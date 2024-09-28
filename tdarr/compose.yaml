@@ -19,9 +19,9 @@ services:
       - 8265:8265 # webUI port
       - 8264:8264 # Node Port
     volumes:
-      - $./tdarr/server:/app/server
-      - $./tdarr/configs:/app/configs
-      - $./tdarr/logs:/app/logs
+      - ./tdarr/server:/app/server
+      - ./tdarr/configs:/app/configs
+      - ./tdarr/logs:/app/logs
       - ${DATA_DIR}/:/data/media
     networks:
       - backend

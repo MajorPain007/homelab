@@ -29,7 +29,6 @@ services:
     environment:
       - IPV64_API_KEY=${IPV64_API_KEY}
       # - CF_DNS_API_TOKEN=$CF_DNS_API_TOKEN # Cloudflare
-      # -- (Optional) When using a custom network
     networks:
       - frontend
       - backend
