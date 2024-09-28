@@ -1,0 +1,24 @@
+services:
+  filebrowser:
+    image: hurlenko/filebrowser
+    container_name: filebrowser
+    restart: unless-stopped
+    healthcheck:
+      disable: true
+    ports:
+      - 99:8080
+    volumes:
+      - ${DATA_DIR}:/data
+      - ./filebrowser/config:/config
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.filebrowser.entrypoints=websecure
+      - traefik.http.routers.filebrowser.rule=Host(`${DOMAIN}`)
+    networks:
+      - frontend
+    environment:
+      - PUID=${ENV_PUID}
+      - PGID=${ENV_PGID}
+networks:
+  frontend:
+    external: true

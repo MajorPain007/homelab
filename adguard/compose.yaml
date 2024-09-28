@@ -1,0 +1,38 @@
+services:
+  adguardhome:
+    image: adguard/adguardhome
+    container_name: adguardhome
+    depends_on:
+      - unbound
+    ports:
+      - 53:53/tcp
+      - 53:53/udp
+      - 784:784/udp
+      - 853:853/tcp
+      - 3003:3000/tcp
+      - 80:80/tcp
+      - 443:443/tcp
+    volumes:
+      - ./config/adguard/workingdir:/opt/adguardhome/work
+      - ./config/adguard/config:/opt/adguardhome/conf
+    restart: unless-stopped
+    networks:
+      docker_host:
+        ipv4_address: 192.168.178.254
+  unbound:
+    container_name: unbound
+    image: mvance/unbound:latest
+    expose:
+      - 53
+    networks:
+      docker_host:
+        ipv4_address: 192.168.178.253
+    ports:
+      - 53:53/tcp
+      - 53:53/udp
+    volumes:
+      - ./config/unbound/unbound.conf:/opt/unbound/etc/unbound/unbound.conf
+    restart: unless-stopped
+networks:
+  docker_host:
+    external: true

@@ -1,0 +1,113 @@
+services:
+  gluetun:
+    image: qmcgaw/gluetun
+    container_name: gluetun
+    # line above must be uncommented to allow external containers to connect.
+    # See https://github.com/qdm12/gluetun-wiki/blob/main/setup/connect-a-container-to-gluetun.md#external-container-to-gluetun
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    ports:
+      - 6881:6881
+      - 6881:6881/udp
+      - 8085:8085 # qbittorrent
+      - 9117:9117 # Jackett
+      - 8989:8989 # Sonarr
+      - 8990:8989 # Sonarr_as
+      - 9696:9696 # Prowlarr
+      - 8087:8080 # sabnzbd
+      - 9090:9090 # sabnzbd
+    volumes:
+      - ${SERVICES_DIR}:/gluetun
+    environment:
+      # See https://github.com/qdm12/gluetun-wiki/tree/main/setup#setup
+      - VPN_SERVICE_PROVIDER=nordvpn
+      - VPN_TYPE=wireguard
+      - WIREGUARD_PRIVATE_KEY=$WIREGUARD_PRIVATE_KEY #<YOUR_PRIVATE_KEY> See https://github.com/qdm12/gluetun-wiki/blob/main/setup/providers/nordvpn.md#obtain-your-wireguard-private-key
+      - WIREGUARD_ADDRESSES=10.5.0.2/32
+      - TZ=${TIMEZONE}
+      - UPDATER_PERIOD=24h
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent
+    container_name: qbittorrent
+    network_mode: service:gluetun
+    environment:
+      - PUID=${ENV_PUID}
+      - PGID=${ENV_PGID}
+      - TZ=${TIMEZONE}
+      - WEBUI_PORT=8085
+    volumes:
+      - ${SERVICES_DIR}/qbittorrent:/config
+      - ${DOWNLOAD_DIR}/Downloads:/downloads
+    depends_on:
+      - gluetun
+    restart: always
+  sabnzbd:
+    image: linuxserver/sabnzbd
+    container_name: sabnzbd
+    network_mode: service:gluetun
+    environment:
+      - PUID=${ENV_PUID}
+      - PGID=${ENV_PGID}
+      - TZ=${TIMEZONE}
+      - WEBUI_PORT=8085
+    volumes:
+      - ${SERVICES_DIR}/sabnzbd:/config
+      - ${DOWNLOAD_DIR}/Downloads:/downloads
+      - ${DATA_DIR}Downloads/incomplete:/incomplete-downloads
+    depends_on:
+      - gluetun
+    restart: always
+  jackett:
+    image: lscr.io/linuxserver/jackett:latest
+    container_name: jackett
+    network_mode: service:gluetun
+    environment:
+      - PUID=${ENV_PUID}
+      - PGID=${ENV_PGID}
+      - TZ=${TIMEZONE}
+      - AUTO_UPDATE=true #optional
+      - RUN_OPTS= #optional
+    volumes:
+      - ${SERVICES_DIR}/jackett/data:/config
+      - ${DOWNLOAD_DIR}/Downloads:/downloads
+    restart: unless-stopped
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    network_mode: service:gluetun
+    environment:
+      - PUID=${ENV_PUID}
+      - PGID=${ENV_PGID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${SERVICES_DIR}/sonarr/data:/config
+      - ${DATA_DIR}Media/Serien:/mnt/tv #optional
+      - ${DOWNLOAD_DIR}/Downloads:/downloads #optional
+    restart: unless-stopped
+  sonarr_as:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr_as
+    network_mode: service:gluetun
+    environment:
+      - PUID=${ENV_PUID}
+      - PGID=${ENV_PGID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${SERVICES_DIR}/sonarr_as/data:/config
+      - ${DATA_DIR}Media/Serien:/mnt/tv #optional
+      - ${DOWNLOAD_DIR}/Downloads:/downloads #optional
+    restart: unless-stopped
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    network_mode: service:gluetun
+    environment:
+      - PUID=${ENV_PUID}
+      - PGID=${ENV_PGID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${SERVICES_DIR}/prowlarr/data:/config
+    restart: unless-stopped
+networks: {}

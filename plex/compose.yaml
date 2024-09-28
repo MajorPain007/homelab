@@ -1,0 +1,31 @@
+services:
+  plex:
+    image: plexinc/pms-docker:latest
+    container_name: plex
+    devices:
+      - /dev/dri:/dev/dri
+    environment:
+      - PLEX_UID=${ENV_PUID}
+      - PLEX_GID=${ENV_PGID}
+      - TZ=${TIMEZONE}
+      - PLEX_CLAIM=${PLEX_CLAIM}
+      - ADVERTISE_IP=http:${ADVERTISE_IP}
+    volumes:
+      - ./Plex-Media-Server:/config
+      - ${DATA_DIR}:/media
+      - ${TMP_TRANSCODE}:/transcode
+    ports:
+      - 32400:32400/tcp #access to the Plex Media Server
+      # - 8324:8324/tcp #controlling Plex for Roku via Plex Companion
+      # - 32469:32469/tcp #access to the Plex DLNA Server
+      # - 1900:1900/udp #access to the Plex DLNA Server
+      # - 32410:32410/udp #current GDM network discovery
+      # - 32412:32412/udp #current GDM network discovery
+      # - 32413:32413/udp #current GDM network discovery
+      # - 32414:32414/udp #current GDM network discovery
+    restart: unless-stopped
+    networks:
+      - frontend
+networks:
+  frontend:
+    external: true

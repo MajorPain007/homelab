@@ -1,0 +1,16 @@
+services:
+  SearXNG:
+    restart: unless-stopped
+    container_name: searxng
+    image: searxng/searxng
+    ports:
+      - 8076:8080
+    volumes:
+      - ./searxng:/etc/searxng
+    environment:
+      - INSTANCE_NAME=example
+    networks:
+      - backend
+networks:
+  backend:
+    external: true

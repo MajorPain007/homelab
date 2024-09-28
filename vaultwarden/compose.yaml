@@ -1,0 +1,23 @@
+services:
+  vaultwarden:
+    restart: unless-stopped
+    container_name: vaultwarden
+    image: vaultwarden/server:latest
+    ports:
+      - 4743:80
+    environment:
+      - SIGNUPS_ALLOWED=false
+      - INVITATIONS_ALLOWED=false
+      - WEBSOCKET_ENABLED=false
+      - ADMIN_TOKEN=$ADMIN_TOKEN
+    volumes:
+      - ./vaultwarden:/data
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.vaultwarden.entrypoints=websecure
+      - traefik.http.routers.vaultwarden.rule=Host(`${DOMAIN}`)
+    networks:
+      - frontend
+networks:
+  frontend:
+    external: true

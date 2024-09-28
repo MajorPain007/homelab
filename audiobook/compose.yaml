@@ -1,0 +1,22 @@
+services:
+  audiobook:
+    container_name: audiobook
+    restart: unless-stopped
+    healthcheck:
+      disable: true
+    image: ghcr.io/advplyr/audiobookshelf
+    ports:
+      - 13378:80
+    volumes:
+      - ${DATA_DIR}/Audio/Hörbücher:/audiobooks
+      - ./audiobookshelf:/config
+      - ./audiobookshelf/metadata:/metadata
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.audiobookshelf.entrypoints=websecure
+      - traefik.http.routers.audiobookshelf.rule=Host(`${DOMAIN}`)
+    networks:
+      - frontend
+networks:
+  frontend:
+    external: true

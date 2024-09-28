@@ -1,0 +1,23 @@
+services:
+  ntfy:
+    image: binwiederhier/ntfy
+    container_name: ntfy
+    command:
+      - serve
+    environment:
+      - TZ=Europe/Berlin # optional: Change to your desired timezone
+    user: 3000:3000 # optional: Set custom user/group or uid/gid
+    volumes:
+      - ./ntfy/var:/var/cache/ntfy
+      - ./ntfy/etc:/etc/ntfy
+    ports:
+      - 89:80
+    restart: unless-stopped
+    networks:
+      - frontend
+      - backend
+networks:
+  backend:
+    external: true
+  frontend:
+    external: true

@@ -1,0 +1,78 @@
+# create docker network
+# sudo docker network create backend && sudo docker network create frontend
+
+networks:
+  backend:
+    external: true
+  frontend:
+    external: true
+services:
+  traefik:
+    image: docker.io/library/traefik:latest
+    container_name: traefik
+    depends_on:
+      - authelia
+      - crowdsec
+    ports:
+      - 80:80
+      - 443:443
+      - 8183:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${SERVICES_DIR}/traefik/:/etc/traefik/
+      - ${SERVICES_DIR}/shared/crowdsec/:/var/log/crowdsec/:rw
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.traefik.entrypoints=websecure
+      - traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`)
+      - traefik.http.services.traefik.loadbalancer.server.port=8080
+    environment:
+      - IPV64_API_KEY=${IPV64_API_KEY}
+      # - CF_DNS_API_TOKEN=$CF_DNS_API_TOKEN # Cloudflare
+      # -- (Optional) When using a custom network
+    networks:
+      - frontend
+      - backend
+    restart: unless-stopped
+  authelia:
+    image: authelia/authelia:latest
+    container_name: authelia
+    volumes:
+      - ${SERVICES_DIR}/authelia/config:/config
+    networks:
+      - frontend
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.authelia.rule=Host(`auth.${DOMAIN}`)
+      - traefik.http.routers.authelia.entrypoints=websecure
+      - traefik.http.routers.authelia.tls=true
+      - traefik.http.middlewares.authelia.forwardauth.address=http://authelia:9091/api/verify?rd=https://auth.${DOMAIN}
+      - traefik.http.middlewares.authelia.forwardauth.trustForwardHeader=true
+      - traefik.http.middlewares.authelia.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Name,Remote-Email
+    expose:
+      - 9091
+    restart: unless-stopped
+    environment:
+      - TZ=${TIMEZONE}
+    healthcheck:
+      disable: true
+  crowdsec:
+    container_name: crowdsec
+    image: crowdsecurity/crowdsec
+    restart: unless-stopped
+    network_mode: frontend
+    environment:
+      - TZ=${TIMEZONE}
+      - COLLECTIONS=crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/appsec-virtual-patching crowdsecurity/appsec-generic-rules
+      - PUID=${ENV_PUID}
+      - PGID=${ENV_PGID}
+    ports:
+      - 8081:8080/tcp
+      - 6060:6060/tcp
+      - 7422:7422/tcp
+    volumes:
+      - ${SERVICES_DIR}/crowdsec/data/:/var/lib/crowdsec/data:rw
+      - ${SERVICES_DIR}/crowdsec/:/etc/crowdsec:rw
+      - ${SERVICES_DIR}/shared/crowdsec/auth.log:/var/log/auth.log:rw
+      - ${SERVICES_DIR}/shared/crowdsec/:/var/log/crowdsec:rw
+      - /var/log/syslog:/syslog:ro

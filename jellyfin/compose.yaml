@@ -1,0 +1,33 @@
+services:
+  jellyfin:
+    devices:
+      - /dev/dri:/dev/dri
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    ports:
+      - 8096:8096
+      # - 8920:8920 #optional Https webUI
+      # - 1900:1900/udp #optional Service discovery used by DNLA and clients
+      # - 7359:7359/udp #optional Allows clients to discover Jellyfin on the local network.
+    restart: unless-stopped
+    networks:
+      - frontend
+      - backend
+    environment:
+      - PUID=${ENV_PUID}
+      - PGID=${ENV_PGID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - ./jellyfin:/config
+      - ${DATA_DIR}:/data/media
+      - ${TMP_TRANSCODE}:/transcode
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.jellyfin.entrypoints=websecure
+      - traefik.http.routers.jellyfin.rule=Host(`${DOMAIN}`)
+      - traefik.http.services.jellyfin.loadbalancer.server.port=8096
+networks:
+  frontend:
+    external: true
+  backend:
+    external: true

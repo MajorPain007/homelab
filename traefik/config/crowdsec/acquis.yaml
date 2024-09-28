@@ -1,0 +1,30 @@
+filenames:
+  - /var/log/nginx/*.log
+  - ./tests/nginx/nginx.log
+#this is not a syslog log, indicate which kind of logs it is
+labels:
+  type: nginx
+---
+# listen_addr: 127.0.0.1:7422
+# appsec_config: crowdsecurity/appsec-generic-rules
+# appsec_config: crowdsecurity/appsec-virtual-patching
+# name: myAppSecComponent
+# source: appsec
+# labels:
+#   type: appsec
+---
+filenames:
+  - /var/log/auth.log
+  - /var/log/syslog
+labels:
+  type: syslog
+---
+filename: /var/log/apache2/*.log
+labels:
+  type: apache2
+---
+filenames:
+  - /var/log/crowdsec/traefik.log
+#this is not a syslog log, indicate which kind of logs it is
+labels:
+  type: traefik
