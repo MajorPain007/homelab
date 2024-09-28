@@ -1,0 +1,17 @@
+services:
+  watchtower:
+    container_name: watchtower
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/Berlin
+      - WATCHTOWER_LIFECYCLE_HOOKS=1 # Enable pre/post-update scripts
+      - WATCHTOWER_CLEANUP=true
+    command: --schedule "0 44 8 * * *" # cronjob
+    networks:
+      - backend
+networks:
+  backend:
+    external: true

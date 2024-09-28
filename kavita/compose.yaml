@@ -1,0 +1,21 @@
+services:
+  kavita:
+    restart: unless-stopped
+    container_name: kavita
+    healthcheck:
+      disable: true
+    image: jvmilazz0/kavita:latest
+    ports:
+      - 5000:5000
+    volumes:
+      - ./Kavita:/kavita/config
+      - ${DATA_DIR}:/library
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.kavita.entrypoints=websecure
+      - traefik.http.routers.kavita.rule=Host(`${DOMAIN}`)
+    networks:
+      - frontend
+networks:
+  frontend:
+    external: true

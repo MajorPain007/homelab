@@ -1,0 +1,91 @@
+---
+###############################################################
+#                   Authelia configuration                    #
+###############################################################
+
+# This secret can also be set using the env variables AUTHELIA_JWT_SECRET_FILE
+# generate with 'docker run authelia/authelia:latest authelia crypto rand --length 128 --charset alphanumeric'
+jwt_secret: your_sec
+default_redirection_url: https://auth.example.com    ### add your domain of autehlia here
+
+log:
+  level: info
+  format: text
+  file_path: /config/authelia.log
+  keep_stdout: true
+
+totp:
+  issuer: auth.example.com ### your plain domain
+  period: 30
+  skew: 1
+
+server:
+  host: 0.0.0.0
+  port: 9091
+
+# duo_api:
+#  hostname: api-123456789.example.com
+#  integration_key: ABCDEF
+#  # This secret can also be set using the env variables AUTHELIA_DUO_API_SECRET_KEY_FILE
+#  secret_key: 1234567890abcdefghifjkl
+
+authentication_backend:
+  file:
+    path: /config/users_database.yml
+    password:
+      algorithm: argon2id
+      iterations: 1
+      salt_length: 16
+      parallelism: 8
+      memory: 128
+
+access_control:
+  default_policy: deny
+  rules:
+    # Do not authorise while on network
+    - domain: "*.example.com"
+      policy: bypass
+      networks:
+        - 192.168.178.0/24 # locale network
+    # Rules applied to everyone
+    - domain: auth.example.com
+      policy: bypass
+    # Bitwarden
+    - domain: "bitwarden.example.com"
+      resources:
+        - ^/api.*$
+        - ^/identity.*$
+      policy: bypass
+    - domain: "*.example.com"
+      policy: two_factor
+
+session:
+  name: authelia_session
+  domain: example.com
+  secret: # docker run authelia/authelia:latest authelia crypto rand --length 64 --charset alphanumeric
+  expiration: 1h
+  inactivity: 5m
+  remember_me_duration:  1M
+
+regulation:
+  max_retries: 3
+  find_time: 120
+  ban_time: 600
+
+storage:
+# generate with 'docker run authelia/authelia:latest authelia crypto rand --length 128 --charset alphanumeric'
+  encryption_key: your_sec
+  local:
+    path: /config/db.sqlite3
+
+notifier:
+  # smtp:
+  #   username: your_username
+  #   # This secret can also be set using the env variables AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE
+  #   password: your_password_for_the_email
+  #   host: your.smtp.provider
+  #   port: 465
+  #   sender: test@example.com
+  # For testing purpose, notifications can be sent in a file. 
+  filesystem:
+    filename: /config/notification.txt

@@ -1,0 +1,14 @@
+services:
+  it-tools:
+    restart: unless-stopped
+    container_name: it-tools
+    healthcheck:
+      disable: true
+    image: corentinth/it-tools
+    ports:
+      - 834:80
+    networks:
+      - backend
+networks:
+  backend:
+    external: true

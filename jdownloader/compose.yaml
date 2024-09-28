@@ -1,0 +1,38 @@
+services:
+  jdownloader-2:
+    image: jlesage/jdownloader-2
+    container_name: JDownloader2
+    healthcheck:
+      disable: true
+    restart: unless-stopped
+    environment:
+      - TZ=${TIMEZONE}
+      - LANG=de_DE.UTF-8
+      - USER_ID=${ENV_PUID}
+      - GROUP_ID=${ENV_PGID}
+      - UMASK=0000
+      - APP_NICENESS=0
+      - DISPLAY_WIDTH=1920
+      - DISPLAY_HEIGHT=1080
+      - DARK_MODE=1
+      - SECURE_CONNECTION=1
+      - SECURE_CONNECTION_VNC_METHOD=SSL
+      - SECURE_CONNECTION_CERTS_CHECK_INTERVAL=60
+      - WEB_LISTENING_PORT=5800
+      - VNC_LISTENING_PORT=5900
+      - MYJDOWNLOADER_EMAIL=$MYJDOWNLOADER_EMAIL
+      - MYJDOWNLOADER_PASSWORD=$MYJDOWNLOADER_PASSWORD
+      - MYJDOWNLOADER_DEVICE_NAME=docker
+      - JDOWNLOADER_HEADLESS=0
+      - JDOWNLOADER_MAX_MEM=
+    ports:
+      - 7807:5800/tcp
+      - 7907:5900/tcp
+    volumes:
+      - ./JDownloader2:/config:rw
+      - ${DATA_DIR}/Downloads/:/output:rw
+    networks:
+      - backend
+networks:
+  backend:
+    external: true

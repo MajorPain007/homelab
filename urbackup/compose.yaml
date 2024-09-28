@@ -1,0 +1,30 @@
+services:
+  urbackup:
+    image: uroni/urbackup-server:latest
+    container_name: urbackup
+    restart: unless-stopped
+    environment:
+      - PUID=${ENV_PUID} # Enter the UID of the user who should own the files here
+      - PGID=${ENV_PGID} # Enter the GID of the user who should own the files here
+      - TZ=${TIMEZONE} # Enter your timezone
+    volumes:
+      - ./urbackup:/var/urbackup
+      - ${DATA_DIR}:/backups
+      # Uncomment the next line if you want to bind-mount the www-folder
+      #- /path/to/wwwfolder:/usr/share/urbackup
+    ports:
+      - 55413:55413
+      - 55414:55414
+      - 55415:55415
+      - 35623:35623
+    networks:
+      - backend
+    # Uncomment the following two lines if you're using BTRFS support
+    #cap_add:
+    #  - SYS_ADMIN
+    # Uncomment the following two lines if you're using ZFS support
+    #devices:
+    #  - /dev/zfs:/dev/zfs
+networks:
+  backend:
+    external: true

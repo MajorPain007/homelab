@@ -1,0 +1,20 @@
+services:
+  homepage:
+    restart: unless-stopped
+    container_name: homepage
+    healthcheck:
+      disable: true
+    image: ghcr.io/gethomepage/homepage:latest
+    ports:
+      - 3000:3000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./homepage:/app/config
+    networks:
+      - backend
+      - frontend
+networks:
+  backend:
+    external: true
+  frontend:
+    external: true

@@ -1,0 +1,342 @@
+networks:
+  proxy:
+    external: true
+  backend:
+    external: false
+
+services:
+
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    restart: unless-stopped
+    #security_opt: # Required for Docker versions below 20.10.10, update Docker for long term solution. Source: https://docs.linuxserver.io/faq#jammy
+    #  - seccomp=unconfined
+    networks:
+      - proxy
+      - backend
+    environment:
+      - PUID=${ENV_PUID}
+      - PGID=${ENV_PGID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${SERVICES_DIR}/jellyfin:/config
+      - ${DATA_DIR}:/data/media
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dmc-jellyfin.rule=Host(`${SUB_DOMAIN_JELLYFIN}.${DOMAIN}`) || Host(`${SUB_DOMAIN_JELLYFIN}.${DOMAIN_LEGACY}`)"
+      - "traefik.http.routers.dmc-jellyfin.tls=true"
+      - "traefik.http.services.dmc-jellyfin.loadbalancer.server.port=8096"
+      - "traefik.http.routers.dmc-jellyfin.tls.certresolver=letsencrypt"
+#      - "traefik.http.routers.dmc-jellyfin.middlewares=redirect-to-https"
+      - "traefik.docker.network=proxy"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  jellyseerr:
+    image: fallenbagel/jellyseerr:latest
+    restart: unless-stopped
+    networks:
+      - proxy
+      - backend
+    user: ${ENV_PUID}:${ENV_PGID}
+    environment:
+      - LOG_LEVEL=debug
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${SERVICES_DIR}/jellyseerr:/app/config
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dmc-jellyseerr.rule=Host(`${SUB_DOMAIN_JELLYSEERR}.${DOMAIN}`) || Host(`${SUB_DOMAIN_JELLYSEERR}.${DOMAIN_LEGACY}`)"
+      - "traefik.http.routers.dmc-jellyseerr.tls=true"
+      - "traefik.http.services.dmc-jellyseerr.loadbalancer.server.port=5055"
+      - "traefik.http.routers.dmc-jellyseerr.tls.certresolver=letsencrypt"
+      - "traefik.docker.network=proxy"
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    restart: unless-stopped
+    networks:
+      - proxy
+      - backend
+    environment:
+      - PUID=${ENV_PUID}
+      - PGID=${ENV_PGID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${SERVICES_DIR}/radarr:/config
+      - ${DATA_DIR}:/data
+      - ${TMP_DOWNLOADS_DIR}/temp-tmpfs/complete:/downloads/complete
+    labels:
+      - "traefik.enable=true"
+
+      # Router for /api/* path
+      - "traefik.http.routers.dmc-radarr-api.rule=Host(`${SUB_DOMAIN_RADARR}.${DOMAIN_LEGACY}`) && PathPrefix(`/api/`)"
+      - "traefik.http.routers.dmc-radarr-api.tls=true"
+      - "traefik.http.routers.dmc-radarr-api.tls.certresolver=letsencrypt"
+
+      # Router for non-/api/* paths
+      - "traefik.http.routers.dmc-radarr.rule=Host(`${SUB_DOMAIN_RADARR}.${DOMAIN_LEGACY}`)"
+      - "traefik.http.routers.dmc-radarr.tls=true"
+      - "traefik.http.services.dmc-radarr.loadbalancer.server.port=7878"
+      - "traefik.http.routers.dmc-radarr.tls.certresolver=letsencrypt"
+      - "traefik.docker.network=proxy"
+      # Basic auth
+      - "traefik.http.middlewares.dmc-auth.basicauth.usersfile=/.htpasswd"
+      - "traefik.http.routers.dmc-radarr.middlewares=dmc-auth"
+
+  radarr4k:
+    image: lscr.io/linuxserver/radarr:latest
+    restart: unless-stopped
+    networks:
+      - proxy
+      - backend
+    environment:
+      - PUID=${ENV_PUID}
+      - PGID=${ENV_PGID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${SERVICES_DIR}/radarr4k:/config
+      - ${DATA_DIR}:/data
+      - ${TMP_DOWNLOADS_DIR}/temp-tmpfs/complete:/downloads/complete
+    labels:
+      - "traefik.enable=true"
+
+      # Router for /api/* path
+      - "traefik.http.routers.dmc-radarr4k-api.rule=Host(`${SUB_DOMAIN_RADARR4K}.${DOMAIN_LEGACY}`) && PathPrefix(`/api/`)"
+      - "traefik.http.routers.dmc-radarr4k-api.tls=true"
+      - "traefik.http.routers.dmc-radarr4k-api.tls.certresolver=letsencrypt"
+
+      # Router for non-/api/* paths
+      - "traefik.http.routers.dmc-radarr4k.rule=Host(`${SUB_DOMAIN_RADARR4K}.${DOMAIN_LEGACY}`)"
+      - "traefik.http.routers.dmc-radarr4k.tls=true"
+      - "traefik.http.services.dmc-radarr4k.loadbalancer.server.port=7878"
+      - "traefik.http.routers.dmc-radarr4k.tls.certresolver=letsencrypt"
+      - "traefik.docker.network=proxy"
+      # Basic auth
+      - "traefik.http.middlewares.dmc-auth.basicauth.usersfile=/.htpasswd"
+      - "traefik.http.routers.dmc-radarr4k.middlewares=dmc-auth"
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    restart: unless-stopped
+    #security_opt: # Required for Docker versions below 20.10.10, update Docker for long term solution. Source: https://docs.linuxserver.io/faq#jammy
+    #  - seccomp=unconfined
+    networks:
+      - proxy
+      - backend
+    environment:
+      - PUID=${ENV_PUID}
+      - PGID=${ENV_PGID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${SERVICES_DIR}/sonarr:/config
+      - ${DATA_DIR}:/data
+      - ${TMP_DOWNLOADS_DIR}/temp-tmpfs/complete:/downloads/complete
+    labels:
+      - "traefik.enable=true"
+
+      # Router for /api/* path
+      - "traefik.http.routers.dmc-sonarr-api.rule=Host(`${SUB_DOMAIN_SONARR}.${DOMAIN_LEGACY}`) && PathPrefix(`/api/`)"
+      - "traefik.http.routers.dmc-sonarr-api.tls=true"
+      - "traefik.http.routers.dmc-sonarr-api.tls.certresolver=letsencrypt"
+
+      - "traefik.http.routers.dmc-sonarr.rule=Host(`${SUB_DOMAIN_SONARR}.${DOMAIN_LEGACY}`)"
+      - "traefik.http.routers.dmc-sonarr.tls=true"
+      - "traefik.http.services.dmc-sonarr.loadbalancer.server.port=8989"
+      - "traefik.http.routers.dmc-sonarr.tls.certresolver=letsencrypt"
+      - "traefik.docker.network=proxy"
+      # Basic auth
+      - "traefik.http.middlewares.dmc-auth.basicauth.usersfile=/.htpasswd"
+      - "traefik.http.routers.dmc-sonarr.middlewares=dmc-auth"
+
+  readarr:
+    image: lscr.io/linuxserver/readarr:develop
+    restart: unless-stopped
+    networks:
+      - proxy
+      - backend
+    environment:
+      - PUID=${ENV_PUID}
+      - PGID=${ENV_PGID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${SERVICES_DIR}/readarr:/config
+      - ${DATA_DIR}:/data
+      - ${TMP_DOWNLOADS_DIR}/temp-tmpfs/complete:/downloads/complete
+    labels:
+      - "traefik.enable=true"
+
+      # Router for /api/* path
+      - "traefik.http.routers.dmc-readarr-api.rule=Host(`${SUB_DOMAIN_READARR}.${DOMAIN_LEGACY}`) && PathPrefix(`/api/`)"
+      - "traefik.http.routers.dmc-readarr-api.tls=true"
+      - "traefik.http.routers.dmc-readarr-api.tls.certresolver=letsencrypt"
+
+      - "traefik.http.routers.dmc-readarr.rule=Host(`${SUB_DOMAIN_READARR}.${DOMAIN_LEGACY}`)"
+      - "traefik.http.routers.dmc-readarr.tls=true"
+      - "traefik.http.services.dmc-readarr.loadbalancer.server.port=8787"
+      - "traefik.http.routers.dmc-readarr.tls.certresolver=letsencrypt"
+      - "traefik.docker.network=proxy"
+      # Basic auth
+      - "traefik.http.middlewares.dmc-auth.basicauth.usersfile=/.htpasswd"
+      - "traefik.http.routers.dmc-readarr.middlewares=dmc-auth"
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    restart: unless-stopped
+    networks:
+      - proxy
+      - backend
+    environment:
+      - PUID=${ENV_PUID}
+      - PGID=${ENV_PGID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${SERVICES_DIR}/prowlarr:/config
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dmc-prowlarr.rule=Host(`${SUB_DOMAIN_PROWLARR}.${DOMAIN_LEGACY}`)"
+      - "traefik.http.routers.dmc-prowlarr.tls=true"
+      - "traefik.http.services.dmc-prowlarr.loadbalancer.server.port=9696"
+      - "traefik.http.routers.dmc-prowlarr.tls.certresolver=letsencrypt"
+      - "traefik.docker.network=proxy"
+      # Basic auth
+      - "traefik.http.middlewares.dmc-auth.basicauth.usersfile=/.htpasswd"
+      - "traefik.http.routers.dmc-prowlarr.middlewares=dmc-auth"
+
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    restart: unless-stopped
+    networks:
+      - proxy
+      - backend
+    volumes:
+      - ${SERVICES_DIR}/bazarr/config:/config
+      - ${DATA_DIR}:/data
+    environment:
+      - PUID=${ENV_PUID}
+      - PGID=${ENV_PGID}
+      - TZ=${TIMEZONE}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dmc-bazarr.rule=Host(`${SUB_DOMAIN_BAZARR}.${DOMAIN_LEGACY}`)"
+      - "traefik.http.routers.dmc-bazarr.tls=true"
+      - "traefik.http.services.dmc-bazarr.loadbalancer.server.port=6767"
+      - "traefik.http.routers.dmc-bazarr.tls.certresolver=letsencrypt"
+      - "traefik.docker.network=proxy"
+      # Basic auth
+      - "traefik.http.middlewares.dmc-auth.basicauth.usersfile=/.htpasswd"
+      - "traefik.http.routers.dmc-bazarr.middlewares=dmc-auth"
+
+  sabnzbd:
+    image: lscr.io/linuxserver/sabnzbd:latest
+    restart: unless-stopped
+    networks:
+      - proxy
+      - backend
+    environment:
+      - PUID=${ENV_PUID}
+      - PGID=${ENV_PGID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${SERVICES_DIR}/sabnzbd:/config
+      - ${DATA_DIR}/:/data
+      - ${TMP_DOWNLOADS_DIR}/temp-tmpfs/incomplete:/downloads/incomplete
+      - ${TMP_DOWNLOADS_DIR}/temp-tmpfs/complete:/downloads/complete
+      - ./fix-permissions-entrypoint.sh:/fix-permissions-entrypoint.sh
+    entrypoint: ["/fix-permissions-entrypoint.sh"]
+    labels:
+      - "traefik.enable=true"
+
+      # Router for /api/* path
+      # no longer needed as everything is in the same backend network
+      #- "traefik.http.routers.dmc-sabnzbd-api.rule=Host(`${SUB_DOMAIN_SABNZBD}.${DOMAIN_LEGACY}`) && PathPrefix(`/api/`)"
+      #- "traefik.http.routers.dmc-sabnzbd-api.tls=true"
+      #- "traefik.http.routers.dmc-sabnzbd-api.tls.certresolver=letsencrypt"
+
+      # Router for non-/api/* paths
+      - "traefik.http.routers.dmc-sabnzbd.rule=Host(`${SUB_DOMAIN_SABNZBD}.${DOMAIN_LEGACY}`)"
+      - "traefik.http.routers.dmc-sabnzbd.tls=true"
+      - "traefik.http.services.dmc-sabnzbd.loadbalancer.server.port=8080"
+      - "traefik.http.routers.dmc-sabnzbd.tls.certresolver=letsencrypt"
+      #- "traefik.http.routers.dmc-sabnzbd.middlewares=redirect-to-https"
+      - "traefik.docker.network=proxy"
+      # Basic auth
+      - "traefik.http.middlewares.dmc-auth.basicauth.usersfile=/.htpasswd"
+      - "traefik.http.routers.dmc-sabnzbd.middlewares=dmc-auth"
+
+  jfago:
+    image: hrfee/jfa-go
+    restart: unless-stopped
+    networks:
+      - proxy
+      - backend
+    volumes:
+      - ${SERVICES_DIR}/jfago:/data
+      - ${SERVICES_DIR}/jellyfin:/jf
+      - /etc/backendtime:/etc/backendtime:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dmc-jfago.rule=Host(`${SUB_DOMAIN_JFAGO}.${DOMAIN}`) || Host(`${SUB_DOMAIN_JFAGO}.${DOMAIN_LEGACY}`)"
+      - "traefik.http.routers.dmc-jfago.tls=true"
+      - "traefik.http.services.dmc-jfago.loadbalancer.server.port=8056"
+      - "traefik.http.routers.dmc-jfago.tls.certresolver=letsencrypt"
+      - "traefik.docker.network=proxy"
+
+  prefetcharr:
+    image: phueber/prefetcharr:latest
+    restart: unless-stopped
+    networks:
+      - proxy
+      - backend
+    environment:
+      - MEDIA_SERVER_TYPE=jellyfin
+      - MEDIA_SERVER_URL=http://jellyfin:8096
+      - MEDIA_SERVER_API_KEY=${PREFETCHARR_JELLYFIN_API_KEY}
+      - SONARR_URL=https://sonarr.vjwb.vpn64.de
+      - SONARR_API_KEY=${SONARR_API_KEY}
+      - LOG_DIR=/log
+      - RUST_LOG=prefetcharr=debug
+      - INTERVAL=480
+      - REMAINING_EPISODES=2
+    volumes:
+      - ${SERVICES_DIR}/prefetcharr/log:/log
+
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    restart: unless-stopped
+    networks:
+      - backend
+    environment:
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - LOG_HTML=${LOG_HTML:-false}
+      - CAPTCHA_SOLVER=${CAPTCHA_SOLVER:-none}
+      - TZ=${TIMEZONE}
+    ports:
+      - "${PORT:-8191}:8191"
+    labels:
+      - "traefik.enable=false"
+
+  umlautadaptarr:
+    image: pcjones/umlautadaptarr:latest
+    restart: unless-stopped
+    networks:
+      - backend
+    environment:
+      - PUID=${ENV_PUID}
+      - PGID=${ENV_PGID}
+      - TZ=${TIMEZONE}
+      - SONARR__HOST=http://sonarr:8989
+      - SONARR__APIKEY=${SONARR_API_KEY}
+      - SONARR__ENABLED=true
+      - RADARR__ENABLED=false
+      - RADARR__HOST="http://backendhost:7878"
+      - RADARR__APIKEY="API_KEY"
+      - READARR__ENABLED=true
+      - READARR__HOST=http://readarr:8787
+      - READARR__APIKEY=${READARR_API_KEY}
+      - LIDARR__ENABLED=false
+      - LIDARR__HOST="http://backendhost:8686"
+      - LIDARR__APIKEY="API_KEY"

@@ -1,0 +1,19 @@
+services:
+  adguardhome-sync:
+    image: lscr.io/linuxserver/adguardhome-sync:latest
+    container_name: adguardhome-sync
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - CONFIGFILE=/config/adguardhome-sync.yaml #optional
+    volumes:
+      - ./adguardhome-sync/config:/config
+    ports:
+      - 8089:8080
+    restart: unless-stopped
+    networks:
+      - backend
+networks:
+  backend:
+    external: true

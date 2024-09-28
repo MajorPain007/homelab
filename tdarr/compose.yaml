@@ -1,0 +1,30 @@
+services:
+  tdarr:
+    devices:
+      - /dev/dri:/dev/dri
+    container_name: tdarr
+    restart: unless-stopped
+    healthcheck:
+      disable: true
+    image: ghcr.io/haveagitgat/tdarr
+    environment:
+      - serverIP=0.0.0.0
+      - internalNode=true
+      - nodeIP=0.0.0.0
+      - nodeID=Docker
+      - PUID=${ENV_PUID}
+      - PGID=${ENV_PGID}
+    ports:
+      - 8266:8266 # server port
+      - 8265:8265 # webUI port
+      - 8264:8264 # Node Port
+    volumes:
+      - $./tdarr/server:/app/server
+      - $./tdarr/configs:/app/configs
+      - $./tdarr/logs:/app/logs
+      - ${DATA_DIR}/:/data/media
+    networks:
+      - backend
+networks:
+  backend:
+    external: true

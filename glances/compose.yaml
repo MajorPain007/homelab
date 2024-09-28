@@ -1,0 +1,20 @@
+services:
+  glances:
+    restart: unless-stopped
+    container_name: Glances
+    image: nicolargo/glances:latest
+    environment:
+      - TZ=${TIMEZONE}
+      - GLANCES_OPT=-w
+    ports:
+      - 61208:61208/tcp
+    volumes:
+      - /:/rootfs:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./glances/glances.conf:/etc/glances/glances.conf:rw
+    pid: host
+    networks:
+      - backend
+networks:
+  backend:
+    external: true
