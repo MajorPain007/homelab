@@ -9,7 +9,6 @@ services:
     ports:
       - 61208:61208/tcp
     volumes:
-      - /:/rootfs:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./glances/glances.conf:/etc/glances/glances.conf:rw
     pid: host
