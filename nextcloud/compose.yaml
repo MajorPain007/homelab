@@ -1,0 +1,58 @@
+services:
+  nextcloud:
+    image: nextcloud
+    container_name: nextcloud
+    restart: unless-stopped
+    networks:
+      - frontend
+    depends_on:
+      - nextclouddb
+      - redis
+    ports:
+      - 8089:80
+    volumes:
+      - ${SERVICES_DIR}/html:/var/www/html
+      - ${SERVICES_DIR}/custom_apps:/var/www/html/custom_apps
+      - ${SERVICES_DIR}/config:/var/www/html/config
+      - ${SERVICES_DIR}/data:/var/www/html/data
+      - ${DATA_DIR}:/data
+    environment:
+      - PUID=${ENV_PUID}
+      - PGID=${ENV_PGID}
+      - TZ=${TIMEZONE}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_HOST=nextclouddb
+      - REDIS_HOST=nextcloud_redis
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.nextcloud.entrypoints=websecure
+      - traefik.http.routers.nextcloud.rule=Host(`${DOMAIN}`)
+  nextclouddb:
+    image: mariadb
+    container_name: nextcloud-db
+    restart: unless-stopped
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    networks:
+      - frontend
+    volumes:
+      - ${SERVICES_DIR}/nextclouddb:/var/lib/mysql
+    environment:
+      - PUID=${ENV_PUID}
+      - PGID=${ENV_PGID}
+      - TZ=${TIMEZONE}
+      - MYSQL_RANDOM_ROOT_PASSWORD=true
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+  redis:
+    image: redis:alpine
+    container_name: nextcloud_redis
+    volumes:
+      - ${SERVICES_DIR}/redis:/data
+    networks:
+      - frontend
+networks:
+  frontend:
+    external: true
