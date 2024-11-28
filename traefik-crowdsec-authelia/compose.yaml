@@ -19,8 +19,8 @@ services:
       - 8183:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ${SERVICES_DIR}/traefik/:/etc/traefik/
-      - ${SERVICES_DIR}/shared/crowdsec/:/var/log/crowdsec/:rw
+      - ./config/traefik/:/etc/traefik/
+      - ./config/logs:/var/log/traefik
     labels:
       - traefik.enable=true
       - traefik.http.routers.traefik.entrypoints=websecure
@@ -70,8 +70,9 @@ services:
       - 6060:6060/tcp
       - 7422:7422/tcp
     volumes:
-      - ${SERVICES_DIR}/crowdsec/data/:/var/lib/crowdsec/data:rw
-      - ${SERVICES_DIR}/crowdsec/:/etc/crowdsec:rw
-      - ${SERVICES_DIR}/shared/crowdsec/auth.log:/var/log/auth.log:rw
-      - ${SERVICES_DIR}/shared/crowdsec/:/var/log/crowdsec:rw
-      - /var/log/syslog:/syslog:ro
+      - ./acquis.yaml:/etc/crowdsec/acquis.yaml
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./config/crowdsec/data/:/var/lib/crowdsec/data:rw
+      - ./config/crowdsec/:/etc/crowdsec:rw
+      - ./config/logs:/var/log/traefik/:ro
+      - ../jellyfin/jellyfin/log:/var/log/jellyfin/:ro
