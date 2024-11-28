@@ -5,15 +5,14 @@ global:
 # -- (Optional) Change Log Level and Format here...
 #     - loglevels [DEBUG, INFO, WARNING, ERROR, CRITICAL]
 #     - format [common, json, logfmt]
-# log:
-#   level: INFO
-#   format: common
-#   filePath: /var/log/traefik/traefik.log
-accesslog:
-  format: common
-  filePath: /var/log/crowdsec/traefik.log
-  # filePath: /var/log/traefik/access.log
-  bufferingSize: 50
+
+# -- (Optional) Enable Accesslog and change Format here...
+#     - format [common, json, logfmt]
+Log:
+  level: INFO
+  filePath: /var/log/traefik/traefik.log
+accessLog:
+  filePath: /var/log/traefik/access.log
 
 # -- (Optional) Enable Accesslog and change Format here...
 #     - format [common, json, logfmt]
@@ -35,6 +34,9 @@ entryPoints:
     address: :80
     # -- (Optional) Redirect all HTTP to HTTPS
     http:
+      middlewares:
+        - authelia@file
+        - crowdsec@file
       redirections:
         entryPoint:
           to: websecure
