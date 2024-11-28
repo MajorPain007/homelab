@@ -37,7 +37,7 @@ services:
     image: authelia/authelia:latest
     container_name: authelia
     volumes:
-      - ${SERVICES_DIR}/authelia/config:/config
+      - ./config/authelia/config:/config
     networks:
       - frontend
     labels:
