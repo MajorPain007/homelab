@@ -1,38 +1,109 @@
 # create docker network
 # sudo docker network create backend && sudo docker network create frontend
 
-networks:
-  backend:
-    external: true
-  frontend:
-    external: true
 services:
   traefik:
-    image: docker.io/library/traefik:latest
-    container_name: traefik
+    container_name: ${SERVICES_TRAEFIK_CONTAINER_NAME:-traefik}
+    hostname: ${SERVICES_TRAEFIK_HOSTNAME:-traefik}
+    image: ${SERVICES_TRAEFIK_IMAGE:-traefik}:${SERVICES_TRAEFIK_IMAGE_VERSION:-latest}
     depends_on:
-      - authelia
-      - crowdsec
+      crowdsec:
+        condition: service_healthy
+    security_opt:
+      - no-new-privileges:true
+    command:
+      - --global.sendAnonymousUsage=false
+      - --global.checknewversion=false
+      - --serversTransport.insecureSkipVerify=true
+      # Logs
+      - "--log.level=INFO"
+      - --log.filePath=/var/log/traefik/traefik.log
+      - --accesslog=true
+      - --accesslog.filepath=/var/log/traefik/access.log
+      - --accesslog.format=json
+      - --accesslog.bufferingsize=0
+      - --accesslog.filters.statuscodes=200-299,400-599
+      - --accesslog.filters.retryattempts
+      - --accesslog.filters.minduration=10ms
+      - --accesslog.fields.headers.defaultmode=drop
+      - --accesslog.fields.headers.names.User-Agent=redact
+      - --accesslog.fields.headers.names.Authorization=drop
+      - --accesslog.fields.headers.names.Content-Type=keep
+      # Plugins
+      - --experimental.plugins.crowdsec-bouncer-traefik-plugin.modulename=github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin
+      - --experimental.plugins.crowdsec-bouncer-traefik-plugin.version=v1.3.5
+      # Providers
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --providers.docker.endpoint=unix:///var/run/docker.sock
+      - --providers.docker.network=frontend
+      # - --providers.docker.defaultRule='Host(`{{ index .Labels \"com.docker.compose.service\"}}.${DOMAIN}`)'
+      - --providers.docker.defaultRule='Host(`{{ .Name }}.{{ index .Labels "customLabel"}}`)'
+      - --providers.file.directory=/etc/traefik/conf
+      - --providers.file.watch=true
+      - --api=true
+      # - --api.insecure=true
+      # - --api.dashboard=true
+      # Set up LetsEncrypt certificate resolver
+      - --certificatesresolvers.letsencrypt.acme.dnschallenge=true
+      - --certificatesresolvers.letsencrypt.acme.dnschallenge.provider=ipv64
+      - --certificatesResolvers.letsencrypt.acme.dnschallenge.resolvers=1.1.1.1:53,1.0.0.1:53
+      - --certificatesResolvers.letsencrypt.acme.dnschallenge.delayBeforeCheck=20
+      - --certificatesresolvers.letsencrypt.acme.email=${EMAIL}
+      - --certificatesresolvers.letsencrypt.acme.storage=/etc/traefik/certs/acme.json
+      - --certificatesresolvers.letsencrypt.acme.certificatesDuration=2160
+      - --certificatesresolvers.letsencrypt.acme.keytype=EC384
+      # staging environment of LE, remove for real certs
+      - --certificatesresolvers.letsencrypt.acme.caserver=https://acme-v02.api.letsencrypt.org/directory
+      # Set up an insecure listener that redirects all traffic to TLS
+      # Extern
+      - --entrypoints.web.address=:81
+      - --entryPoints.web.http.middlewares=authelia@file,crowdsec@file
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+      - --entrypoints.websecure.address=:444
+      - --entryPoints.websecure.http.middlewares=basic-chain@file
+      - --entryPoints.websecure.http3
+      - --entryPoints.websecure.http3.advertisedport=444
+      # Set up the TLS configuration for our websecure listener
+      - --entrypoints.websecure.http.tls=true
+      - --entrypoints.websecure.http.tls.certResolver=letsencrypt
+      - --entrypoints.websecure.http.tls.domains[0].main=${DOMAIN}
+      - --entrypoints.websecure.http.tls.domains[0].sans=*.${DOMAIN}
+      # intern
+      - --entrypoints.home.address=:80
+      - --entrypoints.homesec.address=:443
+      - --entrypoints.home.http.redirections.entrypoint.to=homesec
+      - --entrypoints.home.http.redirections.entrypoint.scheme=https
+      - --entryPoints.homesec.http3.advertisedport=443
+      - --entrypoints.homesec.http.tls=true
+      - --entrypoints.homesec.http.tls.certResolver=letsencrypt
+      - --entrypoints.homesec.http.tls.domains[0].main=${DOMAIN}
+      - --entrypoints.homesec.http.tls.domains[0].sans=*.${DOMAIN}
     ports:
       - 80:80
       - 443:443
-      - 8183:8080
+      - 81:81
+      - 444:444
+      # - 8183:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./config/traefik/:/etc/traefik/
       - ./config/logs:/var/log/traefik
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.traefik.entrypoints=websecure
-      - traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`)
-      - traefik.http.services.traefik.loadbalancer.server.port=8080
     environment:
       - IPV64_API_KEY=${IPV64_API_KEY}
       # - CF_DNS_API_TOKEN=$CF_DNS_API_TOKEN # Cloudflare
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.traefik.entrypoints=homesec
+      - traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`)
+      - traefik.http.services.traefik.loadbalancer.server.port=8080
+      - traefik.docker.network=frontend
     networks:
       - frontend
       - backend
     restart: unless-stopped
+
   authelia:
     image: authelia/authelia:latest
     container_name: authelia
@@ -43,7 +114,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.authelia.rule=Host(`auth.${DOMAIN}`)
-      - traefik.http.routers.authelia.entrypoints=websecure
+      - traefik.http.routers.authelia.entrypoints=websecure,homesec
       - traefik.http.routers.authelia.tls=true
       - traefik.http.middlewares.authelia.forwardauth.address=http://authelia:9091/api/verify?rd=https://auth.${DOMAIN}
       - traefik.http.middlewares.authelia.forwardauth.trustForwardHeader=true
@@ -56,15 +127,19 @@ services:
     healthcheck:
       disable: true
   crowdsec:
-    container_name: crowdsec
-    image: crowdsecurity/crowdsec
+    container_name: ${SERVICES_CROWDSEC_CONTAINER_NAME:-crowdsec}
+    hostname: ${SERVICES_CROWDSEC_HOSTNAME:-crowdsec}
+    image: ${SERVICES_CROWDSEC_IMAGE:-crowdsecurity/crowdsec}:${SERVICES_CROWDSEC_IMAGE_VERSION:-latest}
     restart: unless-stopped
-    network_mode: frontend
-    environment:
-      - TZ=${TIMEZONE}
-      - COLLECTIONS=crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/appsec-virtual-patching crowdsecurity/appsec-generic-rules
-      - PUID=${ENV_PUID}
-      - PGID=${ENV_PGID}
+    healthcheck:
+      test:
+        - CMD
+        - cscli
+        - version
+      timeout: 2s
+      interval: 20s
+      retries: 5
+      start_period: 10s
     ports:
       - 8081:8080/tcp
       - 6060:6060/tcp
@@ -76,3 +151,21 @@ services:
       - ./config/crowdsec/:/etc/crowdsec:rw
       - ./config/logs:/var/log/traefik/:ro
       - ../jellyfin/jellyfin/log:/var/log/jellyfin/:ro
+      - /var/log/auth.log:/var/log/auth.log:ro
+      - /var/log/syslog:/var/log/syslog:ro
+    environment:
+      - TZ=${TIMEZONE}
+      - COLLECTIONS=crowdsecurity/traefik crowdsecurity/http-cve
+        crowdsecurity/appsec-generic-rules crowdsecurity/appsec-virtual-patching
+        crowdsecurity/sshd crowdsecurity/linux crowdsecurity/base-http-scenarios
+      - PUID=${ENV_PUID}
+      - PGID=${ENV_PGID}
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - frontend
+networks:
+  frontend:
+    external: true
+  backend:
+    external: true
