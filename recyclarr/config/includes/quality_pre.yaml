@@ -1,29 +1,29 @@
 delete_old_custom_formats: false
-    replace_existing_custom_formats: false
-    quality_profiles:
-      - name: Any
-        reset_unmatched_scores:
-          enabled: true
-        upgrade:
-          allowed: true
-          until_quality: Bluray|WEB
-          until_score: 999999
-        min_format_score: 10000
-        # score_set: sqp-1-1080p
-        quality_sort: top
+replace_existing_custom_formats: false
+quality_profiles:
+  - name: Any
+    reset_unmatched_scores:
+      enabled: true
+    upgrade:
+      allowed: true
+      until_quality: Bluray|WEB
+      until_score: 999999
+    min_format_score: 10000
+    # score_set: sqp-1-1080p
+    quality_sort: top
+    qualities:
+      - name: Bluray|WEB
         qualities:
-          - name: Bluray|WEB
-            qualities:
-              - Remux-2160p
-              - Bluray-2160p
-              - WEBDL-2160p
-              - WEBRip-2160p
-              - Remux-1080p
-              - Bluray-1080p
-              - WEBDL-1080p
-              - WEBRip-1080p
-              - Bluray-720p
-              - WEBDL-720p
-              - WEBRip-720p
-              - DVD
-              - WEBDL-480p
+          - Remux-2160p
+          - Bluray-2160p
+          - WEBDL-2160p
+          - WEBRip-2160p
+          - Remux-1080p
+          - Bluray-1080p
+          - WEBDL-1080p
+          - WEBRip-1080p
+          - Bluray-720p
+          - WEBDL-720p
+          - WEBRip-720p
+          - DVD
+          - WEBDL-480p

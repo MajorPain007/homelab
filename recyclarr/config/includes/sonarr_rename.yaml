@@ -1,12 +1,9 @@
-# See "Basic Setup" for `service_type` and `instance_name`
-service_type:
-  instance_name:
-    # Media Naming Configuration
-    media_naming:
-      series: '{Series TitleYear} {tvdb-{TvdbId}}'
-      season: 'Season {season:00}'
-      episodes:
-        rename: true
-        standard: '{Series TitleYear} - S{season:00}E{episode:00} - [{Custom Formats }{Quality Full}]{[MediaInfo VideoDynamicRangeType]}{[Mediainfo AudioCodec}{ Mediainfo AudioChannels]}{[MediaInfo VideoCodec]}{-Release Group}'
-        daily: '{Series TitleYear} - {Air-Date} - [{Custom Formats }{Quality Full}]{[MediaInfo VideoDynamicRangeType]}{[Mediainfo AudioCodec}{ Mediainfo AudioChannels]}{[MediaInfo VideoCodec]}{-Release Group}'
-        anime: '{Series TitleYear} - S{season:00}E{episode:00} - {absolute:000} - [{Custom Formats }{Quality Full}]{[MediaInfo VideoDynamicRangeType]}{[Mediainfo AudioCodec}{ Mediainfo AudioChannels]}{[MediaInfo VideoCodec]}{-Release Group}'
+# Media Naming Configuration
+media_naming:
+  series: '{Series TitleYear} {tvdb-{TvdbId}}'
+  season: 'Season {season:00}'
+  episodes:
+    rename: true
+    standard: '{Series TitleYear} - S{season:00}E{episode:00} - [{Custom Formats }{Quality Full}]{[MediaInfo VideoDynamicRangeType]}{[Mediainfo AudioCodec}{ Mediainfo AudioChannels]}{[MediaInfo VideoCodec]}{-Release Group}'
+    daily: '{Series TitleYear} - {Air-Date} - [{Custom Formats }{Quality Full}]{[MediaInfo VideoDynamicRangeType]}{[Mediainfo AudioCodec}{ Mediainfo AudioChannels]}{[MediaInfo VideoCodec]}{-Release Group}'
+    anime: '{Series TitleYear} - S{season:00}E{episode:00} - {absolute:000} - [{Custom Formats }{Quality Full}]{[MediaInfo VideoDynamicRangeType]}{[Mediainfo AudioCodec}{ Mediainfo AudioChannels]}{[MediaInfo VideoCodec]}{-Release Group}'
