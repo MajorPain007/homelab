@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# This script updates the naming and media management configurations for multiple instances
+# of Sonarr and Radarr. It uses the API of each application to send PUT requests with
+# predefined JSON configurations. Make sure to replace the placeholders with actual
+# Sonarr and Radarr URLs and API keys for your setup.
+
 # Prerequisites: curl, jq (for JSON parsing, if needed)
 # You can install jq with "sudo apt-get install jq"
 
