@@ -33,7 +33,6 @@ sonarr:
               - WEBDL-480p
     quality_definition:
       type: series
-    # Media Naming Configuration
     # media_naming:
     #   series: plex
     #   season: default
@@ -43,7 +42,6 @@ sonarr:
     #     daily: default
     #     anime: default
     custom_formats:
-      # Advanced Audio from the guide
       - trash_ids:
           # Audio Formats
           - 47435ece6b99a0b477caf360e79ba0bb # x265 (HD)
@@ -74,14 +72,12 @@ sonarr:
           - bb019e1cd00f304f80971c965de064dc # HDR (undefined)
           - 2a7e3be05d3861d6df7171ec74cad727 # PQ
           - 17e889ce13117940092308f48b48b45b # HLG
-
           # Series Versions
           - 3a4127d8aa781b44120d907f2cd62627 # Hybrid
           - b735f09d3c025cbb7d75a5d38325b73b # Remaster
           # Unwanted
           - 85c61753df5da1fb2aab6f2a47426b09 # BR-DISK
           - 9c11cd3f07101cdba90a2d81cf0e56b4 # LQ
-
           # Miscellaneous
           - ec8fa7296b64e8cd390a1600981f3923 # Repack/Proper
           - eb3d5cc0a2be0db205fb823640db6a3c # Repack 2
@@ -157,14 +153,12 @@ radarr:
               - WEBDL-480p
     quality_definition:
       type: movies
-    # See "Basic Setup" for `service_type` and `instance_name`
     # media_naming:
     #   folder: plex
     #   movie:
     #     rename: true
     #     standard: default
     custom_formats:
-      # Advanced Audio from the guide
       - trash_ids:
           # Audio Formats
           - 496f355514737f7d83bf7aa4d24f8169 # TrueHD ATMOS
@@ -275,29 +269,13 @@ radarr:
 #   main:
 #     base_url: !secret sonarr_as_url
 #     api_key: !secret sonarr_as_apikey
-#     include:
-#       - config: configs/quality_pre.yaml
-#     quality_definition:
-#       type: series
 
 # radarr:
 #   main:
 #     base_url: !secret radarr_url
 #     api_key: !secret radarr_apikey
-#     include:
-#       - config: configs/quality_pre.yaml
-#     quality_definition:
-#       type: movie
-#         assign_scores_to:
-#           - name: HD
 
 # radarr_kids:
 #   main:
 #     base_url: !secret radarr_kids_url
 #     api_key: !secret radarr_kids_apikey
-#     include:
-#       - config: configs/quality_pre.yaml
-#     quality_definition:
-#       type: movie
-#         assign_scores_to:
-#           - name: HD
