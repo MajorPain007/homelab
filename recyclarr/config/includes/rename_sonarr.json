@@ -1,0 +1,14 @@
+{
+    "id": 0,
+    "renameEpisodes": true,
+    "replaceIllegalCharacters": true,
+    "colonReplacementFormat": 0,
+    "customColonReplacementFormat": "Smart Replace",
+    "multiEpisodeStyle": 0,
+    "standardEpisodeFormat": "{Series TitleYear} - S{season:00}E{episode:00} - [{Custom Formats }{Quality Full}]{[MediaInfo VideoDynamicRangeType]}{[Mediainfo AudioCodec}{ Mediainfo AudioChannels]}{[MediaInfo VideoCodec]}{-Release Group}",
+    "dailyEpisodeFormat": "{Series TitleYear} - {Air-Date} - [{Custom Formats }{Quality Full}]{[MediaInfo VideoDynamicRangeType]}{[Mediainfo AudioCodec}{ Mediainfo AudioChannels]}{[MediaInfo VideoCodec]}{-Release Group}",
+    "animeEpisodeFormat": "{Series TitleYear} - S{season:00}E{episode:00} - {absolute:000} - [{Custom Formats }{Quality Full}]{[MediaInfo VideoDynamicRangeType]}{[Mediainfo AudioCodec}{ Mediainfo AudioChannels]}{[MediaInfo VideoCodec]}{-Release Group}",
+    "seriesFolderFormat": "{Series TitleYear} {tvdb-{TvdbId}}",
+    "seasonFolderFormat": "Season {season:00}",
+    "specialsFolderFormat": "Specials"
+  }

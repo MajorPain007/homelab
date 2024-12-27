@@ -1,0 +1,9 @@
+# See "Basic Setup" for `service_type` and `instance_name`
+service_type:
+  instance_name:
+    # Media Naming Configuration
+    media_naming:
+      folder: '{Movie Title:DE}{(Release Year)} [tmdb-{TmdbId}] - {Edition Tags }{[Custom Formats]}{[Quality Full]}{[MediaInfo 3D]}{[MediaInfo VideoDynamicRangeType]}{[Mediainfo AudioCodec}{ Mediainfo AudioChannels]}{[Mediainfo VideoCodec]}{-Release Group}'
+      movie:
+        rename: true
+        standard: '{Movie TitleFirstCharacter:DE}/{Movie Title:DE} ({Release Year}) {tmdb-{TmdbId}}'
