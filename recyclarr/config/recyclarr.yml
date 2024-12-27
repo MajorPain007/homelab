@@ -33,18 +33,15 @@ sonarr:
               - WEBDL-480p
     quality_definition:
       type: series
-    # See "Basic Setup" for `service_type` and `instance_name`
-    # service_type:
-    #   instance_name:
-        # Media Naming Configuration
-    media_naming:
-      series: plex
-      season: default
-      episodes:
-        rename: true
-        standard: default
-        daily: default
-        anime: default
+    # Media Naming Configuration
+    # media_naming:
+    #   series: plex
+    #   season: default
+    #   episodes:
+    #     rename: true
+    #     standard: default
+    #     daily: default
+    #     anime: default
     custom_formats:
       # Advanced Audio from the guide
       - trash_ids:
@@ -161,11 +158,11 @@ radarr:
     quality_definition:
       type: movies
     # See "Basic Setup" for `service_type` and `instance_name`
-    media_naming:
-      folder: plex
-      movie:
-        rename: true
-        standard: default
+    # media_naming:
+    #   folder: plex
+    #   movie:
+    #     rename: true
+    #     standard: default
     custom_formats:
       # Advanced Audio from the guide
       - trash_ids:
