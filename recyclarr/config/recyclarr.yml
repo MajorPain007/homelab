@@ -33,6 +33,7 @@ sonarr:
               - WEBDL-480p
     quality_definition:
       type: series
+      preferred_ratio: 1.0
     # media_naming:
     #   series: plex
     #   season: default
@@ -46,7 +47,8 @@ sonarr:
           # Audio Formats
           - 47435ece6b99a0b477caf360e79ba0bb # x265 (HD)
           - 0d7824bb924701997f874e7ff7d4844a # TrueHD ATMOS
-          - b6fbafa7942952a13e17e2b1152b539a # DTS X
+          - 9d00418ba386a083fbf4d58235fc37ef # DTS X
+          - b6fbafa7942952a13e17e2b1152b539a # ATMOS (undefined)
           - 4232a509ce60c4e208d13825b7c06264 # DD+ ATMOS
           - 1808e4b9cee74e064dfae3f1db99dbfe # TrueHD
           - c429417a57ea8c41d57e6990a8b0033f # DTS-HD MA
@@ -154,6 +156,7 @@ radarr:
               - WEBDL-480p
     quality_definition:
       type: movie
+      preferred_ratio: 1.0
 
     custom_formats:
       - trash_ids:
