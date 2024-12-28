@@ -1,20 +1,24 @@
 #!/bin/bash
 
 # This script is designed to update the quality definitions and various configuration settings for the applications Sonarr and Radarr.
-# These applications are used to manage TV shows and movies, automate downloads, and organize libraries.
+# These applications are used to manage TV series and movies, automate downloads, and organize libraries.
 
 # Prerequisites for the script:
 # - curl: A tool to send HTTP requests.
 # - jq: A command-line tool for processing JSON data.
 # Both can be installed via the package manager if needed (e.g., "sudo apt-get install curl jq").
 
-# Define the base URLs and API keys for connecting to Sonarr and Radarr services on the local network.
-SONARR_URLS=("http://192.168.178.:8989") # ("http://url-sonarr:8989" "http://andere-url-sonarr:8989")
-SONARR_API_KEYS=("") # ("sonarr_api_key_1" "sonarr_api_key_2")
+# Definition of the base URLs and API keys for connecting to Sonarr and Radarr services on the local network.
 
-# Arrays for Radarr
-RADARR_URLS=("http://192.168.178.:7878") # ("http://url-radarr:7878" "http://andere-url-radarr:7878")
-RADARR_API_KEYS=("") # ("radarr_api_key_1" "radarr_api_key_2")
+SONARR_URLS=("") # Normal Sonarr instance
+SONARR_API_KEYS=("") # API key for the normal instance
+
+# Separate URL and API key for Anime Sonarr instance
+SONARR_ANIME_URL="http://192.168.178.3:8989"
+SONARR_ANIME_API_KEY="97f8e335cd4e4fe2863e0da368d24988"
+
+RADARR_URLS=("http://192.168.178.3:7878")
+RADARR_API_KEYS=("77130cf856e04b3a9909b4187e5dd871")
 
 # Quality definitions for Sonarr in JSON format.
 # It defines minimum, maximum, and preferred file sizes for different video quality levels.
@@ -33,6 +37,30 @@ sonarr_quality_definitions='{
   "WEBRip-2160p": {"minSize": 25, "maxSize": 1000, "preferredSize": 999},
   "Bluray-2160p": {"minSize": 94.6, "maxSize": 1000, "preferredSize": 999},
   "Bluray-2160p Remux": {"minSize": 187.4, "maxSize": 1000, "preferredSize": 999}
+}'
+
+# Quality definitions for the Anime Sonarr instance.
+sonarr_quality_definitions_anime='{
+  "SDTV": {"minSize": 5, "maxSize": 1000, "preferredSize": 999},
+  "WEBRip-480p": {"minSize": 5, "maxSize": 1000, "preferredSize": 999},
+  "WEBDL-480p": {"minSize": 5, "maxSize": 1000, "preferredSize": 999},
+  "DVD": {"minSize": 5, "maxSize": 1000, "preferredSize": 999},
+  "Bluray-480p": {"minSize": 5, "maxSize": 1000, "preferredSize": 999},
+  "Bluray-576p": {"minSize": 5, "maxSize": 1000, "preferredSize": 999},
+  "HDTV-720p": {"minSize": 5, "maxSize": 1000, "preferredSize": 999},
+  "WEBDL-720p": {"minSize": 5, "maxSize": 1000, "preferredSize": 999},
+  "WEBRip-720p": {"minSize": 5, "maxSize": 1000, "preferredSize": 999},
+  "Bluray-720p": {"minSize": 5, "maxSize": 1000, "preferredSize": 999},
+  "HDTV-1080p": {"minSize": 5, "maxSize": 1000, "preferredSize": 999},
+  "WEBDL-1080p": {"minSize": 5, "maxSize": 1000, "preferredSize": 999},
+  "WEBRip-1080p": {"minSize": 5, "maxSize": 1000, "preferredSize": 999},
+  "Bluray-1080p": {"minSize": 5, "maxSize": 1000, "preferredSize": 999},
+  "Bluray-1080p Remux": {"minSize": 5, "maxSize": 1000, "preferredSize": 999},
+  "HDTV-2160p": {"minSize": 5, "maxSize": 1000, "preferredSize": 999},
+  "WEBDL-2160p": {"minSize": 5, "maxSize": 1000, "preferredSize": 999},
+  "WEBRip-2160p": {"minSize": 5, "maxSize": 1000, "preferredSize": 999},
+  "Bluray-2160p": {"minSize": 5, "maxSize": 1000, "preferredSize": 999},
+  "Bluray-2160p Remux": {"minSize": 5, "maxSize": 1000, "preferredSize": 999}
 }'
 
 # Quality definitions for Radarr in JSON format.
@@ -112,7 +140,7 @@ update_quality_definitions() {
           -d "$updated_definition")
 
         # Report the success or failure of the update.
-        if [ "$curl_response" -eq 200 ] || [ "$curl_response" -eq 202  ]; then
+        if [ "$curl_response" -eq 200 ] || [ "$curl_response" -eq 202 ]; then
           echo "Successfully updated: $quality_name"
         else
           echo "Error updating $quality_name, HTTP status: $curl_response"
@@ -232,10 +260,16 @@ change_radarr_mediamanagement_config() {
 
 # Start of the script: Calls the functions for Sonarr and Radarr respectively
 # to update the quality definitions and other configurations.
-update_quality_definitions "${SONARR_URLS[@]}" "${SONARR_API_KEYS[@]}" "$sonarr_quality_definitions"
+update_quality_definitions "${SONARR_URLS[@]}" "${SONARR_API_KEYS[@]}" "$sonarr_quality_definitions" 
 change_sonarr_naming_config
 change_sonarr_mediamanagement_config
 
+# Anime Sonarr instance
+update_quality_definitions "$SONARR_ANIME_URL" "$SONARR_ANIME_API_KEY" "$sonarr_quality_definitions_anime"
+change_sonarr_naming_config
+change_sonarr_mediamanagement_config
+
+# Radarr instance
 update_quality_definitions "${RADARR_URLS[@]}" "${RADARR_API_KEYS[@]}" "$radarr_quality_definitions"
 change_radarr_naming_config
 change_radarr_mediamanagement_config
