@@ -112,7 +112,7 @@ update_quality_definitions() {
           -d "$updated_definition")
 
         # Report the success or failure of the update.
-        if [ "$curl_response" -eq 200 ]; then
+        if [ "$curl_response" -eq 200 ] || [ "$curl_response" -eq 200  ]; then
           echo "Successfully updated: $quality_name"
         else
           echo "Error updating $quality_name, HTTP status: $curl_response"
