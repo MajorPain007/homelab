@@ -2,8 +2,8 @@ sonarr:
   sonarr_test:
     base_url: http://sonarr_test:8989 # !secret sonarr_url
     api_key:  # !secret sonarr_apikey
-    delete_old_custom_formats: false
-    replace_existing_custom_formats: false
+    delete_old_custom_formats: true
+    replace_existing_custom_formats: true
     quality_profiles:
       - name: Any
         reset_unmatched_scores:
@@ -29,20 +29,12 @@ sonarr:
               - Bluray-720p
               - WEBDL-720p
               - WEBRip-720p
-              - DVD
-              - WEBDL-480p
-    quality_definition:
-      type: series
-      preferred_ratio: 1.0
-    # media_naming:
-    #   series: plex
-    #   season: default
-    #   episodes:
-    #     rename: true
-    #     standard: default
-    #     daily: default
-    #     anime: default
-    custom_formats:
+              # - DVD
+              # - WEBDL-480p
+    # quality_definition:
+    #   type: series
+    #   preferred_ratio: 1.0
+    custom_formats: # WIP
       - trash_ids:
           # Audio Formats
           - 47435ece6b99a0b477caf360e79ba0bb # x265 (HD)
@@ -152,11 +144,11 @@ radarr:
               - Bluray-720p
               - WEBDL-720p
               - WEBRip-720p
-              - DVD
-              - WEBDL-480p
-    quality_definition:
-      type: movie
-      preferred_ratio: 1.0
+              # - DVD
+              # - WEBDL-480p
+    # quality_definition:
+    #   type: movie
+    #   preferred_ratio: 1.0
 
     custom_formats:
       - trash_ids:
