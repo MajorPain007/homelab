@@ -1,9 +1,263 @@
+###################################################################################################
+# Recyclarr Configuration Template: UHD Bluray + WEB                                              #
+# Updated: 2024-05-21                                                                             #
+# Documentation: https://recyclarr.dev                                                            #
+# Note: If you are using multiple profiles in a single instance, please read the following        #
+# documentation about file merging:                                                               #
+# https://recyclarr.dev/wiki/yaml/config-examples/#merge-single-instance                          #
+###################################################################################################
+
+# Instance Definition: https://recyclarr.dev/wiki/yaml/config-reference/basic/
+radarr:
+  radarr-main:
+    base_url: http://radarr:7878 # !secret radarr_url
+    api_key:  # !secret radarr_apikey
+
+    include:
+      # - template: radarr-quality-definition-movie
+      - template: radarr-custom-formats-uhd-bluray-web-german
+      - template: radarr-custom-formats-uhd-remux-web-german
+
+    quality_profiles:
+      - name: Any
+        reset_unmatched_scores:
+          enabled: false
+        upgrade:
+          allowed: true
+          until_quality: Bluray|WEB
+          until_score: 25000
+# Uncomment one of the next 2 lines dependent on if you want English Releases
+        # min_format_score: 1600 # Get English Releases and Upgrade to German when available
+        min_format_score: 10000 # Skip English Releases
+        quality_sort: top
+        qualities:
+          - name: Bluray|WEB
+# Comment any qualities you are not interested in
+            qualities:
+              - Remux-2160p
+              - Bluray-2160p
+              - WEBDL-2160p
+              - WEBRip-2160p
+              - Remux-1080p
+              - Bluray-1080p
+              - WEBRip-1080p
+              - WEBDL-1080p
+              - Bluray-720p
+              - WEBDL-720p
+              - WEBRip-720p
+    custom_formats:
+
+### Audio
+      - trash_ids:
+# Uncomment the next section to enable Advanced Audio Formats
+         - 496f355514737f7d83bf7aa4d24f8169 # TrueHD Atmos
+         - 2f22d89048b01681dde8afe203bf2e95 # DTS X
+         - 417804f7f2c4308c1f4c5d380d4c4475 # ATMOS (undefined)
+         - 1af239278386be2919e1bcee0bde047e # DD+ ATMOS
+         - 3cafb66171b47f226146a0770576870f # TrueHD
+         - dcf3ec6938fa32445f590a4da84256cd # DTS-HD MA
+         - a570d4a0e56a2874b64e5bfa55202a1b # FLAC
+         - e7c2fcae07cbada050a0af3357491d7b # PCM
+         - 8e109e50e0a0b83a5098b056e13bf6db # DTS-HD HRA
+         - 185f1dd7264c4562b9022d963ac37424 # DD+
+         - f9f847ac70a0af62ea4a08280b859636 # DTS-ES
+         - 1c1a4c5e823891c75bc50380a6866f73 # DTS
+         - 240770601cc226190c367ef59aba7463 # AAC
+         - c2998bd0d90ed5621d8df281e839436e # DD
+
+### Movie Versions
+# Uncomment any of the following lines to prefer these movie versions
+         - 0f12c086e289cf966fa5948eac571f44 # Hybrid
+         - 570bc9ebecd92723d2d21500f4be314c # Remaster
+         - eca37840c13c6ef2dd0262b141a5482f # 4K Remaster
+         - e0c07d59beb37348e975a930d5e50319 # Criterion Collection
+         - 9d27d9d2181838f76dee150882bdc58c # Masters of Cinema
+         - db9b4c4b53d312a3ca5f1378f6440fc9 # Vinegar Syndrome
+         - 957d0f44b592285f26449575e8b1167e # Special Edition
+         - eecf3a857724171f968a66cb5719e152 # IMAX
+         - 9f6cbff8cfe4ebbc1bde14c7b7bec0de # IMAX Enhanced
+
+### Optional
+         - 182fa1c42a2468f8488e6dcf75a81b81 # Internal
+         - b6832f586342ef70d9c128d40c07b872 # Bad Dual Groups
+         - 90cedc1fea7ea5d11298bebd3d1d3223 # EVO (no WEBDL)
+         - ae9b7c9ebde1f3bd336a8cbd1ec4c5e5 # No-RlsGroup
+         - 7357cf5161efbf8c4d5d0c30b4815ee2 # Obfuscated
+         - 5c44f52a8714fdd79bb4d98e2673be1f # Retags
+         - c465ccc73923871b3eb1802042331306 # Line / Mic Dubbed
+         - f537cf427b64c38c8e36298f657e4828 # Scene
+
+### Resolution Boosters
+# Comment any ID corresponding to resolutions you are not interested in
+      - trash_ids:
+          - cc7b1e64e2513a6a271090cdfafaeb55 # German 2160p Booster
+          - fb392fb0d61a010ae38e49ceaa24a1ef # 2160p
+          - 3bc8df3a71baaac60a31ef696ea72d36 # German 1080p Booster
+          - b2be17d608fc88818940cd1833b0b24c # 720p
+          - 820b09bb9acbfde9c35c71e0e565dad8 # 1080p
+
+### Generated Dynamic HDR
+# Uncomment the next 5 lines if you dont care about Generated Dynamic HDR and/or want to grab VECTOR
+          - e6886871085226c3da1830830146846c # Generated Dynamic HDR
+
+### x265 Releases
+# Uncomment the next six lines to allow x265 HD releases with HDR/DV
+# Uncomment the next four lines to allow any x265 HD releases
+          - dc98083864ea246d05a42df0d05f81cc # x265 (HD)
+#          - 839bea857ed2c0a8e084f3cbdbd65ecb # x265 (no HDR/DV)
+
+### HDR / DV
+# Comment out the next line if you and all of your users' setups are fully DV compatible
+          - 923b6abef9b17f937fab56cfcf89e1f1 # DV (WEBDL)
+
+# HDR10+ Boost - Uncomment the next two lines if any of your devices DO support HDR10+
+          - b17886cb4158d9fea189859409975758 # HDR10Plus Boost
+          - 55a5b50cb416dea5a50c4955896217ab # DV HDR10+ Boost
+### Optional SDR
+# Only ever use ONE of the following custom formats:
+# SDR - block ALL SDR releases
+# SDR (no WEBDL) - block UHD/4k Remux and Bluray encode SDR releases, but allow SDR WEB
+#          - 9c38ebb7384dada637be8899efa68e6f # SDR
+          - 25c12f78430a3a23413652cbd1d48d77 # SDR (no WEBDL)
+        assign_scores_to:
+          - name: Any
+      
+      - trash_ids:
+          - f845be10da4f442654c13e1f2c3d6cd5 # German DL
+        assign_scores_to:
+          - name: Any
+            score: 10001
+
+
+  radarr-kids:
+    base_url: http://radarr_kids:7878 # !secret radarr_kids_url
+    api_key:  # !secret radarr_kids_apikey
+
+    include:
+      # - template: radarr-quality-definition-movie
+      - template: radarr-custom-formats-hd-bluray-web-german
+
+    quality_profiles:
+      - name: Any
+        reset_unmatched_scores:
+          enabled: false
+        upgrade:
+          allowed: true
+          until_quality: Bluray|WEB
+          until_score: 25000
+# Uncomment one of the next 2 lines
+#         min_format_score: 1600 # Get English Releases and Upgrade to German when available
+        min_format_score: 10000 # Skip English Releases
+        quality_sort: top
+        qualities:
+          - name: Bluray|WEB
+# Comment any qualities you are not interested in
+            qualities:
+#              - Bluray-2160p
+#              - WEBDL-2160p
+#              - WEBRip-2160p
+              - Bluray-1080p
+              - WEBRip-1080p
+              - WEBDL-1080p
+              - Bluray-720p
+              - WEBDL-720p
+              - WEBRip-720p
+
+    delete_old_custom_formats: true
+    replace_existing_custom_formats: true
+
+    custom_formats:
+### Resolution Boosters
+# Uncomment any ID corresponding to resolutions you are not interested in
+      - trash_ids:
+          - 3bc8df3a71baaac60a31ef696ea72d36 # German 1080p Booster
+          # - cc7b1e64e2513a6a271090cdfafaeb55 # German 2160p Booster
+          - b2be17d608fc88818940cd1833b0b24c # 720p
+          - 820b09bb9acbfde9c35c71e0e565dad8 # 1080p
+          # - fb392fb0d61a010ae38e49ceaa24a1ef # 2160p
+        assign_scores_to:
+          - name: Any
+
+# Optional International
+      - trash_ids:
+          - 182fa1c42a2468f8488e6dcf75a81b81 # Internal
+          - b6832f586342ef70d9c128d40c07b872 # Bad Dual Groups
+          - 90cedc1fea7ea5d11298bebd3d1d3223 # EVO (no WEBDL)
+          - ae9b7c9ebde1f3bd336a8cbd1ec4c5e5 # No-RlsGroup
+          - 7357cf5161efbf8c4d5d0c30b4815ee2 # Obfuscated
+          - 5c44f52a8714fdd79bb4d98e2673be1f # Retags
+          - c465ccc73923871b3eb1802042331306 # Line / Mic Dubbed
+        assign_scores_to:
+          - name: Any
+
+### Generated Dynamic HDR
+      - trash_ids:
+          - e6886871085226c3da1830830146846c # Generated Dynamic HDR
+        assign_scores_to:
+          - name: Any
+# Uncomment the next line if you dont care about Generated Dynamic HDR and/or want to grab VECTOR.
+            score: 0
+
+### x265 Releases
+      - trash_ids:
+# Uncomment the next six lines to allow x265 HD releases with HDR/DV
+# Uncomment the next four lines to allow any x265 HD releases
+          - dc98083864ea246d05a42df0d05f81cc # x265 (HD)
+        assign_scores_to:
+          - name: Any
+            score: 2
+#      - trash_ids:
+#          - 839bea857ed2c0a8e084f3cbdbd65ecb # x265 (no HDR/DV)
+
+### DV/HDR
+      - trash_ids:
+          - c53085ddbd027d9624b320627748612f # DV HDR10Plus
+          - e23edd2482476e595fb990b12e7c609c # DV HDR10
+          - 55d53828b9d81cbe20b02efd00aa0efd # DV HLG
+          - a3e19f8f627608af0211acd02bf89735 # DV SDR
+          - b974a6cd08c1066250f1f177d7aa1225 # HDR10+
+          - dfb86d5941bc9075d6af23b09c2aeecd # HDR10
+          - e61e28db95d22bedcadf030b8f156d96 # HDR
+          - 2a4d9069cc1fe3242ff9bdaebed239bb # HDR (undefined)
+          - 08d6d8834ad9ec87b1dc7ec8148e7a1f # PQ
+          - 9364dd386c9b4a1100dde8264690add7 # HLG
+        assign_scores_to:
+          - name: Any
+      - trash_ids:
+# Comment out the next line if you and all of your users' setups are fully DV compatible
+          # - 923b6abef9b17f937fab56cfcf89e1f1 # DV (WEBDL)
+
+# Uncomment the next two lines if any of your devices DO support HDR10+
+          - b17886cb4158d9fea189859409975758 # HDR10Plus Boost
+          - 55a5b50cb416dea5a50c4955896217ab # DV HDR10+ Boost
+        assign_scores_to:
+          - name: Any
+      - trash_ids:
+          - f845be10da4f442654c13e1f2c3d6cd5 # German DL
+        assign_scores_to:
+          - name: Any
+            score: 10001
+      - trash_ids:
+          - 03c430f326f10a27a9739b8bc83c30e4 # German Microsized
+        assign_scores_to:
+          - name: Any
+            score: 4500
+      - trash_ids:
+          - 9170d55c319f4fe40da8711ba9d8050d # h265
+        assign_scores_to:
+          - name: Any
+            score: 500
+
 sonarr:
   sonarr_test:
     base_url: http://sonarr_test:8989 # !secret sonarr_url
     api_key:  # !secret sonarr_apikey
+    include:
+      - template: sonarr-quality-definition-series
+
     delete_old_custom_formats: true
     replace_existing_custom_formats: true
+    
     quality_profiles:
       - name: Any
         reset_unmatched_scores:
@@ -11,9 +265,8 @@ sonarr:
         upgrade:
           allowed: true
           until_quality: Bluray|WEB
-          until_score: 99999
-        min_format_score: 5000
-        # score_set: sqp-1-1080p
+          until_score: 25000
+        min_format_score: 10000
         quality_sort: top
         qualities:
           - name: Bluray|WEB
@@ -31,13 +284,11 @@ sonarr:
               - WEBRip-720p
               # - DVD
               # - WEBDL-480p
-    # quality_definition:
-    #   type: series
-    #   preferred_ratio: 1.0
-    custom_formats: # WIP
+
+    custom_formats:
       - trash_ids:
+          # - 47435ece6b99a0b477caf360e79ba0bb # x265 (HD)
           # Audio Formats
-          - 47435ece6b99a0b477caf360e79ba0bb # x265 (HD)
           - 0d7824bb924701997f874e7ff7d4844a # TrueHD ATMOS
           - 9d00418ba386a083fbf4d58235fc37ef # DTS X
           - b6fbafa7942952a13e17e2b1152b539a # ATMOS (undefined)
@@ -54,9 +305,8 @@ sonarr:
           - dbe00161b08a25ac6154c55f95e6318d # DD
           - 28f6ef16d61e2d1adfce3156ed8257e3 # Opus
           # HDR Formats
-          - 2b239ed870daba8126a53bd5dc8dc1c8 # DV HDR10+
+          - 2b239ed870daba8126a53bd5dc8dc1c8 # DV HDR10Plus
           - 7878c33f1963fefb3d6c8657d46c2f0a # DV HDR10
-          - 6d0d8de7b57e35518ac0308b0ddf404e # DV
           - 1f733af03141f068a540eec352589a89 # DV HLG
           - 27954b0a80aab882522a88a4d9eae1cd # DV SDR
           - a3d82cbef5039f8d295478d28a887159 # HDR10+
@@ -65,6 +315,15 @@ sonarr:
           - bb019e1cd00f304f80971c965de064dc # HDR (undefined)
           - 2a7e3be05d3861d6df7171ec74cad727 # PQ
           - 17e889ce13117940092308f48b48b45b # HLG
+          - 6d0d8de7b57e35518ac0308b0ddf404e # DV
+
+          # Comment out the next line if you and all of your users' setups are fully DV compatible
+          # - 9b27ab6498ec0f31a3353992e19434ca # DV (WEBDL)
+
+          # HDR10+ Boost - Uncomment the next line if any of your devices DO support HDR10+
+          - 0dad0a507451acddd754fe6dc3a7f5e7 # HDR10Plus Boost
+          - 385e9e8581d33133c3961bdcdeffb7b4 # DV HDR10+ Boost
+
           # Series Versions
           - 3a4127d8aa781b44120d907f2cd62627 # Hybrid
           - b735f09d3c025cbb7d75a5d38325b73b # Remaster
@@ -76,7 +335,7 @@ sonarr:
           - eb3d5cc0a2be0db205fb823640db6a3c # Repack 2
           - 44e7c4de10ae50265753082e5dc76047 # Repack 3
           - cddfb4e32db826151d97352b8e37c648 # x264
-          - c9eafd50846d299b862ca9bb6ea91950 # x265
+          # - c9eafd50846d299b862ca9bb6ea91950 # x265
           - 32b367365729d530ca1c124a0b180c64 # Bad Dual Groups
           - 5ab46ff851b76c337e13e81a4353875f # Internal
           - 82d40da2bc6923f41e14394075dd4b03 # No-RlsGroup
@@ -101,6 +360,12 @@ sonarr:
           - 570b03b3145a25011bf073274a407259 # HIDIVE
           - e5e6405d439dcd1af90962538acd4fe0 # WKN
           - 026d5aadd1a6b4e550b134cb6c72b3ca # Uncensored
+          # Optional
+          - 32b367365729d530ca1c124a0b180c64 # Bad Dual Groups
+          - 82d40da2bc6923f41e14394075dd4b03 # No-RlsGroup
+          - e1a997ddb54e3ecbfe06341ad323c458 # Obfuscated
+          - 06d66ab109d4d2eddb2794d21526d140 # Retags
+          # - c465ccc73923871b3eb1802042331306 # Line / Mic Dubbed
         assign_scores_to:
           - name: Any
 
@@ -108,165 +373,141 @@ sonarr:
           - ed51973a811f51985f14e2f6f290e47a # German DL
         assign_scores_to:
           - name: Any
-            score: 10001          
-
-
-radarr:
-  radarr_test:
-    base_url: http://radarr_test:7878 # !secret sonarr_url
-    api_key:  # !secret sonarr_apikey
-    delete_old_custom_formats: true # Löscht alte CF
-    replace_existing_custom_formats: true # Updated alte CF
-    
-    quality_profiles:
-      - name: Bluray|WEB
-        # language: Any
-        reset_unmatched_scores:
-          enabled: true
-        upgrade:
-          allowed: true
-          until_quality: Bluray|WEB
-          until_score: 99999
-        min_format_score: 5000
-        # score_set: sqp-1-1080p
-        quality_sort: top
-        qualities:
-          - name: Bluray|WEB
-            qualities:
-              - Remux-2160p
-              - Bluray-2160p
-              - WEBDL-2160p
-              - WEBRip-2160p
-              - Remux-1080p
-              - Bluray-1080p
-              - WEBDL-1080p
-              - WEBRip-1080p
-              - Bluray-720p
-              - WEBDL-720p
-              - WEBRip-720p
-              # - DVD
-              # - WEBDL-480p
-    # quality_definition:
-    #   type: movie
-    #   preferred_ratio: 1.0
-
-    custom_formats:
-      - trash_ids:
-          # Audio Formats
-          - 496f355514737f7d83bf7aa4d24f8169 # TrueHD ATMOS
-          - 2f22d89048b01681dde8afe203bf2e95 # DTS X
-          - 417804f7f2c4308c1f4c5d380d4c4475 # ATMOS (undefined)
-          - 1af239278386be2919e1bcee0bde047e # DD+ ATMOS
-          - 3cafb66171b47f226146a0770576870f # TrueHD
-          - dcf3ec6938fa32445f590a4da84256cd # DTS-HD MA
-          - a570d4a0e56a2874b64e5bfa55202a1b # FLAC
-          - e7c2fcae07cbada050a0af3357491d7b # PCM
-          - 8e109e50e0a0b83a5098b056e13bf6db # DTS-HD HRA
-          - 185f1dd7264c4562b9022d963ac37424 # DD+
-          - f9f847ac70a0af62ea4a08280b859636 # DTS-ES
-          - 1c1a4c5e823891c75bc50380a6866f73 # DTS
-          - 240770601cc226190c367ef59aba7463 # AAC
-          - c2998bd0d90ed5621d8df281e839436e # DD
-          # HDR Formats
-          - c53085ddbd027d9624b320627748612f # DV HDR10+
-          - e23edd2482476e595fb990b12e7c609c # DV HDR10
-          - 58d6a88f13e2db7f5059c41047876f00 # DV
-          - 55d53828b9d81cbe20b02efd00aa0efd # DV HLG
-          - a3e19f8f627608af0211acd02bf89735 # DV SDR
-          - b974a6cd08c1066250f1f177d7aa1225 # HDR10+
-          - dfb86d5941bc9075d6af23b09c2aeecd # HDR10
-          - e61e28db95d22bedcadf030b8f156d96 # HDR
-          - 2a4d9069cc1fe3242ff9bdaebed239bb # HDR (undefined)
-          - 08d6d8834ad9ec87b1dc7ec8148e7a1f # PQ
-          - 9364dd386c9b4a1100dde8264690add7 # HLG
-          # Movie Versions
-          - 0f12c086e289cf966fa5948eac571f44 # Hybrid
-          - 570bc9ebecd92723d2d21500f4be314c # Remaster
-          - eca37840c13c6ef2dd0262b141a5482f # 4K Remaster
-          - e0c07d59beb37348e975a930d5e50319 # Criterion Collection
-          - 9d27d9d2181838f76dee150882bdc58c # Masters of Cinema
-          - db9b4c4b53d312a3ca5f1378f6440fc9 # Vinegar Syndrome
-          - 957d0f44b592285f26449575e8b1167e # Special Edition
-          - eecf3a857724171f968a66cb5719e152 # IMAX
-          - 9f6cbff8cfe4ebbc1bde14c7b7bec0de # IMAX Enhanced
-          # Miscellaneous
-          - 182fa1c42a2468f8488e6dcf75a81b81 # Internal
-          - b6832f586342ef70d9c128d40c07b872 # Bad Dual Groups
-          - 90cedc1fea7ea5d11298bebd3d1d3223 # EVO (no WEBDL)
-          - ae9b7c9ebde1f3bd336a8cbd1ec4c5e5 # No-RlsGroup
-          - 7357cf5161efbf8c4d5d0c30b4815ee2 # Obfuscated
-          - 5c44f52a8714fdd79bb4d98e2673be1f # Retags
-          - e7718d7a3ce595f289bfee26adc178f5 # Repack/Proper
-          - ae43b294509409a6a13919dedd4764c4 # Repack 2
-          - 5caaaa1c08c1742aa4342d8c4cc463f2 # Repack 3
-          # Unwanted
-          - ed38b889b31be83fda192888e2286d83 # BR-DISK
-          - b8cd450cbfa689c0259a01d9e29ba3d6 # 3D
-          - c465ccc73923871b3eb1802042331306 # Line/Mic Dubbed
-          - 90a6f9a284dff5103f6346090e6280c8 # LQ
-          - 263943bc5d99550c68aad0c4278ba1c7 # German LQ
-          - 03c430f326f10a27a9739b8bc83c30e4 # German Microsized
-          # - dc98083864ea246d05a42df0d05f81cc # x265 (HD)
-          # streaming
-          - b3b3a6ac74ecbd56bcdbefa4799fb9df # AMZN
-          - 40e9380490e748672c2522eaaeb692f7 # ATVP
-          - cc5e51a9e85a6296ceefe097a77f12f4 # BCORE
-          - 16622a6911d1ab5d5b8b713d5b0036d4 # CRiT
-          - 84272245b2988854bfb76a16e60baea5 # DSNP
-          - 509e5f41146e278f9eab1ddaceb34515 # HBO
-          - 5763d1b0ce84aff3b21038eea8e9b8ad # HMAX
-          - 526d445d4c16214309f0fd2b3be18a89 # Hulu
-          - e0ec9672be6cac914ffad34a6b077209 # iT
-          - 6a061313d22e51e0f25b7cd4dc065233 # MAX
-          - 2a6039655313bf5dab1e43523b62c374 # MA
-          - 170b1d363bd8516fbf3a3eb05d4faff6 # NF
-          - e36a0ba1bc902b26ee40818a1d59b8bd # PMTP
-          - c9fd353f8f5f1baf56dc601c4cb29920 # PCOK
-          - c2863d2a50c9acad1fb50e53ece60817 # STAN          
-          # German Guide
-          - 86bc3115eb4e9873ac96904a4a68e19e # German 
-          - 6aad77771dabe9d3e9d7be86f310b867 # German DL (undefined)
-          - 54795711b78ea87e56127928c423689b # German Bluray Tier 01
-          - 1bfc773c53283d47c68e535811da30b7 # German Bluray Tier 02
-          - aee01d40cd1bf4bcded81ee62f0f3659 # German Bluray Tier 03
-          - a2ab25194f463f057a5559c03c84a3df # German Web Tier 01
-          - 08d120d5a003ec4954b5b255c0691d79 # German Web Tier 02
-          - 439f9d71becaed589058ec949e037ff3 # German Web Tier 03
-          - 2d136d4e33082fe573d06b1f237c40dd # German Scene 01
-          - 8608a2ed20c636b8a62de108e9147713 # German Remux Tier 01
-          - f9cf598d55ce532d63596b060a6db9ee # German Remux Tier 01
-          # - 4d74ac4c4db0b64bff6ce0cffef99bf0 # UHD Bluray Tier 01 (Englisch)
-          # - a58f517a70193f8e578056642178419d # UHD Bluray Tier 02 (Englisch)
-          # - e71939fae578037e7aed3ee219bbe7c1 # UHD Bluray Tier 03 (Englisch)
-          # - 3a3ff47579026e76d6504ebea39390de # Remux Tier 01 (Englisch)
-          # - 9f98181fe5a3fbeb0cc29340da2a468a # Remux Tier 02 (Englisch)
-          # - 8baaf0b3142bf4d94c42a724f034e27a # Remux Tier 03 (Englisch)
-          # - ed27ebfef2f323e964fb1f61391bcb35 # HD Bluray Tier 01 (Englisch)
-          # - c20c8647f2746a1f4c4262b0fbbeeeae # HD Bluray Tier 02 (Englisch)
-          # - 5608c71bcebba0a5e666223bae8c9227 # HD Bluray Tier 03 (Englisch)
-          # - c20f169ef63c5f40c2def54abaf4438e # Web Tier 01 (Englisch)
-          # - 403816d65392c79236dcb6dd591aeda4 # Web Tier 02 (Englisch)
-          # - af94e0fe497124d1f9ce732069ec8c3b # Web Tier 03 (Englisch)
-          - 3bc8df3a71baaac60a31ef696ea72d36 # German 1080p Booster
-          - cc7b1e64e2513a6a271090cdfafaeb55 # German 2160p Booster
-          - b2be17d608fc88818940cd1833b0b24c # 720p
-          - 820b09bb9acbfde9c35c71e0e565dad8 # 1080p
-          - fb392fb0d61a010ae38e49ceaa24a1ef # 2160p
-        assign_scores_to:
-          - name: Bluray|WEB
-      - trash_ids:
-          - f845be10da4f442654c13e1f2c3d6cd5 # German DL
-        assign_scores_to:
-          - name: Bluray|WEB
             score: 10001
-#   sonarr_as:
-#     base_url: !secret sonarr_as_url
-#     api_key: !secret sonarr_as_apikey
+      - trash_ids:
+          - c9eafd50846d299b862ca9bb6ea91950 # x265
+        assign_scores_to:
+          - name: Any
+            score: 2
 
-#   radarr_main:
-#     base_url: !secret radarr_url
-#     api_key: !secret radarr_apikey
+  # sonarr_as:
+  #   base_url: !secret sonarr_as_url
+  #   api_key: !secret sonarr_as_apikey
+  #   include:
+  #     - template: sonarr-quality-definition-animes
 
-#   radarr_kids:
-#     base_url: !secret radarr_kids_url
-#     api_key: !secret radarr_kids_apikey
+  #   delete_old_custom_formats: true
+  #   replace_existing_custom_formats: true
+    
+  #   quality_profiles:
+  #     - name: Any
+  #       # language: Any
+  #       reset_unmatched_scores:
+  #         enabled: true
+  #       upgrade:
+  #         allowed: true
+  #         until_quality: Bluray|WEB
+  #         until_score: 25000
+  #       min_format_score: 10000
+  #       quality_sort: top
+  #       qualities:
+  #         - name: Bluray|WEB
+  #           qualities:
+  #             - Bluray-2160p Remux
+  #             - Bluray-2160p
+  #             - WEBDL-2160p
+  #             - WEBRip-2160p
+  #             - Bluray-1080p Remux
+  #             - Bluray-1080p
+  #             - WEBDL-1080p
+  #             - WEBRip-1080p
+  #             - Bluray-720p
+  #             - WEBDL-720p
+  #             - WEBRip-720p
+  #             # - DVD
+  #             # - WEBDL-480p
+
+  #   custom_formats:
+  #     - trash_ids:
+  #         - 47435ece6b99a0b477caf360e79ba0bb # x265 (HD)
+  #         # Audio Formats
+  #         - 0d7824bb924701997f874e7ff7d4844a # TrueHD ATMOS
+  #         - 9d00418ba386a083fbf4d58235fc37ef # DTS X
+  #         - b6fbafa7942952a13e17e2b1152b539a # ATMOS (undefined)
+  #         - 4232a509ce60c4e208d13825b7c06264 # DD+ ATMOS
+  #         - 1808e4b9cee74e064dfae3f1db99dbfe # TrueHD
+  #         - c429417a57ea8c41d57e6990a8b0033f # DTS-HD MA
+  #         - 851bd64e04c9374c51102be3dd9ae4cc # FLAC
+  #         - 30f70576671ca933adbdcfc736a69718 # PCM
+  #         - cfa5fbd8f02a86fc55d8d223d06a5e1f # DTS-HD HRA
+  #         - 63487786a8b01b7f20dd2bc90dd4a477 # DD+
+  #         - c1a25cd67b5d2e08287c957b1eb903ec # DTS-ES
+  #         - 5964f2a8b3be407d083498e4459d05d0 # DTS
+  #         - a50b8a0c62274a7c38b09a9619ba9d86 # AAC
+  #         - dbe00161b08a25ac6154c55f95e6318d # DD
+  #         - 28f6ef16d61e2d1adfce3156ed8257e3 # Opus
+  #         # HDR Formats
+  #         - 2b239ed870daba8126a53bd5dc8dc1c8 # DV HDR10Plus
+  #         - 7878c33f1963fefb3d6c8657d46c2f0a # DV HDR10
+  #         - 1f733af03141f068a540eec352589a89 # DV HLG
+  #         - 27954b0a80aab882522a88a4d9eae1cd # DV SDR
+  #         - a3d82cbef5039f8d295478d28a887159 # HDR10+
+  #         - 3497799d29a085e2ac2df9d468413c94 # HDR10
+  #         - 3e2c4e748b64a1a1118e0ea3f4cf6875 # HDR
+  #         - bb019e1cd00f304f80971c965de064dc # HDR (undefined)
+  #         - 2a7e3be05d3861d6df7171ec74cad727 # PQ
+  #         - 17e889ce13117940092308f48b48b45b # HLG
+  #         - 6d0d8de7b57e35518ac0308b0ddf404e # DV
+
+  #         # Comment out the next line if you and all of your users' setups are fully DV compatible
+  #         # - 9b27ab6498ec0f31a3353992e19434ca # DV (WEBDL)
+
+  #         # HDR10+ Boost - Uncomment the next line if any of your devices DO support HDR10+
+  #         - 0dad0a507451acddd754fe6dc3a7f5e7 # HDR10Plus Boost
+  #         - 385e9e8581d33133c3961bdcdeffb7b4 # DV HDR10+ Boost
+
+  #         # Series Versions
+  #         - 3a4127d8aa781b44120d907f2cd62627 # Hybrid
+  #         - b735f09d3c025cbb7d75a5d38325b73b # Remaster
+  #         # Unwanted
+  #         - 85c61753df5da1fb2aab6f2a47426b09 # BR-DISK
+  #         - 9c11cd3f07101cdba90a2d81cf0e56b4 # LQ
+  #         # Miscellaneous
+  #         - ec8fa7296b64e8cd390a1600981f3923 # Repack/Proper
+  #         - eb3d5cc0a2be0db205fb823640db6a3c # Repack 2
+  #         - 44e7c4de10ae50265753082e5dc76047 # Repack 3
+  #         - cddfb4e32db826151d97352b8e37c648 # x264
+  #         - c9eafd50846d299b862ca9bb6ea91950 # x265
+  #         - 32b367365729d530ca1c124a0b180c64 # Bad Dual Groups
+  #         - 5ab46ff851b76c337e13e81a4353875f # Internal
+  #         - 82d40da2bc6923f41e14394075dd4b03 # No-RlsGroup
+  #         - e1a997ddb54e3ecbfe06341ad323c458 # Obfuscated
+  #         - 06d66ab109d4d2eddb2794d21526d140 # Retags
+  #         # streaming
+  #         - d660701077794679fd59e8bdf4ce3a29 # AMZN
+  #         - f67c9ca88f463a48346062e8ad07713f # ATVP
+  #         - 77a7b25585c18af08f60b1547bb9b4fb # Comedy Central
+  #         - 89358767a60cc28783cdc3d0be9388a4 # DSNP
+  #         - 7a235133c87f7da4c8cccceca7e3c7a6 # HBO
+  #         - f6cce30f1733d5c8194222a7507909bb # Hulu
+  #         - 0ac24a2a68a9700bcb7eeca8e5cd644c # iT
+  #         - 81d1fbf600e2540cee87f3a23f9d3c1c # MAX
+  #         - d34870697c9db575f17700212167be23 # NF
+  #         - c67a75ae4a1715f2bb4d492755ba4195 # PMTP
+  #         - 1656adc6d7bb2c8cca6acfb6592db421 # PCOK
+  #         - 1efe8da11bfd74fbbcd4d8117ddb9213 # STAN
+  #         # Anime streaming
+  #         - 4c67ff059210182b59cdd41697b8cb08 # Bilibili
+  #         - 3e0b26604165f463f3e8e192261e7284 # CR
+  #         - 570b03b3145a25011bf073274a407259 # HIDIVE
+  #         - e5e6405d439dcd1af90962538acd4fe0 # WKN
+  #         - 026d5aadd1a6b4e550b134cb6c72b3ca # Uncensored
+  #         # Optional
+  #         - 32b367365729d530ca1c124a0b180c64 # Bad Dual Groups
+  #         - 82d40da2bc6923f41e14394075dd4b03 # No-RlsGroup
+  #         - e1a997ddb54e3ecbfe06341ad323c458 # Obfuscated
+  #         - 06d66ab109d4d2eddb2794d21526d140 # Retags
+  #         - c465ccc73923871b3eb1802042331306 # Line / Mic Dubbed
+  #       assign_scores_to:
+  #         - name: Any
+
+  #     - trash_ids:
+  #         - ed51973a811f51985f14e2f6f290e47a # German DL
+  #       assign_scores_to:
+  #         - name: Any
+  #           score: 10001
+      # - trash_ids:
+      #     - c9eafd50846d299b862ca9bb6ea91950 # x265
+      #   assign_scores_to:
+      #     - name: Any
+      #       score: 2
