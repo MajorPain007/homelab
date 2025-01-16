@@ -61,7 +61,6 @@ radarr:
 # Uncomment one of the next 2 lines dependent on if you want English Releases
         # min_format_score: 1600 # Get English Releases and Upgrade to German when available
         min_format_score: 10000 # Skip English Releases
-        score_set: german
         quality_sort: top
         qualities:
           - name: Merged QPs
@@ -89,7 +88,6 @@ radarr:
 # Uncomment one of the next 2 lines dependent on if you want English Releases
         # min_format_score: 1600 # Get English Releases and Upgrade to German when available
         min_format_score: 10000 # Skip English Releases
-        score_set: german
         quality_sort: top
         qualities:
           - name: Merged QPs
@@ -251,7 +249,6 @@ radarr:
 # Uncomment one of the next 2 lines
 #         min_format_score: 1600 # Get English Releases and Upgrade to German when available
         min_format_score: 10000 # Skip English Releases
-        score_set: german
         quality_sort: top
         qualities:
           - name: Merged QPs
@@ -380,7 +377,6 @@ sonarr:
           until_quality: Merged QPs
           until_score: 25000
         min_format_score: 10000
-        score_set: german
         quality_sort: top
         qualities:
           - name: Merged QPs
@@ -521,7 +517,6 @@ sonarr:
           until_quality: Merged QPs
           until_score: 25000
         min_format_score: 10000
-        score_set: german
         quality_sort: top
         qualities:
           - name: Merged QPs
