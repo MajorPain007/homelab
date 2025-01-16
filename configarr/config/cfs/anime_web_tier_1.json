@@ -1,0 +1,48 @@
+{
+    "trash_id": "Anime Web Tier 1",
+    "trash_scores": {
+      "default": 2000
+    },
+    "trash_description": "Anime Web Tier 1",
+    "custom_inf": "Anime Web Tier 1",
+    "name": "Anime Web Tier 1",
+    "includeCustomFormatWhenRenaming": false,
+    "specifications": [
+        {
+        "name": "WeebPinn",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "^(WeebPinn)$"
+        }
+        },
+        {
+        "name": "Tanuki",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "^(Tanuki)$"
+        }
+        },
+        {
+        "name": "DK",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "DK"
+        }
+        },
+        {
+        "name": "Pudding-sama",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "Pudding-sama"
+        }
+        }
+    ]
+}

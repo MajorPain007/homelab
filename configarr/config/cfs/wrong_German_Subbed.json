@@ -1,0 +1,21 @@
+{
+    "trash_id": "wrong_German_Subbed",
+    "trash_scores": {
+      "default": -10000
+    },
+    "trash_description": "wrong_German_Subbed",
+    "custom_inf": "wrong_German_Subbed",
+    "name": "wrong_German_Subbed",
+    "includeCustomFormatWhenRenaming": false,
+    "specifications": [
+{
+    "name": "wrong_German_Subbed",
+    "implementation": "ReleaseTitleSpecification",
+    "negate": false,
+    "required": true,
+    "fields": {
+      "value": "\\bGerman.Subbed\\b"
+        }
+        }
+    ]
+}

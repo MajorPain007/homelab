@@ -10,6 +10,8 @@ radarr:
   radarr-main:
     base_url: http://radarr:7878 # !secret radarr_url
     api_key:  # !secret radarr_apikey
+    quality_definition:
+      type: movie # Quality definition type for Radarr
     media_management:
       id: 1
       autoUnmonitorPreviouslyDownloadedMovies: false
@@ -46,9 +48,6 @@ radarr:
         source: TRASH
       - template: 2b90e905c99490edc7c7a5787443748b # https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/radarr/quality-profiles/german-hd-bluray-web.json
         source: TRASH
-      # - template: radarr-custom-formats-uhd-bluray-web-german
-      # - template: radarr-custom-formats-uhd-remux-web-german
-
     quality_profiles:
       - name: "[German] UHD Bluray + WEB (Alternative)"
         language: Any
@@ -104,7 +103,6 @@ radarr:
               - Bluray-720p
               - WEBDL-720p
               - WEBRip-720p
-
     custom_formats:
 ### Audio
       - trash_ids:
@@ -191,6 +189,8 @@ radarr:
   radarr-kids:
     base_url: http://radarr_kids:7878 # !secret radarr_kids_url
     api_key:  # !secret radarr_kids_apikey
+    quality_definition:
+      type: movie # Quality definition type for Radarr
     media_management:
       id: 1
       autoUnmonitorPreviouslyDownloadedMovies: false
@@ -222,7 +222,6 @@ radarr:
         VideoDynamicRangeType]}{[Mediainfo AudioCodec}{ Mediainfo
         AudioChannels]}{[Mediainfo VideoCodec]}{-Release Group}"
       movieFolderFormat: "{Movie Title:DE} ({Release Year}) {tmdb-{TmdbId}}"
-
     include:
       - template: 2b90e905c99490edc7c7a5787443748b # https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/radarr/quality-profiles/german-hd-bluray-web.json
         source: TRASH
@@ -297,6 +296,8 @@ sonarr:
   sonarr:
     base_url: http://sonarr:8989 # !secret sonarr_url
     api_key:  # !secret sonarr_apikey
+    quality_definition:
+      type: series # Quality definition type for Sonarr
     media_management:
       id: 1
       autoUnmonitorPreviouslyDownloadedEpisodes: true
@@ -340,14 +341,9 @@ sonarr:
       seriesFolderFormat: "{Series TitleYear} {tvdb-{TvdbId}}"
       seasonFolderFormat: Season {season:00}
       specialsFolderFormat: Specials
-
-    
     include:
       - template: 7324309a7d1e10dc0dc2cea6c70ed852 # https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/sonarr/quality-profiles/german-uhd-bluray-web-alternative.json
         source: TRASH
-      - template: bef99584217af744e404ed44a33af589 # https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/sonarr/quality-size/series.json
-        source: TRASH
-
     delete_old_custom_formats: true
     replace_existing_custom_formats: true
     
@@ -439,6 +435,8 @@ sonarr:
   sonarr_as:
     base_url: http://sonarr_as:8989 # !secret sonarr_as_url
     api_key:  # !secret sonarr_as_apikey
+    quality_definition:
+      type: anime # Quality definition type for Sonarr
     media_management:
       id: 1
       autoUnmonitorPreviouslyDownloadedEpisodes: true
@@ -460,7 +458,6 @@ sonarr:
       importExtraFiles: true
       extraFileExtensions: srt,sub,idx,vob,nfo
       enableMediaInfo: true
-
     media_naming:
       id: 1
       renameEpisodes: true
@@ -482,17 +479,11 @@ sonarr:
       seriesFolderFormat: "{Series TitleYear} {tvdb-{TvdbId}}"
       seasonFolderFormat: Season {season:00}
       specialsFolderFormat: Specials
-
-    
     include:
       - template: 7324309a7d1e10dc0dc2cea6c70ed852 # https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/sonarr/quality-profiles/german-uhd-bluray-web-alternative.json
         source: TRASH
-      - template: 387e6278d8e06083d813358762e0ac63 # https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/sonarr/quality-size/anime.json
-        source: TRASH
-
     delete_old_custom_formats: true
     replace_existing_custom_formats: true
-    
     quality_profiles:
       - name: "[German] UHD Bluray + WEB (Alternative)"
         reset_unmatched_scores:
@@ -524,6 +515,10 @@ sonarr:
       - trash_ids:
           - Baka HQ German Anime Release Groups
           - Not ENG/GER/JPN
+          - wrong_German_Subbed
+          - German_Subbed
+          - Anime BD Tier 1
+          - Anime Web Tier 1
           # # Tier list
           - da0f005f9c3edf34fc26e18dce8c6573 # German Remux Tier 01
           - 6bc5ccd80a03e7abb8f556eecd174b73 # German Remux Tier 02
