@@ -557,7 +557,6 @@ sonarr:
     custom_formats:
       - trash_ids:
           - Baka HQ German Anime Release Groups
-          - German DL JPN
           - Not ENG/GER/JPN
           # # Tier list
           - da0f005f9c3edf34fc26e18dce8c6573 # German Remux Tier 01
