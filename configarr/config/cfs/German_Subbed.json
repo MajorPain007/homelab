@@ -1,0 +1,21 @@
+{
+    "trash_id": "German_Subbed",
+    "trash_scores": {
+      "default": 6000
+    },
+    "trash_description": "German_Subbed",
+    "custom_inf": "German_Subbed",
+    "name": "German_Subbed",
+    "includeCustomFormatWhenRenaming": false,
+    "specifications": [
+{
+    "name": "german Subs",
+    "implementation": "ReleaseTitleSpecification",
+    "negate": false,
+    "required": false,
+    "fields": {
+      "value": "(?=.*(German|Ger))(?=.*(Sub|Multi(ple)?Sub))"
+        }
+        }
+    ]
+}

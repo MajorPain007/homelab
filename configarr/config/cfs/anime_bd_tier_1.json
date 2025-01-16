@@ -1,0 +1,66 @@
+{
+    "trash_id": "Anime BD Tier 1",
+    "trash_scores": {
+      "default": 3000
+    },
+    "trash_description": "Anime BD Tier 1",
+    "custom_inf": "Anime BD Tier 1",
+    "name": "Anime BD Tier 1",
+    "includeCustomFormatWhenRenaming": false,
+    "specifications": [
+        {
+        "name": "AST4u",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "^(AST4u)$"
+        }
+        },
+        {
+        "name": "Fuuko",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "^(Fuuko)$"
+        }
+        },
+        {
+        "name": "Waechter",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "Waechter"
+        }
+        },
+        {
+        "name": "Hugo",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "Hugo"
+        }
+        },
+        {
+        "name": "snk",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "snk"
+        }
+        },
+        {
+        "name": "AO",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "AO"
+        }
+        }
+    ]
+}
