@@ -42,9 +42,9 @@ radarr:
         AudioChannels]}{[Mediainfo VideoCodec]}{-Release Group}"
       movieFolderFormat: "{Movie Title:DE} ({Release Year}) {tmdb-{TmdbId}}"
     include:
-      - template: 425da1ba30711b55d2eb371437ec98d7
+      - template: 425da1ba30711b55d2eb371437ec98d7 # https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/radarr/quality-profiles/german-uhd-bluray-web-alternative.json
         source: TRASH
-      - template: 2b90e905c99490edc7c7a5787443748b
+      - template: 2b90e905c99490edc7c7a5787443748b # https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/radarr/quality-profiles/german-hd-bluray-web.json
         source: TRASH
       # - template: radarr-custom-formats-uhd-bluray-web-german
       # - template: radarr-custom-formats-uhd-remux-web-german
@@ -241,8 +241,8 @@ radarr:
       movieFolderFormat: "{Movie Title:DE} ({Release Year}) {tmdb-{TmdbId}}"
 
     include:
-      # - template: radarr-quality-definition-movie
-      - template: radarr-custom-formats-hd-bluray-web-german
+      - template: 2b90e905c99490edc7c7a5787443748b # https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/radarr/quality-profiles/german-hd-bluray-web.json
+        source: TRASH
 
     quality_profiles:
       - name: "[German] HD Bluray + WEB"
@@ -372,9 +372,9 @@ sonarr:
 
     
     include:
-      - template: 7324309a7d1e10dc0dc2cea6c70ed852
+      - template: 7324309a7d1e10dc0dc2cea6c70ed852 # https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/sonarr/quality-profiles/german-uhd-bluray-web-alternative.json
         source: TRASH
-      - template: bef99584217af744e404ed44a33af589
+      - template: bef99584217af744e404ed44a33af589 # https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/sonarr/quality-size/series.json
         source: TRASH
 
     delete_old_custom_formats: true
@@ -518,10 +518,9 @@ sonarr:
 
     
     include:
-      - template: sonarr-quality-definition-series
-      - template: 7324309a7d1e10dc0dc2cea6c70ed852
+      - template: 7324309a7d1e10dc0dc2cea6c70ed852 # https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/sonarr/quality-profiles/german-uhd-bluray-web-alternative.json
         source: TRASH
-      - template: 387e6278d8e06083d813358762e0ac63
+      - template: 387e6278d8e06083d813358762e0ac63 # https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/sonarr/quality-size/anime.json
         source: TRASH
 
     delete_old_custom_formats: true
