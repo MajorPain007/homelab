@@ -1,0 +1,18 @@
+services:
+  configarr:
+    image: ghcr.io/raydak-labs/configarr:latest
+    container_name: configarr
+    user: 99:100 # Optional, defaults to root:root
+    environment:
+      - TZ=Europe/Berlin
+    volumes:
+      - ./configarr/config:/app/config # Contains the config.yml and secrets.yml
+      - ./configarr/dockerrepos:/app/repos # Cache repositories
+      # - ./configarr/custom/cfs:/app/cfs # Optional if custom formats locally provided
+      # - ./configarr/custom/templates:/app/templates # Optional if custom templates
+    restart: unless-stopped
+    networks:
+      - backend
+networks:
+  backend:
+    external: true

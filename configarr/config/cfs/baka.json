@@ -1,0 +1,57 @@
+{
+    "trash_id": "Baka HQ German Anime Release Groups",
+    "trash_scores": {
+      "default": 3000
+    },
+    "trash_description": "Baka HQ German Anime Release Groups",
+    "custom_inf": "Baka HQ German Anime Release Groups",
+    "name": "Baka HQ German Anime Release Groups",
+    "includeCustomFormatWhenRenaming": false,
+    "specifications": [
+        {
+        "name": "BAKA",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "^(BAKA)$"
+        }
+        },
+        {
+        "name": "HiSHiRO",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "^(HiSHiRO)$"
+        }
+        },
+        {
+        "name": "DRiFTKiNG",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "DRiFTKiNG"
+        }
+        },
+        {
+        "name": "Ainz",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "Ainz"
+        }
+        },
+        {
+        "name": "ONiGiRi",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "ONiGiRi"
+        }
+        }
+    ]
+}
