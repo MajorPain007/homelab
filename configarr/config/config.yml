@@ -164,19 +164,11 @@ radarr:
         assign_scores_to:
           - name: "[German] UHD Bluray + WEB (Alternative)"
           - name: "[German] HD Bluray + WEB"
-      
-### Generated Dynamic HDR
-# Uncomment the next 5 lines if you dont care about Generated Dynamic HDR and/or want to grab VECTOR
-      - trash_ids:
-          - e6886871085226c3da1830830146846c # Generated Dynamic HDR
-        assign_scores_to:
-          - name: "[German] UHD Bluray + WEB (Alternative)"
-            score: 0
 ### x265 Releases
       - trash_ids:
 # Uncomment the next six lines to allow x265 HD releases with HDR/DV
 # Uncomment the next four lines to allow any x265 HD releases
-          - dc98083864ea246d05a42df0d05f81cc # x265 (HD)
+          - 9170d55c319f4fe40da8711ba9d8050d # x265
         assign_scores_to:
           - name: "[German] UHD Bluray + WEB (Alternative)"
             score: 2
@@ -189,11 +181,9 @@ radarr:
             score: 0
           - name: "[German] HD Bluray + WEB"
             score: 0
-
       - trash_ids:
           - 03c430f326f10a27a9739b8bc83c30e4 # German Microsized
         assign_scores_to:
-          - name: "[German] UHD Bluray + WEB (Alternative)"
           - name: "[German] HD Bluray + WEB"
             score: 4500
 
@@ -287,13 +277,6 @@ radarr:
 ### Generated Dynamic HDR
 # Uncomment the next 5 lines if you dont care about Generated Dynamic HDR and/or want to grab VECTOR
 ### x265 Releases
-      - trash_ids:
-# Uncomment the next six lines to allow x265 HD releases with HDR/DV
-# Uncomment the next four lines to allow any x265 HD releases
-          - dc98083864ea246d05a42df0d05f81cc # x265 (HD)
-        assign_scores_to:
-          - name: "[German] HD Bluray + WEB"
-            score: 250
       - trash_ids:
           - 839bea857ed2c0a8e084f3cbdbd65ecb # x265 (no HDR/DV)
         assign_scores_to:
@@ -437,7 +420,9 @@ sonarr:
           - 82d40da2bc6923f41e14394075dd4b03 # No-RlsGroup
           - e1a997ddb54e3ecbfe06341ad323c458 # Obfuscated
           - 06d66ab109d4d2eddb2794d21526d140 # Retags
+          # - 2016d1676f5ee13a5b7257ff86ac9a93 # SDR
           - 83304f261cf516bb208c18c54c0adf97 # SDR (no WEBDL)
+          # - 9b64dff695c2115facf1b6ea59c9bd07 # x265 (no HDR/DV)
           # Optional
           - 32b367365729d530ca1c124a0b180c64 # Bad Dual Groups
           - 82d40da2bc6923f41e14394075dd4b03 # No-RlsGroup
@@ -579,7 +564,9 @@ sonarr:
           - 82d40da2bc6923f41e14394075dd4b03 # No-RlsGroup
           - e1a997ddb54e3ecbfe06341ad323c458 # Obfuscated
           - 06d66ab109d4d2eddb2794d21526d140 # Retags
+          # - 2016d1676f5ee13a5b7257ff86ac9a93 # SDR
           - 83304f261cf516bb208c18c54c0adf97 # SDR (no WEBDL)
+          # - 9b64dff695c2115facf1b6ea59c9bd07 # x265 (no HDR/DV)
           # Anime streaming
           - 4c67ff059210182b59cdd41697b8cb08 # Bilibili
           - 3e0b26604165f463f3e8e192261e7284 # CR
@@ -591,7 +578,6 @@ sonarr:
           - 82d40da2bc6923f41e14394075dd4b03 # No-RlsGroup
           - e1a997ddb54e3ecbfe06341ad323c458 # Obfuscated
           - 06d66ab109d4d2eddb2794d21526d140 # Retags
-          # - c465ccc73923871b3eb1802042331306 # Line / Mic Dubbed
         assign_scores_to:
           - name: "[German] UHD Bluray + WEB (Alternative)"
       - trash_ids:
