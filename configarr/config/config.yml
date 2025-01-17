@@ -5,13 +5,10 @@ whisparrEnabled: false
 readarrEnabled: false
 lidarrEnabled: false
 
-# Instance Definition: https://recyclarr.dev/wiki/yaml/config-reference/basic/
 radarr:
   radarr-main:
     base_url: http://radarr:7878 # !secret radarr_url
     api_key:  # !secret radarr_apikey
-    quality_definition:
-      type: movie # Quality definition type for Radarr
     media_management:
       id: 1
       autoUnmonitorPreviouslyDownloadedMovies: false
@@ -31,7 +28,7 @@ radarr:
       copyUsingHardlinks: false
       useScriptImport: false
       importExtraFiles: true
-      extraFileExtensions: srt,sub,idx,vob,nfo
+      extraFileExtensions: srt,sub,idx,vob
       enableMediaInfo: true
     media_naming:
       id: 1
@@ -43,26 +40,33 @@ radarr:
         VideoDynamicRangeType]}{[Mediainfo AudioCodec}{ Mediainfo
         AudioChannels]}{[Mediainfo VideoCodec]}{-Release Group}"
       movieFolderFormat: "{Movie Title:DE} ({Release Year}) {tmdb-{TmdbId}}"
+    quality_definition:
+      type: movie # Quality definition type for Radarr
     include:
       - template: 425da1ba30711b55d2eb371437ec98d7 # https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/radarr/quality-profiles/german-uhd-bluray-web-alternative.json
         source: TRASH
       - template: 2b90e905c99490edc7c7a5787443748b # https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/radarr/quality-profiles/german-hd-bluray-web.json
         source: TRASH
+    renameQualityProfiles:
+      - from: "[German] UHD Bluray + WEB (Alternative)"
+        to: Any
+      - from: "[German] HD Bluray + WEB"
+        to: kids
     quality_profiles:
-      - name: "[German] UHD Bluray + WEB (Alternative)"
+      - name: Any
         language: Any
         reset_unmatched_scores:
           enabled: false
         upgrade:
           allowed: true
-          until_quality: Merged QPs
+          until_quality: Bluray|WEB
           until_score: 25000
 # Uncomment one of the next 2 lines dependent on if you want English Releases
         # min_format_score: 1600 # Get English Releases and Upgrade to German when available
         min_format_score: 10000 # Skip English Releases
         quality_sort: top
         qualities:
-          - name: Merged QPs
+          - name: Bluray|WEB
 # Comment any qualities you are not interested in
             qualities:
               - Remux-2160p
@@ -76,20 +80,20 @@ radarr:
               - Bluray-720p
               - WEBDL-720p
               - WEBRip-720p
-      - name: "[German] HD Bluray + WEB" # Kids
+      - name: kids
         language: Any
         reset_unmatched_scores:
           enabled: false
         upgrade:
           allowed: true
-          until_quality: Merged QPs
+          until_quality: Bluray|WEB
           until_score: 25000
 # Uncomment one of the next 2 lines dependent on if you want English Releases
         # min_format_score: 1600 # Get English Releases and Upgrade to German when available
         min_format_score: 10000 # Skip English Releases
         quality_sort: top
         qualities:
-          - name: Merged QPs
+          - name: Bluray|WEB
 # Comment any qualities you are not interested in
             qualities:
               # - Remux-2160p
@@ -104,7 +108,6 @@ radarr:
               - WEBDL-720p
               - WEBRip-720p
     custom_formats:
-### Audio
       - trash_ids:
 # Uncomment the next section to enable Advanced Audio Formats
           - 8608a2ed20c636b8a62de108e9147713 # German Remux Tier 01
@@ -142,9 +145,7 @@ radarr:
 #          - 9c38ebb7384dada637be8899efa68e6f # SDR
           - 25c12f78430a3a23413652cbd1d48d77 # SDR (no WEBDL)
         assign_scores_to:
-          - name: "[German] UHD Bluray + WEB (Alternative)"
-
-
+          - name: Any
 ### HDR / DV
       - trash_ids:
 # Comment out the next line if you and all of your users' setups are fully DV compatible
@@ -160,37 +161,34 @@ radarr:
           - 7357cf5161efbf8c4d5d0c30b4815ee2 # Obfuscated
           - 5c44f52a8714fdd79bb4d98e2673be1f # Retags
         assign_scores_to:
-          - name: "[German] UHD Bluray + WEB (Alternative)"
-          - name: "[German] HD Bluray + WEB"
+          - name: Any
+          - name: kids
 ### x265 Releases
       - trash_ids:
 # Uncomment the next six lines to allow x265 HD releases with HDR/DV
 # Uncomment the next four lines to allow any x265 HD releases
           - 9170d55c319f4fe40da8711ba9d8050d # x265
         assign_scores_to:
-          - name: "[German] UHD Bluray + WEB (Alternative)"
+          - name: Any
             score: 2
-          - name: "[German] HD Bluray + WEB"
+          - name: kids
             score: 250
       - trash_ids:
           - 839bea857ed2c0a8e084f3cbdbd65ecb # x265 (no HDR/DV)
         assign_scores_to:
-          - name: "[German] UHD Bluray + WEB (Alternative)"
+          - name: Any
             score: 0
-          - name: "[German] HD Bluray + WEB"
+          - name: kids
             score: 0
       - trash_ids:
           - 03c430f326f10a27a9739b8bc83c30e4 # German Microsized
         assign_scores_to:
-          - name: "[German] HD Bluray + WEB"
+          - name: kids
             score: 4500
-
 
   radarr-kids:
     base_url: http://radarr_kids:7878 # !secret radarr_kids_url
     api_key:  # !secret radarr_kids_apikey
-    quality_definition:
-      type: movie # Quality definition type for Radarr
     media_management:
       id: 1
       autoUnmonitorPreviouslyDownloadedMovies: false
@@ -210,7 +208,7 @@ radarr:
       copyUsingHardlinks: false
       useScriptImport: false
       importExtraFiles: true
-      extraFileExtensions: srt,sub,idx,vob,nfo
+      extraFileExtensions: srt,sub,idx,vob
       enableMediaInfo: true
     media_naming:
       id: 1
@@ -222,10 +220,14 @@ radarr:
         VideoDynamicRangeType]}{[Mediainfo AudioCodec}{ Mediainfo
         AudioChannels]}{[Mediainfo VideoCodec]}{-Release Group}"
       movieFolderFormat: "{Movie Title:DE} ({Release Year}) {tmdb-{TmdbId}}"
+    quality_definition:
+      type: movie # Quality definition type for Radarr
     include:
       - template: 2b90e905c99490edc7c7a5787443748b # https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/radarr/quality-profiles/german-hd-bluray-web.json
         source: TRASH
-
+    renameQualityProfiles:
+      - from: "[German] HD Bluray + WEB"
+        to: Any
     quality_profiles:
       - name: "[German] HD Bluray + WEB"
         language: Any
@@ -233,14 +235,14 @@ radarr:
           enabled: false
         upgrade:
           allowed: true
-          until_quality: Merged QPs
+          until_quality: Bluray|WEB
           until_score: 25000
 # Uncomment one of the next 2 lines
 #         min_format_score: 1600 # Get English Releases and Upgrade to German when available
         min_format_score: 10000 # Skip English Releases
         quality_sort: top
         qualities:
-          - name: Merged QPs
+          - name: Bluray|WEB
 # Comment any qualities you are not interested in
             qualities:
               - Remux-1080p
@@ -271,25 +273,24 @@ radarr:
           - 7357cf5161efbf8c4d5d0c30b4815ee2 # Obfuscated
           - 5c44f52a8714fdd79bb4d98e2673be1f # Retags
         assign_scores_to:
-          - name: "[German] HD Bluray + WEB"
-      
+          - name: Any
 ### Generated Dynamic HDR
 # Uncomment the next 5 lines if you dont care about Generated Dynamic HDR and/or want to grab VECTOR
 ### x265 Releases
       - trash_ids:
           - 839bea857ed2c0a8e084f3cbdbd65ecb # x265 (no HDR/DV)
         assign_scores_to:
-          - name: "[German] HD Bluray + WEB"
+          - name: Any
             score: 0
       - trash_ids:
           - 03c430f326f10a27a9739b8bc83c30e4 # German Microsized
         assign_scores_to:
-          - name: "[German] HD Bluray + WEB"
+          - name: Any
             score: 4500
       - trash_ids:
           - 9170d55c319f4fe40da8711ba9d8050d # h265
         assign_scores_to:
-          - name: "[German] HD Bluray + WEB"
+          - name: Any
             score: 500
 
 sonarr:
@@ -317,9 +318,8 @@ sonarr:
       copyUsingHardlinks: false
       useScriptImport: false
       importExtraFiles: true
-      extraFileExtensions: srt,sub,idx,vob,nfo
+      extraFileExtensions: srt,sub,idx,vob
       enableMediaInfo: true
-
     media_naming:
       id: 1
       renameEpisodes: true
@@ -346,19 +346,21 @@ sonarr:
         source: TRASH
     delete_old_custom_formats: true
     replace_existing_custom_formats: true
-    
+    renameQualityProfiles:
+      - from: "[German] UHD Bluray + WEB (Alternative)"
+        to: Any
     quality_profiles:
-      - name: "[German] UHD Bluray + WEB (Alternative)"
+      - name: Any
         reset_unmatched_scores:
           enabled: true
         upgrade:
           allowed: true
-          until_quality: Merged QPs
+          until_quality: Bluray|WEB
           until_score: 25000
         min_format_score: 10000
         quality_sort: top
         qualities:
-          - name: Merged QPs
+          - name: Bluray|WEB
             qualities:
               - Bluray-2160p Remux
               - Bluray-2160p
@@ -373,9 +375,9 @@ sonarr:
               - WEBRip-720p
               # - DVD
               # - WEBDL-480p
-
     custom_formats:
       - trash_ids:
+          # German Audio
           # # Tier list
           - da0f005f9c3edf34fc26e18dce8c6573 # German Remux Tier 01
           - 6bc5ccd80a03e7abb8f556eecd174b73 # German Remux Tier 02
@@ -425,18 +427,16 @@ sonarr:
           - e1a997ddb54e3ecbfe06341ad323c458 # Obfuscated
           - 06d66ab109d4d2eddb2794d21526d140 # Retags
         assign_scores_to:
-          - name: "[German] UHD Bluray + WEB (Alternative)"
+          - name: Any
       - trash_ids:
           - c9eafd50846d299b862ca9bb6ea91950 # x265
         assign_scores_to:
-          - name: "[German] UHD Bluray + WEB (Alternative)"
+          - name: Any
             score: 2
 
   sonarr_as:
     base_url: http://sonarr_as:8989 # !secret sonarr_as_url
     api_key:  # !secret sonarr_as_apikey
-    quality_definition:
-      type: anime # Quality definition type for Sonarr
     media_management:
       id: 1
       autoUnmonitorPreviouslyDownloadedEpisodes: true
@@ -456,7 +456,7 @@ sonarr:
       copyUsingHardlinks: false
       useScriptImport: false
       importExtraFiles: true
-      extraFileExtensions: srt,sub,idx,vob,nfo
+      extraFileExtensions: srt,sub,idx,vob
       enableMediaInfo: true
     media_naming:
       id: 1
@@ -479,27 +479,32 @@ sonarr:
       seriesFolderFormat: "{Series TitleYear} {tvdb-{TvdbId}}"
       seasonFolderFormat: Season {season:00}
       specialsFolderFormat: Specials
+    quality_definition:
+      type: anime # Quality definition type for Sonarr
     include:
       - template: 7324309a7d1e10dc0dc2cea6c70ed852 # https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/sonarr/quality-profiles/german-uhd-bluray-web-alternative.json
         source: TRASH
     delete_old_custom_formats: true
     replace_existing_custom_formats: true
+    renameQualityProfiles:
+      - from: "[German] UHD Bluray + WEB (Alternative)"
+        to: Any
     quality_profiles:
       - name: "[German] UHD Bluray + WEB (Alternative)"
         reset_unmatched_scores:
           enabled: true
         upgrade:
           allowed: true
-          until_quality: Merged QPs
+          until_quality: Bluray|WEB
           until_score: 25000
-        min_format_score: 10000
+        min_format_score: 8000
         quality_sort: top
         qualities:
-          - name: Merged QPs
+          - name: Bluray|WEB
             qualities:
-              - Bluray-2160p Remux
-              - Bluray-2160p
-              - WEBDL-2160p
+              # - Bluray-2160p Remux
+              # - Bluray-2160p
+              # - WEBDL-2160p
               - WEBRip-2160p
               - Bluray-1080p Remux
               - Bluray-1080p
@@ -510,7 +515,6 @@ sonarr:
               - WEBRip-720p
               # - DVD
               # - WEBDL-480p
-
     custom_formats:
       - trash_ids:
           - Baka HQ German Anime Release Groups
@@ -574,14 +578,14 @@ sonarr:
           - e1a997ddb54e3ecbfe06341ad323c458 # Obfuscated
           - 06d66ab109d4d2eddb2794d21526d140 # Retags
         assign_scores_to:
-          - name: "[German] UHD Bluray + WEB (Alternative)"
+          - name: Any
       - trash_ids:
           - c9eafd50846d299b862ca9bb6ea91950 # x265
         assign_scores_to:
-          - name: "[German] UHD Bluray + WEB (Alternative)"
+          - name: Any
             score: 2
       - trash_ids:
           - 133589380b89f8f8394320901529bac1 # Not German or English
         assign_scores_to:
-          - name: "[German] UHD Bluray + WEB (Alternative)"
+          - name: Any
             score: 0
