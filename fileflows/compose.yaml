@@ -1,0 +1,31 @@
+services:
+  fileflows:
+    container_name: ${SERVICES_FILEFLOWS_CONTAINER_NAME:-fileflows}
+    hostname: ${SERVICES_FILEFLOWS_HOSTNAME:-fileflows}
+    image: ${SERVICES_FILEFLOWS_IMAGE:-revenz/fileflows}:${SERVICES_FILEFLOWS_IMAGE_VERSION:-latest}
+    restart: unless-stopped
+    ports:
+      - 19200:5000
+    devices:
+      - /dev/dri:/dev/dri
+    environment:
+      - TZ=${TIMEZONE}
+      - PUID=${ENV_PUID}
+      - PGID=${ENV_PGID}
+    volumes:
+      - ./fileflows/config:/app/Data
+      - ./fileflows/logs:/app/Logs
+      - ${DATA_DIR}:/data/media
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=backend
+      - traefik.http.routers.fileflows.entrypoints=homesec
+      - traefik.http.routers.fileflows.rule=Host(`fileflows.${DOMAIN}`)
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:19200]/files/
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/revenz/FileFlows/master/icon.png?raw=true
+    networks:
+      - backend
+networks:
+  backend:
+    external: true

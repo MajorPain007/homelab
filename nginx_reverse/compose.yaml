@@ -1,11 +1,11 @@
 services:
   app:
     image: jc21/nginx-proxy-manager:latest
-    restart: always
+    restart: unless-stopped
     ports:
-      - 180:80
+      - 80:80
       - 81:81
-      - 1443:443
+      - 443:443
     environment:
       DB_SQLITE_FILE: /data/database.sqlite
     volumes:

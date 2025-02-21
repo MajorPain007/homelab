@@ -1,0 +1,47 @@
+services:
+  postgres:
+    container_name: ${SERVICES_POSTGRES_CONTAINER_NAME:-vaultwarden-postgres}
+    hostname: ${SERVICES_POSTGRES_HOSTNAME:-vaultwarden-postgres}
+    image: ${SERVICES_POSTGRES_IMAGE:-postgres}:${SERVICES_POSTGRES_IMAGE_VERSION:-latest}
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${VAULTWARDEN_DB_NAME}
+      POSTGRES_USER: ${VAULTWARDEN_DB_USER}
+    volumes:
+      - ./config/pgsql:/var/lib/postgresql/data
+    networks:
+      - backend
+  vaultwarden:
+    container_name: ${SERVICES_VAULTWARDEN_CONTAINER_NAME:-vaultwarden-main}
+    hostname: ${SERVICES_VAULTWARDEN_HOSTNAME:-vaultwarden-main}
+    image: ${SERVICES_VAULTWARDEN_IMAGE:-vaultwarden/server}:${SERVICES_VAULTWARDEN_IMAGE_VERSION:-latest}
+    restart: unless-stopped
+    environment:
+      PGHOST: "vaultwarden-postgres"
+      PGDATABASE: ${VAULTWARDEN_DB_NAME}
+      PGUSER: ${VAULTWARDEN_DB_USER}
+      DATABASE_URL: ${VAULTWARDEN_DATABASE_URL}
+      ADMIN_TOKEN: ${VAULTWARDE_ADMIN_TOKEN}
+      WEBSOCKET_ENABLED: true
+      DOMAIN: https://${DOMAIN}
+      INVITATIONS_ALLOWED: false
+      # SIGNUPS_ALLOWED: false #wird nach der Account erstellung aktiviert
+    volumes:
+      - ./config/vaultwarden:/data
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.vaultwarden-pg.entrypoints=websecure,homesec
+      - traefik.http.routers.vaultwarden-pg.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.vaultwarden-pg.middlewares=authelia@file
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:80]/admin
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/selfhosters/unRAID-CA-templates/master/templates/img/vaultwarden.png
+    networks:
+      - frontend
+      - backend
+networks:
+  frontend:
+    external: true
+  backend:
+    external: true

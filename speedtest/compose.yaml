@@ -1,0 +1,28 @@
+services:
+  speedtest:
+    container_name: speedtest
+    image: henrywhitaker3/speedtest-tracker
+    ports:
+      - 8765:80
+    volumes:
+      - ./data:/config
+    environment:
+      - TZ=Europe/Berlin
+      - PGID=100
+      - PUID=99
+      - OOKLA_EULA_GDPR=true
+    logging:
+      driver: json-file
+      options:
+        max-file: "10"
+        max-size: 200k
+    restart: unless-stopped
+    labels:  
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:8765]
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/alexjustesen/speedtest-tracker/refs/heads/main/public/img/speedtest-tracker-icon.png
+    networks:
+      - backend
+networks:
+  backend:
+    external: true

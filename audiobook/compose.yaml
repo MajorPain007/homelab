@@ -1,20 +1,25 @@
 services:
   audiobook:
-    container_name: audiobook
-    restart: unless-stopped
+    container_name: ${SERVICES_AUDIOBOOKSHELF_CONTAINER_NAME:-audiobook}
+    hostname: ${SERVICES_AUDIOBOOKSHELF_HOSTNAME:-audiobook}
+    image: ${SERVICES_AUDIOBOOKSHELF_IMAGE:-ghcr.io/advplyr/audiobookshelf}:${SERVICES_AUDIOBOOKSHELF_IMAGE_VERSION:-latest}
     healthcheck:
       disable: true
-    image: ghcr.io/advplyr/audiobookshelf
+    restart: unless-stopped
     ports:
       - 13378:80
     volumes:
-      - ${DATA_DIR}/Audio/Hörbücher:/audiobooks
+      - ${DATA_DIR}:/audiobooks
       - ./audiobookshelf:/config
       - ./audiobookshelf/metadata:/metadata
     labels:
       - traefik.enable=true
-      - traefik.http.routers.audiobookshelf.entrypoints=websecure
+      - traefik.http.routers.audiobookshelf.entrypoints=websecure,homesec
       - traefik.http.routers.audiobookshelf.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.audiobookshelf.middlewares=authelia@file
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:80]
+      - net.unraid.docker.icon=https://github.com/advplyr/audiobookshelf/raw/master/client/static/Logo.png
     networks:
       - frontend
 networks:

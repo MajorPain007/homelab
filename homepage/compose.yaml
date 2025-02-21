@@ -1,15 +1,26 @@
 services:
   homepage:
-    restart: unless-stopped
-    container_name: homepage
+    container_name: ${SERVICES_HOMEPAGE_CONTAINER_NAME:-homepage}
+    hostname: ${SERVICES_HOMEPAGE_HOSTNAME:-homepage}
+    image: ${SERVICES_HOMEPAGE_IMAGE:-ghcr.io/gethomepage/homepage}:${SERVICES_HOMEPAGE_IMAGE_VERSION:-latest}
     healthcheck:
       disable: true
-    image: ghcr.io/gethomepage/homepage:latest
+    restart: unless-stopped
     ports:
       - 3000:3000
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./homepage:/app/config
+      - ./image:/app/public/images
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=backend
+      - traefik.http.routers.homepage.entrypoints=homesec
+      - traefik.http.routers.homepage.rule=Host(`ho.${DOMAIN}`)
+      - traefik.http.services.homepage.loadbalancer.server.port=3000
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:3000]
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/gethomepage/homepage/main/public/android-chrome-512x512.png
     networks:
       - backend
       - frontend

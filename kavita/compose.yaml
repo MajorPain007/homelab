@@ -1,10 +1,11 @@
 services:
   kavita:
-    restart: unless-stopped
-    container_name: kavita
+    container_name: ${SERVICES_KAVITAR_CONTAINER_NAME:-kavita}
+    hostname: ${SERVICES_KAVITAR_HOSTNAME:-kavita}
+    image: ${SERVICES_KAVITAR_IMAGE:-jvmilazz0/kavita}:${SERVICES_KAVITAR_IMAGE_VERSION:-latest}
     healthcheck:
       disable: true
-    image: jvmilazz0/kavita:latest
+    restart: unless-stopped
     ports:
       - 5000:5000
     volumes:
@@ -12,8 +13,12 @@ services:
       - ${DATA_DIR}:/library
     labels:
       - traefik.enable=true
-      - traefik.http.routers.kavita.entrypoints=websecure
+      - traefik.http.routers.kavita.entrypoints=websecure,homesec
       - traefik.http.routers.kavita.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.kavita.middlewares=authelia@file
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:5000]
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/Kareadita/Kavita/develop/UI/Web/src/assets/icons/android-chrome-192x192.png
     networks:
       - frontend
 networks:

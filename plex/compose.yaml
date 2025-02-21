@@ -1,19 +1,17 @@
 services:
   plex:
-    image: plexinc/pms-docker:latest
-    container_name: plex
+    container_name: ${SERVICES_PLEX_CONTAINER_NAME:-plex}
+    hostname: ${SERVICES_PLEX_HOSTNAME:-plex}
+    image: ${SERVICES_PLEX_IMAGE:-plexinc/pms-docker}:${SERVICES_PLEX_IMAGE_VERSION:-latest}
     devices:
       - /dev/dri:/dev/dri
-    environment:
-      - PLEX_UID=${ENV_PUID}
-      - PLEX_GID=${ENV_PGID}
-      - TZ=${TIMEZONE}
-      - PLEX_CLAIM=${PLEX_CLAIM}
-      - ADVERTISE_IP=http:${ADVERTISE_IP}
-    volumes:
-      - ./Plex-Media-Server:/config
-      - ${DATA_DIR}:/media
-      - ${TMP_TRANSCODE}:/transcode
+    extra_hosts:
+      - analytics.plex.tv:127.0.0.1
+      - metrics.plex.tv:127.0.0.1
+      - metric.plex.tv:127.0.0.1
+      - mf.svc.nhl.com:127.0.0.1
+      - mlb-ws-mf.media.mlb.com:127.0.0.1
+      - playback.svcs.mlb.com:127.0.0.1
     ports:
       - 32400:32400/tcp #access to the Plex Media Server
       # - 8324:8324/tcp #controlling Plex for Roku via Plex Companion
@@ -23,9 +21,30 @@ services:
       # - 32412:32412/udp #current GDM network discovery
       # - 32413:32413/udp #current GDM network discovery
       # - 32414:32414/udp #current GDM network discovery
+    environment:
+      - PLEX_UID=${ENV_PUID}
+      - PLEX_GID=${ENV_PGID}
+      - TZ=${TIMEZONE}
+      - PLEX_CLAIM=${PLEX_CLAIM}
+      - ADVERTISE_IP=${ADVERTISE_IP}
+    volumes:
+      - ./Plex-Media-Server:/config
+      - ${DATA_DIR}:/media
+      - ${TMP_TRANSCODE}:/transcode
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.plex.entrypoints=websecure,homesec
+      - traefik.http.routers.plex.rule=Host(`${DOMAIN}`)
+      - traefik.http.services.plex.loadbalancer.server.port=32400
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:32400]/web
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/plexinc/pms-docker/master/img/plex-server.png
     restart: unless-stopped
     networks:
       - frontend
+      - backend
 networks:
   frontend:
+    external: true
+  backend:
     external: true

@@ -1,0 +1,32 @@
+services:
+  gotify:
+    container_name: ${SERVICES_GOTIFY_CONTAINER_NAME:-gotify}
+    hostname: ${SERVICES_GOTIFY_HOSTNAME:-gotify}
+    image: ${SERVICES_GOTIFY_IMAGE:-gotify/server}:${SERVICES_GOTIFY_IMAGE_VERSION:-latest}
+    security_opt:
+      - no-new-privileges:true
+    # ports:
+    #   - 8080:80
+    environment:
+      - GOTIFY_DEFAULTUSER_PASS=admin
+      - TZ=${TIMEZONE}
+      - GOTIFY_REGISTRATION=true
+    volumes:
+      - ./gotify_data:/app/data
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=backend
+      - traefik.http.routers.gotify.entrypoints=websecure,homesec
+      - traefik.http.routers.gotify.rule=Host(`${DOMAIN}`)
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:7878]/system/status
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/A75G/docker-templates/master/templates/icons/gotify.png
+    restart: unless-stopped
+    networks:
+      - backend
+      - frontend
+networks:
+  backend:
+    external: true
+  frontend:
+    external: true
