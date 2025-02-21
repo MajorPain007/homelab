@@ -1,14 +1,23 @@
 services:
   it-tools:
-    restart: unless-stopped
-    container_name: it-tools
+    container_name: ${SERVICES_IT_TOOLS_CONTAINER_NAME:-it-tools}
+    hostname: ${SERVICES_IT_TOOLS_HOSTNAME:-it-tools}
+    image: ${SERVICES_IT_TOOLS_IMAGE:-corentinth/it-tools}:${SERVICES_IT_TOOLS_IMAGE_VERSION:-latest}
     healthcheck:
       disable: true
-    image: corentinth/it-tools
-    ports:
-      - 834:80
+    restart: unless-stopped
+    # ports:
+    #   - 834:80
     networks:
       - backend
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=backend
+      - traefik.http.routers.it-tools.entrypoints=homesec
+      - traefik.http.routers.it-tools.rule=Host(`itt.${DOMAIN}`)
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:80]
+      - net.unraid.docker.icon=https://it-tools.tech/android-chrome-512x512.png
 networks:
   backend:
     external: true

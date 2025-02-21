@@ -1,21 +1,27 @@
 services:
   vaultwarden:
+    container_name: ${SERVICES_VAULTWARDEN_CONTAINER_NAME:-vaultwarden}
+    hostname: ${SERVICES_VAULTWARDEN_HOSTNAME:-vaultwarden}
+    image: ${SERVICES_VAULTWARDEN_IMAGE:-vaultwarden/server}:${SERVICES_VAULTWARDEN_IMAGE_VERSION:-latest}
     restart: unless-stopped
-    container_name: vaultwarden
-    image: vaultwarden/server:latest
-    ports:
-      - 4743:80
+    # ports:
+    #   - 4744:80
     environment:
-      - SIGNUPS_ALLOWED=false
-      - INVITATIONS_ALLOWED=false
-      - WEBSOCKET_ENABLED=false
-      - ADMIN_TOKEN=$ADMIN_TOKEN
+      SIGNUPS_ALLOWED: false
+      INVITATIONS_ALLOWED: false
+      WEBSOCKET_ENABLED: false
+      ADMIN_TOKEN: $ADMIN_TOKEN
+      DOMAIN: https://${DOMAIN}
     volumes:
       - ./vaultwarden:/data
     labels:
       - traefik.enable=true
-      - traefik.http.routers.vaultwarden.entrypoints=websecure
+      - traefik.http.routers.vaultwarden.entrypoints=websecure,homesec
       - traefik.http.routers.vaultwarden.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.vaultwarden.middlewares=authelia@file
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:80]/admin
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/selfhosters/unRAID-CA-templates/master/templates/img/vaultwarden.png
     networks:
       - frontend
 networks:

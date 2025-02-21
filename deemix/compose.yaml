@@ -1,15 +1,15 @@
 services:
   deemix:
     container_name: deemix
-    image: registry.gitlab.com/bockiii/deemix-docker
+    image: registry.gitlab.com/bockiii/deemix-docker:latest
     environment:
       - DEEMIX_SINGLE_USER=false
-      - PUID=3000
-      - PGID=3000
+      - PUID=99
+      - PGID=100
     ports:
       - 6595:6595/tcp
     volumes:
-      - /mnt/Downloads/:/downloads:rw
+      - /mnt/user/home/Downloads/:/downloads:rw
       - ./deemix:/config:rw
     networks:
       - backend

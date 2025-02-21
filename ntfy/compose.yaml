@@ -1,18 +1,42 @@
 services:
   ntfy:
-    image: binwiederhier/ntfy
-    container_name: ntfy
+    container_name: ${SERVICES_NTFY_CONTAINER_NAME:-ntfy}
+    hostname: ${SERVICES_NTFY_HOSTNAME:-ntfy}
+    image: ${SERVICES_NTFY_IMAGE:-binwiederhier/ntfy}:${SERVICES_NTFY_IMAGE_VERSION:-latest}
+    restart: unless-stopped
     command:
       - serve
-    environment:
-      - TZ=Europe/Berlin # optional: Change to your desired timezone
-    user: 3000:3000 # optional: Set custom user/group or uid/gid
+    # ports:
+    #   - '89:80/tcp'
     volumes:
-      - ./ntfy/var:/var/cache/ntfy
-      - ./ntfy/etc:/etc/ntfy
-    ports:
-      - 89:80
-    restart: unless-stopped
+      - ./ntfy:/config:rw
+    environment:
+      - TZ=Europe/Berlin
+      - NTFY_BASE_URL=https://ntfy.local
+      - NTFY_WEB_ROOT=app
+      - NTFY_UPSTREAM_BASE_URL=https://ntfy.sh
+      - NTFY_CACHE_FILE=/config/cache.db
+      - NTFY_CACHE_DURATION=12h
+      - NTFY_AUTH_FILE=/config/user.db
+      - NTFY_AUTH_DEFAULT_ACCESS=read-write
+      - NTFY_ATTACHMENT_CACHE_DIR=/config/attachments
+      - NTFY_ATTACHMENT_TOTAL_SIZE_LIMIT=5G
+      - NTFY_ATTACHMENT_FILE_SIZE_LIMIT=15M
+      - NTFY_ATTACHMENT_EXPIRY_DURATION=3h
+      - NTFY_SMTP_SENDER_ADDR=
+      - NTFY_SMTP_SENDER_USER=
+      - NTFY_SMTP_SENDER_PASS=
+      - NTFY_SMTP_SENDER_FROM=
+      - NTFY_SMTP_SERVER_ADDR_PREFIX=
+      - NTFY_LOG_LEVEL=info
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=frontend
+      - traefik.http.routers.ntfy.entrypoints=homesec
+      - traefik.http.routers.ntfy.rule=Host(`ntfy.${DOMAIN}`)
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:80]/
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/binwiederhier/ntfy/main/docs/static/img/ntfy.png
     networks:
       - frontend
       - backend

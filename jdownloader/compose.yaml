@@ -1,12 +1,11 @@
 services:
   jdownloader-2:
-    image: jlesage/jdownloader-2
-    container_name: JDownloader2
-    healthcheck:
-      disable: true
+    container_name: ${SERVICES_JDOWNLOADER_CONTAINER_NAME:-jdownloader}
+    hostname: ${SERVICES_JDOWNLOADER_HOSTNAME:-jdownloader}
+    image: ${SERVICES_JDOWNLOADER_IMAGE:-jlesage/jdownloader-2}:${SERVICES_JDOWNLOADER_IMAGE_VERSION:-latest}
     restart: unless-stopped
     environment:
-      - TZ=${TIMEZONE}
+      - TZ=Europe/Berlin
       - LANG=de_DE.UTF-8
       - USER_ID=${ENV_PUID}
       - GROUP_ID=${ENV_PGID}
@@ -15,7 +14,7 @@ services:
       - DISPLAY_WIDTH=1920
       - DISPLAY_HEIGHT=1080
       - DARK_MODE=1
-      - SECURE_CONNECTION=1
+      - SECURE_CONNECTION=0
       - SECURE_CONNECTION_VNC_METHOD=SSL
       - SECURE_CONNECTION_CERTS_CHECK_INTERVAL=60
       - WEB_LISTENING_PORT=5800
@@ -25,9 +24,20 @@ services:
       - MYJDOWNLOADER_DEVICE_NAME=docker
       - JDOWNLOADER_HEADLESS=0
       - JDOWNLOADER_MAX_MEM=
-    ports:
-      - 7807:5800/tcp
-      - 7907:5900/tcp
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=backend
+      - traefik.http.routers.jdownloader.entrypoints=homesec
+      - traefik.http.routers.jdownloader.rule=Host(`jd.${DOMAIN}`)
+      - traefik.http.services.jdownloader.loadbalancer.server.port=5800
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:5800]
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/jlesage/docker-templates/master/jlesage/images/jdownloader-2-icon.png
+    healthcheck:
+      disable: true
+    # ports:
+    #   - 7807:5800/tcp
+    #   - 7907:5900/tcp
     volumes:
       - ./JDownloader2:/config:rw
       - ${DATA_DIR}/Downloads/:/output:rw

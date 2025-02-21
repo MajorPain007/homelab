@@ -1,7 +1,8 @@
 services:
   watchtower:
-    container_name: watchtower
-    image: containrrr/watchtower
+    container_name: ${SERVICES_WATCHTOWER_CONTAINER_NAME:-watchtower}
+    hostname: ${SERVICES_WATCHTOWER_HOSTNAME:-watchtower}
+    image: ${SERVICES_WATCHTOWER_IMAGE:-containrrr/watchtower}:${SERVICES_WATCHTOWER_IMAGE_VERSION:-latest}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
@@ -9,7 +10,16 @@ services:
       - TZ=Europe/Berlin
       - WATCHTOWER_LIFECYCLE_HOOKS=1 # Enable pre/post-update scripts
       - WATCHTOWER_CLEANUP=true
-    command: --schedule "0 44 8 * * *" # cronjob
+      - WATCHTOWER_NOTIFICATIONS=gotify
+      - WATCHTOWER_NOTIFICATION_GOTIFY_URL=${GOTIFY_URL:-http://gotify}
+      - WATCHTOWER_NOTIFICATION_GOTIFY_TOKEN={GOTIFY_TOKEN}
+      - WATCHTOWER_MONITOR_ONLY=true
+      - WATCHTOWER_NOTIFICATIONS_LEVEL=info
+      - WATCHTOWER_SCHEDULE=0 0 4 * * *
+    # command: --schedule "0 44 8 * * *" # Namen-Der-Container
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://containrrr.dev/watchtower/images/logo-450px.png
     networks:
       - backend
 networks:

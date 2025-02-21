@@ -1,0 +1,60 @@
+services:
+  sftpgo:
+    container_name: ${SERVICES_SFTPGO_CONTAINER_NAME:-sftpgo}
+    hostname: ${SERVICES_SFTPGO_HOSTNAME:-sftpgo}
+    image: ${SERVICES_SFTPGO_IMAGE:-drakkan/sftpgo}:${SERVICES_SFTPGO_IMAGE_VERSION:-latest}
+    security_opt:
+      - no-new-privileges:true
+    user: 99:100
+    # ports:
+    #     - '2221:8080/tcp'
+    #     - '2121:2121/tcp'
+    #     - '2022:2022/tcp'
+    #     - '50000-50100:50000-50100/tcp'
+    #     - '10080:10080/tcp'
+    volumes:
+      - ./sftpgo/config:/var/lib/sftpgo:rw
+      - /mnt/user:/unraid:rw
+    environment:
+      - SFTPGO_HTTPD_BINDINGS__0__CLIENT_IP_PROXY_HEADER=X-Real-IP
+      - SFTPGO_HTTPD_BINDINGS__0__PROXY_ALLOWED=172.20.0.0/16
+      - SFTPGO_COMMON__DEFENDER__ENABLED=true
+      - SFTPGO_COMMON__DEFENDER__SAFELIST=172.20.0.0/16
+      - SFTPGO_COMMON__DEFENDER__BAN_TIME=30
+      - SFTPGO_COMMON__DEFENDER__BAN_TIME_INCREMENT=50
+      - SFTPGO_COMMON__DEFENDER__THRESHOLD=15
+      - SFTPGO_COMMON__DEFENDER__OBSERVATION_TIME=30
+      - SFTPGO_WEBDAVD__BINDINGS__0__PORT=8090
+      - SFTPGO_SFTPD__BINDINGS__0__PORT=2022
+      - SFTPGO_SFTPD__BINDINGS__0__PROXY_ALLOWED=172.20.0.0/16
+      - SFTPGO_COMMON__PROXY_PROTOCOL=2
+      - SFTPGO_COMMON__PROXY_ALLOWED=172.20.0.0/16
+      # - SFTPGO_FTPD__BINDINGS__0__FORCE_PASSIVE_IP=192.168.178.3
+      # - SFTPGO_FTPD__PASSIVE_PORT_RANGE__START=50000
+      # - SFTPGO_FTPD__PASSIVE_PORT_RANGE__END=50100
+      # - SFTPGO_FTPD__BINDINGS__0__PORT=2121
+    labels:
+      #Webui
+      - traefik.enable=true
+      - traefik.http.routers.sftpgo.entrypoints=homesec
+      - traefik.http.routers.sftpgo.rule=Host(`sftpgo.${DOMAIN}`)
+      - traefik.http.routers.sftpgo.service=sftpgo
+      - traefik.http.services.sftpgo.loadbalancer.server.port=8080
+      - traefik.tcp.routers.sftpgo-sftp.entrypoints=sftpgo
+      - traefik.tcp.routers.sftpgo-sftp.rule=HostSNI(`*`)
+      - traefik.tcp.routers.sftpgo-sftp.service=sftpgo-sftp
+      - traefik.tcp.services.sftpgo-sftp.loadBalancer.server.port=2022
+      - traefik.tcp.services.sftpgo-sftp.loadbalancer.proxyprotocol.version=2
+      - traefik.http.routers.webdav.entrypoints=homesec
+      - traefik.http.routers.webdav.rule=Host(`webdav.${DOMAIN}`)
+      - traefik.http.routers.webdav.service=webdav
+      - traefik.http.services.webdav.loadbalancer.server.port=8090
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:8080]
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/CorneliousJD/Docker-Templates/master/icons/sftpgo.png
+    networks:
+      - frontend
+    restart: unless-stopped
+networks:
+  frontend:
+    external: true

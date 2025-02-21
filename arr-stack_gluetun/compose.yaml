@@ -42,7 +42,7 @@ services:
       - ${DOWNLOAD_DIR}/Downloads:/downloads
     depends_on:
       - gluetun
-    restart: always
+    restart: unless-stopped
   sabnzbd:
     image: linuxserver/sabnzbd
     container_name: sabnzbd
@@ -58,7 +58,7 @@ services:
       - ${DATA_DIR}Downloads/incomplete:/incomplete-downloads
     depends_on:
       - gluetun
-    restart: always
+    restart: unless-stopped
   jackett:
     image: lscr.io/linuxserver/jackett:latest
     container_name: jackett

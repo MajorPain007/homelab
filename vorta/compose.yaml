@@ -1,0 +1,29 @@
+services:
+  vorta:
+    image: ghcr.io/borgbase/vorta-docker:latest
+    container_name: vorta
+    hostname: vorta
+    # cap_add:
+    #   - SYS_ADMIN
+    #    security_opt:
+    #      - apparmor:unconfined
+    privileged: true
+    volumes:
+      - ./vorta:/config
+      - /mnt/user:/data:ro
+      - /mnt/user/test:/destination
+      #- /volumeUSB1/:/destination
+    ports:
+      - 5811:5800
+    restart: unless-stopped
+    environment:
+      - USER_ID=99
+      - GROUP_ID=100
+      - TZ=Europe/Berlin
+      - DISPLAY_WIDTH=1920
+      - DISPLAY_HEIGHT=1080
+    networks:
+      - backend
+networks:
+  backend:
+    external: true

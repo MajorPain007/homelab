@@ -1,0 +1,21 @@
+filenames:
+ - /var/log/auth.log
+ - /var/log/syslog
+labels:
+  type: syslog
+---
+filenames:
+  - /var/log/traefik/*
+labels:
+  type: traefik
+---
+source: docker
+container_name:
+ - authentik-server
+labels:
+  type: authentik
+---
+filenames:
+ - /var/log/jellyfin/log_*.log
+labels:
+  type: jellyfin

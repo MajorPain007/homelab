@@ -1,7 +1,8 @@
 services:
   configarr:
-    image: ghcr.io/raydak-labs/configarr:latest
-    container_name: configarr
+    container_name: ${SERVICES_CONFIGARR_CONTAINER_NAME:-configarr}
+    hostname: ${SERVICES_CONFIGARR_HOSTNAME:-configarr}
+    image: ${SERVICES_CONFIGARR_IMAGE:-ghcr.io/raydak-labs/configarr}:${SERVICES_CONFIGARR_IMAGE_VERSION:-latest}
     user: 99:100 # Optional, defaults to root:root
     environment:
       - TZ=Europe/Berlin

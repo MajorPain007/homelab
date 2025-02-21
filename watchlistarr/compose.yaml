@@ -1,0 +1,25 @@
+services:
+  watchlistarr:
+    image: nylonee/watchlistarr
+    environment:
+      SONARR_BASE_URL: http://sonarr:8989
+      SONARR_API_KEY: ${SONARR_API_KEY}
+      SONARR_QUALITY_PROFILE: ${QUALITY_PROFILE}
+      SONARR_ROOT_FOLDER: /data/Media/Serien
+      RADARR_BASE_URL: http://radarr:7878
+      RADARR_API_KEY: ${RADARR_API_KEY}
+      RADARR_QUALITY_PROFILE: ${QUALITY_PROFILE}
+      RADARR_ROOT_FOLDER: /data/Media/Serien
+      PLEX_TOKEN: ${PLEX_TOKEN}
+      REFRESH_INTERVAL_SECONDS: 60
+    volumes:
+      - .config:/app/config
+    restart: unless-stopped
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://github.com/nylonee/watchlistarr/blob/main/watchlistarr.png?raw=true
+    networks:
+      - backend
+networks:
+  backend:
+    external: true

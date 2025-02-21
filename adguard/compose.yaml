@@ -1,7 +1,8 @@
 services:
   adguardhome:
-    image: adguard/adguardhome
-    container_name: adguardhome
+    container_name: ${SERVICES_ADGUARDHOME_CONTAINER_NAME:-adguardhome}
+    hostname: ${SERVICES_ADGUARDHOME_HOSTNAME:-adguardhome}
+    image: ${SERVICES_ADGUARDHOME_IMAGE:-adguard/adguardhome}:${SERVICES_ADGUARDHOME_IMAGE_VERSION:-latest}
     depends_on:
       - unbound
     ports:
@@ -15,9 +16,13 @@ services:
     volumes:
       - ./config/adguard/workingdir:/opt/adguardhome/work
       - ./config/adguard/config:/opt/adguardhome/conf
+    labels:
+      - net.unraid.docker.managed=composeman
+      - 'net.unraid.docker.webui=http://[IP]/'
+      - 'net.unraid.docker.icon=https://raw.githubusercontent.com/SiwatINC/unraid-ca-repository/master/icons/adguard.png'
     restart: unless-stopped
     networks:
-      docker_host:
+      locale-net:
         ipv4_address: 192.168.178.254
   unbound:
     container_name: unbound
@@ -25,14 +30,17 @@ services:
     expose:
       - 53
     networks:
-      docker_host:
+      locale-net:
         ipv4_address: 192.168.178.253
     ports:
       - 53:53/tcp
       - 53:53/udp
     volumes:
       - ./config/unbound/unbound.conf:/opt/unbound/etc/unbound/unbound.conf
+    labels:
+      - net.unraid.docker.managed=dockerman
+      - 'net.unraid.docker.icon=https://raw.githubusercontent.com/kutzilla/unraid-templates/master/images/unbound.png'
     restart: unless-stopped
 networks:
-  docker_host:
+  locale-net:
     external: true

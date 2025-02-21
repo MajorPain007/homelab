@@ -6,23 +6,35 @@ services:
     restart: unless-stopped
     healthcheck:
       disable: true
-    image: ghcr.io/haveagitgat/tdarr
+    image: ghcr.io/haveagitgat/tdarr:latest
     environment:
+      - TZ=${TIMEZONE}
       - serverIP=0.0.0.0
+      - serverPort=8266
+      - webUIPort=8265
       - internalNode=true
-      - nodeIP=0.0.0.0
-      - nodeID=Docker
+      - inContainer=true
+      - ffmpegVersion=6
+      - nodeName=Internal
       - PUID=${ENV_PUID}
       - PGID=${ENV_PGID}
-    ports:
-      - 8266:8266 # server port
-      - 8265:8265 # webUI port
-      - 8264:8264 # Node Port
+    # ports:
+    #   - 8266:8266 # server port
+    #   - 8265:8265 # webUI port
+    #   - 8264:8264 # Node Port
     volumes:
       - ./tdarr/server:/app/server
       - ./tdarr/configs:/app/configs
       - ./tdarr/logs:/app/logs
       - ${DATA_DIR}/:/data/media
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=backend
+      - traefik.http.routers.tdarr.entrypoints=homesec
+      - traefik.http.routers.tdarr.rule=Host(`tdarr.${DOMAIN}`)
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:8265]
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/selfhosters/unRAID-CA-templates/master/templates/img/tdarr.png
     networks:
       - backend
 networks:
