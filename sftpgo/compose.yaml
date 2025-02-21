@@ -54,7 +54,7 @@ services:
       - net.unraid.docker.icon=https://raw.githubusercontent.com/CorneliousJD/Docker-Templates/master/icons/sftpgo.png
     networks:
       - frontend
-    restart: always
+    restart: unless-stopped
 networks:
   frontend:
     external: true

@@ -26,7 +26,7 @@ services:
     depends_on:
       - redis
       - database
-    restart: always
+    restart: unless-stopped
     labels:
       - traefik.enable=true
       - traefik.http.routers.immich.entrypoints=homesec
@@ -51,7 +51,7 @@ services:
       - ./immich/model-cache:/cache
     env_file:
       - .env
-    restart: always
+    restart: unless-stopped
     healthcheck:
       disable: false
     labels:
@@ -64,7 +64,7 @@ services:
     image: docker.io/redis:6.2-alpine@sha256:eaba718fecd1196d88533de7ba49bf903ad33664a92debb24660a922ecd9cac8
     healthcheck:
       test: redis-cli ping || exit 1
-    restart: always
+    restart: unless-stopped
     labels:
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.icon=https://raw.githubusercontent.com/juusujanar/unraid-templates/master/img/Redis-logo.png
@@ -94,7 +94,7 @@ services:
     command: postgres -c shared_preload_libraries=vectors.so -c
       'search_path="$$user", public, vectors' -c logging_collector=on -c
       max_wal_size=2GB -c shared_buffers=512MB -c wal_compression=on
-    restart: always
+    restart: unless-stopped
     labels:
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.icon=https://github.com/juusujanar/unraid-templates/raw/master/img/PostgreSQL-logo.png

@@ -18,7 +18,7 @@ services:
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.webui=http://[IP]:[PORT:8181]/files/
       - net.unraid.docker.icon=https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/tautulli-logo.png
-    restart: always
+    restart: unless-stopped
     networks:
       - frontend
 networks:

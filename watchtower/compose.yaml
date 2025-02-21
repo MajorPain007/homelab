@@ -5,7 +5,7 @@ services:
     image: ${SERVICES_WATCHTOWER_IMAGE:-containrrr/watchtower}:${SERVICES_WATCHTOWER_IMAGE_VERSION:-latest}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    restart: always
+    restart: unless-stopped
     environment:
       - TZ=Europe/Berlin
       - WATCHTOWER_LIFECYCLE_HOOKS=1 # Enable pre/post-update scripts

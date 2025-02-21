@@ -8,7 +8,7 @@ services:
       - ./breitbandmessung/data:/config/xdg/config/Breitbandmessung
     ports:
       - 5800:5800
-    restart: always
+    restart: unless-stopped
     networks:
       - backend
 networks:
