@@ -39,7 +39,7 @@ services:
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.webui=http://[IP]:[PORT:32400]/web
       - net.unraid.docker.icon=https://raw.githubusercontent.com/plexinc/pms-docker/master/img/plex-server.png
-    restart: always
+    restart: unless-stopped
     networks:
       - frontend
       - backend
