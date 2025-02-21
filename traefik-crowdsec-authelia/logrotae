@@ -1,0 +1,15 @@
+# /etc/logrotate.d/traefik
+
+/mnt/fast/appdata/dockge/stacks/traefik/config/logs/*.log {
+  su nobody users
+#  size 10M
+  daily 
+  rotate 7
+  missingok
+  compress
+  delaycompress
+  notifempty
+  postrotate
+    docker kill --signal="USR1" traefik
+  endscript
+}

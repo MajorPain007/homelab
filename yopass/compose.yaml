@@ -1,7 +1,7 @@
 services:
   memcached:
     image: memcached
-    restart: unless-stopped
+    restart: always
     expose:
       - "11211"
     labels:
@@ -11,7 +11,7 @@ services:
       - backend
   yopass:
     image: jhaals/yopass
-    restart: unless-stopped
+    restart: always
     command: --memcached=memcached:11211 --port 80
     environment:
       - VIRTUAL_HOST=yopass.${DOMAIN}

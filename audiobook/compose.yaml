@@ -5,7 +5,7 @@ services:
     image: ${SERVICES_AUDIOBOOKSHELF_IMAGE:-ghcr.io/advplyr/audiobookshelf}:${SERVICES_AUDIOBOOKSHELF_IMAGE_VERSION:-latest}
     healthcheck:
       disable: true
-    restart: unless-stopped
+    restart: always
     ports:
       - 13378:80
     volumes:

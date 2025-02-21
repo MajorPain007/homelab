@@ -16,7 +16,7 @@ services:
       options:
         max-file: "10"
         max-size: 200k
-    restart: unless-stopped
+    restart: always
     labels:  
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.webui=http://[IP]:[PORT:8765]

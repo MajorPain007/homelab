@@ -38,6 +38,6 @@ url: http://gotify/message
 method: POST
 
 headers:
-  X-Gotify-Key: 
+  X-Gotify-Key:
   Content-Type: application/json
 # skip_tls_verification:  # true or false. Default is false
