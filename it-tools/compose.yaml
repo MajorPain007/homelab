@@ -5,7 +5,7 @@ services:
     image: ${SERVICES_IT_TOOLS_IMAGE:-corentinth/it-tools}:${SERVICES_IT_TOOLS_IMAGE_VERSION:-latest}
     healthcheck:
       disable: true
-    restart: unless-stopped
+    restart: always
     # ports:
     #   - 834:80
     networks:

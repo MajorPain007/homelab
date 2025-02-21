@@ -3,7 +3,7 @@ services:
     container_name: ${SERVICES_FILEBROWSER_CONTAINER_NAME:-filebrowser}
     hostname: ${SERVICES_FILEBROWSER_HOSTNAME:-filebrowser}
     image: ${SERVICES_FILEBROWSER_IMAGE:-filebrowser/filebrowser}:${SERVICES_FILEBROWSER_IMAGE_VERSION:-latest}
-    restart: unless-stopped
+    restart: always
     healthcheck:
       disable: true
     ports:

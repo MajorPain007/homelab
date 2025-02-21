@@ -1,4 +1,10 @@
 filenames:
+ - /var/log/auth.log
+ - /var/log/syslog
+labels:
+  type: syslog
+---
+filenames:
   - /var/log/traefik/*
 labels:
   type: traefik
@@ -13,3 +19,9 @@ filenames:
  - /var/log/jellyfin/log_*.log
 labels:
   type: jellyfin
+---
+source: docker
+container_name:
+  - sftpgo
+labels:
+  type: sshd
