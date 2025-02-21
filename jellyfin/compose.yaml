@@ -10,7 +10,7 @@ services:
       # - 8920:8920 #optional Https webUI
       # - 1900:1900/udp #optional Service discovery used by DNLA and clients
       # - 7359:7359/udp #optional Allows clients to discover Jellyfin on the local network.
-    restart: always
+    restart: unless-stopped
     networks:
       - frontend
       - backend

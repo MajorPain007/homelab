@@ -3,7 +3,7 @@ services:
     devices:
       - /dev/dri:/dev/dri
     container_name: tdarr
-    restart: always
+    restart: unless-stopped
     healthcheck:
       disable: true
     image: ghcr.io/haveagitgat/tdarr:latest
