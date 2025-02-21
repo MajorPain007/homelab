@@ -3,7 +3,7 @@ services:
     container_name: ${SERVICES_VAULTWARDEN_CONTAINER_NAME:-vaultwarden}
     hostname: ${SERVICES_VAULTWARDEN_HOSTNAME:-vaultwarden}
     image: ${SERVICES_VAULTWARDEN_IMAGE:-vaultwarden/server}:${SERVICES_VAULTWARDEN_IMAGE_VERSION:-latest}
-    restart: unless-stopped
+    restart: always
     # ports:
     #   - 4744:80
     environment:

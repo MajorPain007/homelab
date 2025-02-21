@@ -12,7 +12,7 @@ services:
     environment:
       CRON_SCHEDULE: "* 4 * * *"
       TZ: ${TIMEZONE}
-    restart: unless-stopped
+    restart: always
 networks:
   backend:
     external: true

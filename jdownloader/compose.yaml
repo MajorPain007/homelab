@@ -3,7 +3,7 @@ services:
     container_name: ${SERVICES_JDOWNLOADER_CONTAINER_NAME:-jdownloader}
     hostname: ${SERVICES_JDOWNLOADER_HOSTNAME:-jdownloader}
     image: ${SERVICES_JDOWNLOADER_IMAGE:-jlesage/jdownloader-2}:${SERVICES_JDOWNLOADER_IMAGE_VERSION:-latest}
-    restart: unless-stopped
+    restart: always
     environment:
       - TZ=Europe/Berlin
       - LANG=de_DE.UTF-8

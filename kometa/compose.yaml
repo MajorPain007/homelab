@@ -16,7 +16,7 @@ services:
     volumes:
       - ./config:/config
       - ../posterizarr/config/posterizarr/assets/:/config/assets
-    restart: unless-stopped
+    restart: always
     labels:
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.icon=https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/kometa-logo.png
@@ -48,7 +48,7 @@ services:
     volumes:
       - ./config/imagemaid:/config
       - '/mnt/user/appdata/dockge/stacks/plex/Plex-Media-Server/Library/Application Support/Plex Media Server/:/plex'
-    restart: unless-stopped
+    restart: always
     labels:
       - net.unraid.docker.managed=dockerman
       - net.unraid.docker.icon=https://raw.githubusercontent.com/Kometa-Team/ImageMaid/refs/heads/develop/.github/logo.png
