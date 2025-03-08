@@ -1,0 +1,36 @@
+services:
+  borgmatic-collective:
+    container_name: ${SERVICES_BORGNATIC_CONTAINER_NAME:-borgmatic}
+    hostname: ${SERVICES_BORGNATIC_HOSTNAME:-borgmatic}
+    image: ${SERVICES_BORGNATIC_IMAGE:-ghcr.io/borgmatic-collective/borgmatic} #:${SERVICES_BORGNATIC_IMAGE_VERSION:-latest}
+    restart: unless-stopped
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
+      - label:disable
+    devices:
+      - /dev/fuse:/dev/fuse
+    # command: /bin/sh
+    environment:
+      - TZ=${TZ}
+      - BORG_PASSPHRASE=${BORG_PASSPHRASE}
+      - PUID=${PUID}
+      - PGID=${PGID}
+    volumes:
+      - /mnt/user:/mnt/user:ro
+      - /boot:/boot:ro
+      - /mnt/user/borg_backup/repo:/mnt/borg-repository
+      - ./borgmatic/cache:/root/.cache/borg
+      - ./borgmatic/config:/etc/borgmatic.d
+      - ./borgmatic/borg_keys:/root/.config/borg
+      - ./borgmatic/ssh_keys:/root/.ssh
+      - /mnt/fast/test/:/mnt/fast/test
+    labels:
+      - net.unraid.docker.managed=dockerman
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/Sdub76/unraid_docker_templates/main/images/borgmatic.png
+    networks:
+      - backend
+networks:
+  backend:
+    external: true

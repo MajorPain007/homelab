@@ -22,6 +22,10 @@ services:
       - /dev/sdi
       - /dev/nvme0n1
       - /dev/nvme2n1
+    labels:
+      - net.unraid.docker.webui=http://[IP]:[PORT:8073]/
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/selfhosters/unRAID-CA-templates/master/templates/img/scrutiny.png
     networks:
       - backend
 networks:

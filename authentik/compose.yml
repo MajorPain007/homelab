@@ -14,7 +14,7 @@ services:
     volumes:
       - ./authentik/database:/var/lib/postgresql/data
     environment:
-      POSTGRES_PASSWORD: ${PG_PASS:?database password required}
+      POSTGRES_PASSWORD: ${PG_PASSWORD:?database password required}
       POSTGRES_USER: ${PG_USER:-authentik}
       POSTGRES_DB: ${PG_DB:-authentik}
     env_file:
@@ -54,7 +54,7 @@ services:
       AUTHENTIK_POSTGRESQL__HOST: authentik-db
       AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
       AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
-      AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS}
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASSWORD}
     volumes:
       - ./authentik/media:/media
       - ./authentik/custom-templates:/templates
@@ -88,7 +88,7 @@ services:
       AUTHENTIK_POSTGRESQL__HOST: authentik-db
       AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
       AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
-      AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS}
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASSWORD}
     # `user: root` and the docker socket volume are optional.
     # See more for the docker socket integration here:
     # https://goauthentik.io/docs/outposts/integrations/docker

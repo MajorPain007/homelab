@@ -11,6 +11,10 @@ services:
     restart: unless-stopped
     networks:
       - backend
+    labels:
+      - net.unraid.docker.webui=http://[IP]:[PORT:5800]/
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=s
 networks:
   backend:
     external: true

@@ -22,6 +22,14 @@ services:
       - TZ=Europe/Berlin
       - DISPLAY_WIDTH=1920
       - DISPLAY_HEIGHT=1080
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=backend
+      - traefik.http.routers.vorta.entrypoints=homesec
+      - traefik.http.routers.vorta.rule=Host(`vorta.${DOMAIN}`)
+      - net.unraid.docker.webui=http://[IP]:[PORT:5811]/
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/borgbase/vorta/93ef64cddeb361d7d16035826b4e85988e32a0b3/src/vorta/assets/icons/icon.svg
     networks:
       - backend
 networks:

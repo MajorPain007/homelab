@@ -4,7 +4,6 @@ services:
     hostname: ${SERVICES_ADGUARDHOME_SYNC_HOSTNAME:-adguardhome}
     image: ${SERVICES_ADGUARDHOME_SYNC_IMAGE:-lscr.io/linuxserver/adguardhome-sync}:${SERVICES_ADGUARDHOME_SYNC_IMAGE_VERSION:-latest}
     network_mode: host
-    container_name: adguardhome-sync
     environment:
       - PUID=99
       - PGID=100

@@ -3,9 +3,6 @@ services:
     container_name: ${SERVICES_TRAEFIK_CONTAINER_NAME:-traefik}
     hostname: ${SERVICES_TRAEFIK_HOSTNAME:-traefik}
     image: ${SERVICES_TRAEFIK_IMAGE:-traefik}:${SERVICES_TRAEFIK_IMAGE_VERSION:-latest}
-    depends_on:
-      crowdsec:
-        condition: service_healthy
     security_opt:
       - no-new-privileges:true
     command:
@@ -45,7 +42,6 @@ services:
       - --certificatesresolvers.letsencrypt.acme.caserver=https://acme-v02.api.letsencrypt.org/directory
       - --entrypoints.sftpgo.address=:2022
       - --entrypoints.web.address=:81
-      # - --entryPoints.web.http.middlewares=crowdsec@file
       - --entrypoints.web.http.redirections.entrypoint.to=websecure
       - --entrypoints.web.http.redirections.entrypoint.scheme=https
       - --entrypoints.websecure.address=:444
@@ -124,6 +120,8 @@ services:
     hostname: ${SERVICES_CROWDSEC_HOSTNAME:-crowdsec}
     image: ${SERVICES_CROWDSEC_IMAGE:-crowdsecurity/crowdsec}:${SERVICES_CROWDSEC_IMAGE_VERSION:-latest}
     restart: unless-stopped
+    depends_on:
+      - traefik
     healthcheck:
       test:
         - CMD

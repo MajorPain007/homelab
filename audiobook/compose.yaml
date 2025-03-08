@@ -15,7 +15,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.audiobookshelf.entrypoints=websecure,homesec
-      - traefik.http.routers.audiobookshelf.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.audiobookshelf.rule=Host(`ab.${DOMAIN}`)
       - traefik.http.routers.audiobookshelf.middlewares=authelia@file
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.webui=http://[IP]:[PORT:80]
