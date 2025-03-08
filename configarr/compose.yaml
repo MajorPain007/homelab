@@ -12,6 +12,9 @@ services:
       # - ./configarr/custom/cfs:/app/cfs # Optional if custom formats locally provided
       # - ./configarr/custom/templates:/app/templates # Optional if custom templates
     restart: unless-stopped
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/raydak-labs/configarr/77246c84aac88ada621840467c01f06aea383652/docs/static/img/logo.svg
     networks:
       - backend
 networks:

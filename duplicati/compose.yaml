@@ -1,0 +1,32 @@
+services:
+  duplicati:
+    container_name: ${SERVICES_DUPLICATI_CONTAINER_NAME:-duplicati}
+    hostname: ${SERVICES_DUPLICATI_HOSTNAME:-duplicati}
+    image: ${SERVICES_DUPLICATI_IMAGE:-lscr.io/linuxserver/duplicati}:${SERVICES_DUPLICATI_IMAGE_VERSION:-latest}
+    ports:
+      - 8200:8200
+    environment:
+      - PUID=99
+      - PGID=100
+      - TZ={TZ}
+      - SETTINGS_ENCRYPTION_KEY={PASSWORD}
+      - CLI_ARGS= #optional
+      - DUPLICATI__WEBSERVICE_PASSWORD= #optional
+    volumes:
+      - ./config:/config
+      - /mnt/user/test/New Folder/:/backups
+      - /mnt/user/Daten/:/source
+      - /mnt/user/rsync_backup/:/source2
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.duplicati.entrypoints=homesec
+      - traefik.http.routers.duplicati.rule=Host(`duplicati.${DOMAIN}`)
+      - net.unraid.docker.managed=dockerman
+      - net.unraid.docker.webui=http://[IP]:[PORT:8200]/login.html
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/duplicati-logo.png
+    restart: unless-stopped
+    networks:
+      - backend
+networks:
+  backend:
+    external: true

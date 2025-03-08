@@ -34,7 +34,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.plex.entrypoints=websecure,homesec
-      - traefik.http.routers.plex.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.plex.rule=Host(`plex.${DOMAIN}`)
       - traefik.http.services.plex.loadbalancer.server.port=32400
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.webui=http://[IP]:[PORT:32400]/web

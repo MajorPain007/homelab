@@ -14,7 +14,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.tautulli.entrypoints=homesec
-      - traefik.http.routers.tautulli.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.tautulli.rule=Host(`tautulli.${DOMAIN}`)
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.webui=http://[IP]:[PORT:8181]/files/
       - net.unraid.docker.icon=https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/tautulli-logo.png
