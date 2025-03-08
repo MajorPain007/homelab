@@ -1,6 +1,6 @@
 # /etc/logrotate.d/traefik
 
-/mnt/fast/appdata/dockge/stacks/traefik/config/logs/*.log {
+/mnt/fast/appdata/dockge/stacks/traefik-crowdsec-authelia/config/logs/*.log {
   su nobody users
 #  size 10M
   daily 

@@ -14,7 +14,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.filebrowser.entrypoints=websecure,homesec
-      - traefik.http.routers.filebrowser.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.filebrowser.rule=Host(`fb.${DOMAIN}`)
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.webui=http://[IP]:[PORT:99]/files/
       - net.unraid.docker.icon=https://github.com/maschhoff/docker/raw/master/filebrowser/35781395.png

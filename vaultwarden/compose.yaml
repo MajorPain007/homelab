@@ -17,7 +17,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.vaultwarden.entrypoints=websecure,homesec
-      - traefik.http.routers.vaultwarden.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.vaultwarden.rule=Host(`bw.${DOMAIN}`)
       - traefik.http.routers.vaultwarden.middlewares=authelia@file
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.webui=http://[IP]:[PORT:80]/admin

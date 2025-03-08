@@ -1,0 +1,35 @@
+services:
+  backrest:
+    image: garethgeorge/backrest:latest
+    container_name: backrest
+    hostname: backrest
+    volumes:
+      - ./backrest/data:/data
+      - ./backrest/config:/config
+      - ./backrest/cache:/cache
+      - ./backrest/tmp:/tmp
+      - /mnt/user/Daten:/userdata # Mount local paths to backup
+      - /mnt/user/appdata:/userdata2 # Mount local paths to backup
+      - /mnt/user/test:/repos     # Mount local repos (optional for remote storage)
+    environment:
+      - BACKREST_DATA=/data
+      - BACKREST_CONFIG=/config/config.json
+      - XDG_CACHE_HOME=/cache
+      - TMPDIR=/tmp
+      - TZ=Europe/Berlin
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=backend
+      - traefik.http.routers.backrest.entrypoints=homesec
+      - traefik.http.routers.backrest.rule=Host(`backrest.${DOMAIN}`)
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:9898]/
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/garethgeorge/backrest/refs/heads/main/webui/assets/favicon.png
+    ports:
+      - 9898:9898
+    restart: unless-stopped
+    networks:
+      - backend
+networks:
+  backend:
+    external: true
