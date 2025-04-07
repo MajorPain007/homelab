@@ -29,7 +29,7 @@ services:
       - ADVERTISE_IP=${ADVERTISE_IP}
     volumes:
       - ./Plex-Media-Server:/config
-      - ${DATA_DIR}:/media
+      - ${DATA_DIR}:/media:ro
       - ${TMP_TRANSCODE}:/transcode
     labels:
       - traefik.enable=true

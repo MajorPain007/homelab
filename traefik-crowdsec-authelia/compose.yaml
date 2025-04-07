@@ -148,7 +148,9 @@ services:
       - /var/log/syslog:/var/log/syslog:ro
     environment:
       - TZ=${TIMEZONE}
-      - COLLECTIONS=crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/appsec-generic-rules crowdsecurity/appsec-virtual-patching crowdsecurity/sshd crowdsecurity/linux crowdsecurity/base-http-scenarios
+      - COLLECTIONS=crowdsecurity/traefik crowdsecurity/http-cve
+        crowdsecurity/appsec-generic-rules crowdsecurity/appsec-virtual-patching
+        crowdsecurity/sshd crowdsecurity/linux crowdsecurity/base-http-scenarios
       - PUID=${ENV_PUID}
       - PGID=${ENV_PGID}
     labels:

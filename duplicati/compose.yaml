@@ -14,6 +14,7 @@ services:
       - DUPLICATI__WEBSERVICE_PASSWORD= #optional
     volumes:
       - ./config:/config
+      - ./ssh_keys:root/.ssh
       - /mnt/user/test/New Folder/:/backups
       - /mnt/user/Daten/:/source
       - /mnt/user/rsync_backup/:/source2

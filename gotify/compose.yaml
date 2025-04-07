@@ -18,6 +18,7 @@ services:
       - traefik.docker.network=backend
       - traefik.http.routers.gotify.entrypoints=websecure,homesec
       - traefik.http.routers.gotify.rule=Host(`gotify.${DOMAIN}`)
+      # - traefik.http.routers.gotify.middlewares=authentik@file
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.webui=http://[IP]:[PORT:7878]/system/status
       - net.unraid.docker.icon=https://raw.githubusercontent.com/A75G/docker-templates/master/templates/icons/gotify.png

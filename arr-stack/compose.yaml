@@ -43,7 +43,7 @@ services:
     volumes:
       - ${SERVICES_DIR}/radarr:/config
       - ${DATA_DIR}:/data
-      - ${TMP_DOWNLOADS_DIR}/complete:/downloads/complete
+      - ${DOWNLOADS_DIR}/complete:/downloads/complete
     labels:
       - traefik.enable=true
       - traefik.docker.network=backend
@@ -68,7 +68,7 @@ services:
     volumes:
       - ${SERVICES_DIR}/radarr_kids:/config
       - ${DATA_DIR}:/data
-      - ${TMP_DOWNLOADS_DIR}/complete:/downloads/complete
+      - ${DOWNLOADS_DIR}/complete:/downloads/complete
     labels:
       - traefik.enable=true
       - traefik.docker.network=backend
@@ -93,7 +93,7 @@ services:
     volumes:
       - ${SERVICES_DIR}/sonarr:/config
       - ${DATA_DIR}:/data
-      - ${TMP_DOWNLOADS_DIR}/complete:/downloads/complete
+      - ${DOWNLOADS_DIR}/complete:/downloads/complete
     labels:
       - traefik.enable=true
       - traefik.docker.network=backend
@@ -119,7 +119,7 @@ services:
     volumes:
       - ${SERVICES_DIR}/sonarr_as:/config
       - ${DATA_DIR}:/data
-      - ${TMP_DOWNLOADS_DIR}/complete:/downloads/complete
+      - ${DOWNLOADS_DIR}/complete:/downloads/complete
     labels:
       - traefik.enable=true
       - traefik.docker.network=backend
@@ -144,7 +144,7 @@ services:
     volumes:
       - ${SERVICES_DIR}/readarr:/config
       - ${DATA_DIR}:/data
-      - ${TMP_DOWNLOADS_DIR}/complete:/downloads/complete
+      - ${DOWNLOADS_DIR}/complete:/downloads/complete
     labels:
       - traefik.enable=true
       - traefik.docker.network=backend
@@ -218,7 +218,7 @@ services:
       - ${SERVICES_DIR}/sabnzbd:/config
       - ${DATA_DIR}/:/data
       - ${TMP_DOWNLOADS_DIR}/incomplete:/downloads/incomplete
-      - ${TMP_DOWNLOADS_DIR}/complete:/downloads/complete
+      - ${DOWNLOADS_DIR}/complete:/downloads/complete
     labels:
       - traefik.enable=true
       - traefik.docker.network=backend

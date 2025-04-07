@@ -1,23 +1,50 @@
 services:
   mydrive:
-    build:
-      context: .
-      dockerfile: Dockerfile.production
-    container_name: mydrive_production
-    # env_file:
-    # - ./backend/config/.env.production
+    container_name: mydrive
+    hostname: mydrive
+    image: kylehoell/mydrive:latest
     volumes:
-      - .:/usr/app-production
-      - /usr/app-production/node_modules
-      - ${FS_DIRECTORY}:/data
+      # Use the following volumes section if you want to use bind mounts:
+      - ${DATA_DIR}:/data/
+      - ./mydrive/temp:/temp/
     ports:
       - ${HTTP_PORT:-3000}:3000
-      - ${HTTPS_PORT:-8080}:8080
-    environment:
-      - DOCKER=true
+    env_file:
+      - .env # Copy .env.example to .env and fill in the values
     restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.mydrive.entrypoints=websecure,homesec
+      - traefik.http.routers.mydrive.rule=Host(`md.${DOMAIN}`
+    networks:
+      - backend
+      - frontend
+  mongo:
+    image: mongo:8
+    container_name: mongomydrive
+    hostname: mongomydrive
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${PASS}
+    expose:
+      - 27017
+    volumes:
+      - ./mydrive/db-data:/data/db
+    healthcheck:
+      test:
+        - CMD
+        - mongosh
+        - --eval
+        - db.adminCommand('ping')
+      timeout: 10s
+      interval: 10s
+      retries: 10
+      start_period: 10s
     networks:
       - backend
 networks:
+  frontend:
+    external: true
   backend:
     external: true
