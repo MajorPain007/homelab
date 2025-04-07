@@ -15,7 +15,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.kavita.entrypoints=websecure,homesec
       - traefik.http.routers.kavita.rule=Host(`eb.${DOMAIN}`)
-      - traefik.http.routers.kavita.middlewares=authelia@file
+      - traefik.http.routers.kavita.middlewares=authentik@file
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.webui=http://[IP]:[PORT:5000]
       - net.unraid.docker.icon=https://raw.githubusercontent.com/Kareadita/Kavita/develop/UI/Web/src/assets/icons/android-chrome-192x192.png

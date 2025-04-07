@@ -1,0 +1,14 @@
+services:
+  jellyplex-watched:
+    image: luigi311/jellyplex-watched:latest
+    container_name: jellyplex-watched
+    restart: unless-stopped
+    environment:
+      - PUID=99
+      - PGID=100
+    env_file: ./.env
+    networks:
+      - backend
+networks:
+  backend:
+    external: true

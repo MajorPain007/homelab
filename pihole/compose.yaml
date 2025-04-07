@@ -2,9 +2,9 @@ services:
   pihole:
     container_name: ${SERVICES_PIHOLE_CONTAINER_NAME:-pihole}
     hostname: ${SERVICES_PIHOLE_HOSTNAME:-pihole}
-    image: ${SERVICES_PIHOLE_IMAGE:-pihole/pihole:latest}:${SERVICES_PIHOLE_IMAGE_VERSION:-latest}
-    networks:
-      - pihole-unbound
+    image: ${SERVICES_PIHOLE_IMAGE:-pihole/pihole}:${SERVICES_PIHOLE_IMAGE_VERSION:-latest}
+    depends_on:
+      - unbound
     ports:
       - 53:53/tcp
       - 53:53/udp
@@ -15,8 +15,17 @@ services:
       # Set a password to access the web interface. Not setting one will result in a random password being assigned
       FTLCONF_webserver_api_password: ""
       # Configure DNS upstream servers, e.g:
-      FTLCONF_dns_upstreams: unbound
-      FTLCONF_dns_dnssec: true
+      # FTLCONF_dns_upstreams: unbound
+      # FTLCONF_dns_dnssec: true
+      REV_SERVER: true
+      REV_SERVER_DOMAIN: fritz.box
+      REV_SERVER_TARGET: 192.168.178.1
+      REV_SERVER_CIDR: 192.168.178.0/24
+      WEBTHEME: default-darker
+    labels:
+      - net.unraid.docker.webui=http://[IP]:[PORT:83]/
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/binhex/docker-templates/master/binhex/images/official-pihole-icon.png
     # Volumes store your data between container upgrades
     volumes:
       - ./etc-pihole:/etc/pihole
@@ -25,9 +34,15 @@ services:
     container_name: ${SERVICES_UNBOUND_CONTAINER_NAME:-unbound}
     hostname: ${SERVICES_UNBOUND_HOSTNAME:-unbound}
     image: ${SERVICES_UNBOUND_IMAGE:-mvance/unbound}:${SERVICES_UNBOUND_IMAGE_VERSION:-latest}
-    networks:
-      - pihole-unbound
+    # ports:
+    #   - 5335:53/tcp
+    #   - 5335:53/udp
+    # volumes:
+    #   - ./unbound.conf:/opt/unbound/etc/unbound/unbound.conf
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/kutzilla/unraid-templates/master/images/unbound.png
     restart: unless-stopped
 networks:
-  pihole-unbound:
-    external: true
+  default:
+    name: "pihole"
