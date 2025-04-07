@@ -1,0 +1,21 @@
+services:
+  spottube:
+    image: thewicklowwolf/spottube:latest
+    container_name: spottube
+    environment:
+      - PUID=99
+      - PGID=100
+      - thread_limit=2
+      - artist_track_selection=all
+    volumes:
+      - ./spottube/config:/spottube/config # Pfad für die Konfiguration
+      - /mnt/fast/Downloads/spottube:/spottube/downloads # Pfad für die Downloads 
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 5010:5000
+    restart: unless-stopped
+    networks:
+      - backend
+networks:
+  backend:
+    external: true
