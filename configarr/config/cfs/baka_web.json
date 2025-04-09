@@ -1,92 +1,74 @@
 {
-    "trash_id": "Anime BD Tier 1",
+    "trash_id": "Baka HQ German Anime Release Groups WEB",
     "trash_scores": {
-      "default": 3000
+      "default": 2100
     },
-    "trash_description": "Anime BD Tier 1",
-    "custom_inf": "Anime BD Tier 1",
-    "name": "Anime BD Tier 1",
+    "trash_description": "Baka HQ German Anime Release Groups WEB",
+    "custom_inf": "Baka HQ German Anime Release Groups WEB",
+    "name": "Baka HQ German Anime Release Groups WEB",
     "includeCustomFormatWhenRenaming": false,
     "specifications": [
         {
-        "name": "AST4u",
+        "name": "BAKA",
         "implementation": "ReleaseGroupSpecification",
         "negate": false,
         "required": false,
         "fields": {
-            "value": "^(AST4u)$"
+            "value": "^(BAKA)$"
         }
         },
         {
-        "name": "Fuuko",
+        "name": "HiSHiRO",
         "implementation": "ReleaseGroupSpecification",
         "negate": false,
         "required": false,
         "fields": {
-            "value": "^(Fuuko)$"
+            "value": "^(HiSHiRO)$"
         }
         },
         {
-        "name": "Waechter",
+        "name": "DRiFTKiNG",
         "implementation": "ReleaseGroupSpecification",
         "negate": false,
         "required": false,
         "fields": {
-            "value": "Waechter"
+            "value": "DRiFTKiNG"
         }
         },
         {
-        "name": "FumoFriday",
+        "name": "Ainz",
         "implementation": "ReleaseGroupSpecification",
         "negate": false,
         "required": false,
         "fields": {
-            "value": "^(FumoFriday)$"
+            "value": "Ainz"
         }
         },
         {
-        "name": "Hugo",
+        "name": "ONiGiRi",
         "implementation": "ReleaseGroupSpecification",
         "negate": false,
         "required": false,
         "fields": {
-            "value": "Hugo"
+            "value": "ONiGiRi"
         }
         },
         {
-        "name": "snk",
-        "implementation": "ReleaseGroupSpecification",
-        "negate": false,
-        "required": false,
-        "fields": {
-            "value": "\\b(snk|shw)\\b"
-        }
-        },
-        {
-        "name": "AO",
-        "implementation": "ReleaseGroupSpecification",
-        "negate": false,
-        "required": false,
-        "fields": {
-            "value": "^(AO)$"
-        }
-        },
-        {
-          "name": "GP",
-          "implementation": "ReleaseGroupSpecification",
+          "name": "WebDL",
+          "implementation": "SourceSpecification",
           "negate": false,
           "required": false,
           "fields": {
-            "value": "^(GP)$"
+            "value": 3
           }
         },
         {
-          "name": "Bluray",
+          "name": "WebRip",
           "implementation": "SourceSpecification",
           "negate": false,
-          "required": true,
+          "required": false,
           "fields": {
-            "value": 6
+            "value": 4
           }
         }
     ]

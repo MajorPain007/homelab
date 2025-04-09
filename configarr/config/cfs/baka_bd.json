@@ -1,11 +1,11 @@
 {
-    "trash_id": "Baka HQ German Anime Release Groups",
+    "trash_id": "Baka HQ German Anime Release Groups BD",
     "trash_scores": {
-      "default": 2100
+      "default": 3000
     },
-    "trash_description": "Baka HQ German Anime Release Groups",
-    "custom_inf": "Baka HQ German Anime Release Groups",
-    "name": "Baka HQ German Anime Release Groups",
+    "trash_description": "Baka HQ German Anime Release Groups BD",
+    "custom_inf": "Baka HQ German Anime Release Groups BD",
+    "name": "Baka HQ German Anime Release Groups BD",
     "includeCustomFormatWhenRenaming": false,
     "specifications": [
         {
@@ -52,6 +52,15 @@
         "fields": {
             "value": "ONiGiRi"
         }
+        },
+        {
+          "name": "Bluray",
+          "implementation": "SourceSpecification",
+          "negate": false,
+          "required": true,
+          "fields": {
+            "value": 6
+          }
         }
     ]
 }
