@@ -1,0 +1,24 @@
+services:
+  powershell:
+    container_name: powershell
+    image: mcr.microsoft.com/powershell:latest
+    restart: no
+    # optional
+    logging:
+      driver: json-file
+      options:
+        max-file: 10
+        max-size: 200k
+    # optional
+    environment:
+      - PUID=99
+      - PGID=100
+    volumes:
+      - ./powershell:/scripts
+    command: pwsh /scripts/Upgradinatorr/upgradinatorr.ps1 -ApplicationList
+      radarr,sonarr
+    networks:
+      - backend
+networks:
+  backend:
+    external: true
