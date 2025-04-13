@@ -1,0 +1,88 @@
+services:
+  outline:
+    container_name: ${SERVICES_OUTLINE_CONTAINER_NAME:-outline}
+    hostname: ${SERVICES_OUTLINE_HOSTNAME:-outline}
+    image: ${SERVICES_OUTLINE_IMAGE:-docker.getoutline.com/outlinewiki/outline}:${SERVICES_OUTLINE_IMAGE_VERSION:-latest}
+    env_file: .env
+    #ports:
+    #  - "3000:3000"
+    volumes:
+      - ./outline/outline-data:/var/lib/outline/data
+    labels:
+      - traefik.docker.network=frontend
+      - traefik.enable=true
+      - traefik.http.routers.outline.entrypoints=homesec
+      - traefik.http.routers.outline.rule=Host(`outline.${DOMAIN}`)
+      - net.unraid.docker.webui=http://[IP]:[PORT:3000]/
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/outline/outline/refs/heads/main/public/images/icon-512.png
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - frontend
+      - backend
+    restart: unless-stopped
+  redis:
+    image: redis
+    container_name: outline-redis
+    env_file: .env
+    #ports:
+    #  - 6379:6379
+    volumes:
+      - ./outline/redis.conf:/redis.conf
+    command:
+      - redis-server
+      - /redis.conf
+    healthcheck:
+      test:
+        - CMD
+        - redis-cli
+        - ping
+      interval: 10s
+      timeout: 30s
+      retries: 3
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/juusujanar/unraid-templates/master/img/Redis-logo.png
+    networks:
+      - backend
+    restart: unless-stopped
+  postgres:
+    image: postgres:16.4-bullseye
+    container_name: outline-postgres
+    env_file: .env
+    #ports:
+    #  - "5432:5432"
+    volumes:
+      - ./outline/database-data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        - CMD
+        - pg_isready
+        - -d
+        - outline
+        - -U
+        - outline
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    environment:
+      POSTGRES_USER: outline
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} # (nehmt am besten keine Sonderzeichen, dass kann zu problemen führen)
+      POSTGRES_DB: outline
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://github.com/juusujanar/unraid-templates/raw/master/img/PostgreSQL-logo.png
+    networks:
+      - backend
+    restart: unless-stopped
+# volumes:
+#   https-portal-data: 
+#   storage-data: 
+#   database-data:
+networks:
+  backend:
+    external: true
+  frontend:
+    external: true
