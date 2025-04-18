@@ -1,8 +1,8 @@
 services:
   jdownloader-2:
-    container_name: ${SERVICES_JDOWNLOADER_CONTAINER_NAME:-jdownloader}
-    hostname: ${SERVICES_JDOWNLOADER_HOSTNAME:-jdownloader}
-    image: ${SERVICES_JDOWNLOADER_IMAGE:-jlesage/jdownloader-2}:${SERVICES_JDOWNLOADER_IMAGE_VERSION:-latest}
+    container_name: ${SERVICES_JDOWNLOADER-2_CONTAINER_NAME:-jdownloader}
+    hostname: ${SERVICES_JDOWNLOADER-2_HOSTNAME:-jdownloader}
+    image: ${SERVICES_JDOWNLOADER-2_IMAGE:-jlesage/jdownloader-2}:${SERVICES_JDOWNLOADER-2_IMAGE_VERSION:-latest}
     restart: unless-stopped
     environment:
       - TZ=Europe/Berlin

@@ -91,8 +91,9 @@ services:
       - backend
     restart: unless-stopped
   authelia:
-    image: authelia/authelia:latest
-    container_name: authelia
+    image: ${SERVICES_AUTHELIA_IMAGE:-authelia/authelia}:${SERVICES_AUTHELIA_IMAGE_VERSION:-latest}
+    container_name: ${SERVICES_AUTHELIA_CONTAINER_NAME:-authelia}
+    hostname: ${SERVICES_AUTHELIA_HOSTNAME:-authelia}
     volumes:
       - ./config/authelia/config:/config
     networks:

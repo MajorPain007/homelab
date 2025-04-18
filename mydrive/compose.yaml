@@ -1,8 +1,8 @@
 services:
   mydrive:
-    container_name: mydrive
-    hostname: mydrive
-    image: kylehoell/mydrive:latest
+    container_name: ${SERVICES_MYDRIVE_CONTAINER_NAME:-mydrive}
+    hostname: ${SERVICES_MYDRIVE_HOSTNAME:-mydrive}
+    image: ${SERVICES_MYDRIVE_IMAGE:-kylehoell/mydrive}:${SERVICES_MYDRIVE_IMAGE_VERSION:-latest}
     volumes:
       # Use the following volumes section if you want to use bind mounts:
       - ${DATA_DIR}:/data/
@@ -20,9 +20,9 @@ services:
       - backend
       - frontend
   mongo:
-    image: mongo:8
-    container_name: mongomydrive
-    hostname: mongomydrive
+    image: ${SERVICES_MONGO_IMAGE:-mongo}:${SERVICES_MONGO_IMAGE_VERSION:-8}
+    container_name: ${SERVICES_MONGO_CONTAINER_NAME:-mongomydrive}
+    hostname: ${SERVICES_MONGO_HOSTNAME:-mongomydrive}
     restart: unless-stopped
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${USER}

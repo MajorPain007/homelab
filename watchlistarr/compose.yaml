@@ -1,6 +1,6 @@
 services:
   watchlistarr:
-    image: nylonee/watchlistarr
+    image: ${SERVICES_WATCHLISTARR_IMAGE:-nylonee/watchlistarr}:${SERVICES_WATCHLISTARR_IMAGE_VERSION:-latest}
     environment:
       SONARR_BASE_URL: http://sonarr:8989
       SONARR_API_KEY: ${SONARR_API_KEY}

@@ -1,7 +1,8 @@
 services:
   webtop:
-    image: ghcr.io/xpipe-io/xpipe-webtop:latest
-    container_name: xpipe-webtop
+    image: ${SERVICES_WEBTOP_IMAGE:-ghcr.io/xpipe-io/xpipe-webtop}:${SERVICES_WEBTOP_IMAGE_VERSION:-latest}
+    container_name: ${SERVICES_WEBTOP_CONTAINER_NAME:-xpipe-webtop}
+    hostname: ${SERVICES_WEBTOP_HOSTNAME:-xpipe-webtop}
     environment:
       - CUSTOM_PORT=6077
       - CUSTOM_HTTPS_PORT=6078

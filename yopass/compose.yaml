@@ -1,6 +1,6 @@
 services:
   memcached:
-    image: memcached
+    image: ${SERVICES_MEMCACHED_IMAGE:-memcached}:${SERVICES_MEMCACHED_IMAGE_VERSION:-latest}
     restart: unless-stopped
     expose:
       - "11211"
@@ -10,7 +10,7 @@ services:
     networks:
       - backend
   yopass:
-    image: jhaals/yopass
+    image: ${SERVICES_YOPASS_IMAGE:-jhaals/yopass}:${SERVICES_YOPASS_IMAGE_VERSION:-latest}
     restart: unless-stopped
     command: --memcached=memcached:11211 --port 80
     environment:

@@ -1,8 +1,9 @@
 ---
 services:
   server:
-    image: gitea/gitea:1.22.4
-    container_name: gitea-server
+    image: ${SERVICES_SERVER_IMAGE:-gitea/gitea}:${SERVICES_SERVER_IMAGE_VERSION:-1.22.4}
+    container_name: ${SERVICES_SERVER_CONTAINER_NAME:-gitea-server}
+    hostname: ${SERVICES_SERVER_HOSTNAME:-gitea-server}
     environment:
       - USER_UID=99
       - USER_GID=100
@@ -36,8 +37,9 @@ services:
     restart: unless-stopped
 
   db:
-    image: postgres:14
-    container_name: gitea-db
+    image: ${SERVICES_DB_IMAGE:-postgres}:${SERVICES_DB_IMAGE_VERSION:-14}
+    container_name: ${SERVICES_DB_CONTAINER_NAME:-gitea-db}
+    hostname: ${SERVICES_DB_HOSTNAME:-gitea-db}
     environment:
       - POSTGRES_USER=${POSTGRES_USER:?POSTGRES_USER not set}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?POSTGRES_PASSWORD not set}

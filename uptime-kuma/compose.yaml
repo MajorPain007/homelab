@@ -1,13 +1,14 @@
 services:
   uptime-kuma:
     restart: unless-stopped
-    container_name: uptime-kuma
+    container_name: ${SERVICES_UPTIME-KUMA_CONTAINER_NAME:-uptime-kuma}
+    hostname: ${SERVICES_UPTIME-KUMA_HOSTNAME:-uptime-kuma}
     ports:
       - 3001:3001
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./uptime-kuma:/app/data
-    image: louislam/uptime-kuma:latest
+    image: ${SERVICES_VOLUMES_IMAGE:-louislam/uptime-kuma}:${SERVICES_VOLUMES_IMAGE_VERSION:-latest}
     networks:
       - backend
     labels:

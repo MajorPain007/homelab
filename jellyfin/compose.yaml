@@ -1,10 +1,10 @@
 services:
   jellyfin:
-    devices:
-      - /dev/dri:/dev/dri
     container_name: ${SERVICES_JELLYFIN_CONTAINER_NAME:-jellyfin}
     hostname: ${SERVICES_JELLYFIN_HOSTNAME:-jellyfin}
     image: ${SERVICES_JELLYFIN_IMAGE:-lscr.io/linuxserver/jellyfin}:${SERVICES_JELLYFIN_IMAGE_VERSION:-latest}
+    devices:
+      - /dev/dri:/dev/dri
     ports:
       - 8096:8096
       # - 8920:8920 #optional Https webUI

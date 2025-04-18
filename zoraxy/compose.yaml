@@ -1,7 +1,8 @@
 services:
   zoraxy:
-    image: zoraxydocker/zoraxy:latest
-    container_name: zoraxy
+    image: ${SERVICES_ZORAXY_IMAGE:-zoraxydocker/zoraxy}:${SERVICES_ZORAXY_IMAGE_VERSION:-latest}
+    container_name: ${SERVICES_ZORAXY_CONTAINER_NAME:-zoraxy}
+    hostname: ${SERVICES_ZORAXY_HOSTNAME:-zoraxy}
     restart: unless-stopped
     ports:
       - 801:80

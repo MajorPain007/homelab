@@ -1,7 +1,8 @@
 services:
   powershell:
-    container_name: powershell
-    image: mcr.microsoft.com/powershell:latest
+    container_name: ${SERVICES_POWERSHELL_CONTAINER_NAME:-powershell}
+    hostname: ${SERVICES_POWERSHELL_HOSTNAME:-powershell}
+    image: ${SERVICES_POWERSHELL_IMAGE:-mcr.microsoft.com/powershell}:${SERVICES_POWERSHELL_IMAGE_VERSION:-latest}
     restart: no
     # optional
     logging:
@@ -16,7 +17,7 @@ services:
     volumes:
       - ./powershell:/scripts
     command: pwsh /scripts/Upgradinatorr/upgradinatorr.ps1 -ApplicationList
-      radarr,sonarr
+      SonarrAS
     networks:
       - backend
 networks:

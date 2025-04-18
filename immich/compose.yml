@@ -9,8 +9,9 @@
 name: immich
 services:
   immich-server:
-    container_name: immich_server
-    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
+    container_name: ${SERVICES_IMMICH-SERVER_CONTAINER_NAME:-immich_server}
+    hostname: ${SERVICES_IMMICH-SERVER_HOSTNAME:-immich_server}
+    image: ${SERVICES_IMMICH-SERVER_IMAGE:-ghcr.io/immich-app/immich-server:${IMMICH_VERSION}:${SERVICES_IMMICH-SERVER_IMAGE_VERSION:--release}
     extends:
       file: hwaccel.transcoding.yml
       service: quicksync # set to one of [nvenc, quicksync, rkmpp, vaapi, vaapi-wsl] for accelerated transcoding
@@ -40,10 +41,11 @@ services:
       - backend
       - frontend
   immich-machine-learning:
-    container_name: immich_machine_learning
+    container_name: ${SERVICES_IMMICH-MACHINE-LEARNING_CONTAINER_NAME:-immich_machine_learning}
+    hostname: ${SERVICES_IMMICH-MACHINE-LEARNING_HOSTNAME:-immich_machine_learning}
     # For hardware acceleration, add one of -[armnn, cuda, openvino] to the image tag.
     # Example tag: ${IMMICH_VERSION:-release}-cuda
-    image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}
+    image: ${SERVICES_IMMICH-MACHINE-LEARNING_IMAGE:-ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION}:${SERVICES_IMMICH-MACHINE-LEARNING_IMAGE_VERSION:--release}
     # extends: # uncomment this section for hardware acceleration - see https://immich.app/docs/features/ml-hardware-acceleration
     #   file: hwaccel.ml.yml
     #   service: cpu # set to one of [armnn, cuda, openvino, openvino-wsl] for accelerated inference - use the `-wsl` version for WSL2 where applicable
@@ -60,8 +62,9 @@ services:
     networks:
       - backend
   redis:
-    container_name: immich_redis
-    image: docker.io/redis:6.2-alpine@sha256:eaba718fecd1196d88533de7ba49bf903ad33664a92debb24660a922ecd9cac8
+    container_name: ${SERVICES_REDIS_CONTAINER_NAME:-immich_redis}
+    hostname: ${SERVICES_REDIS_HOSTNAME:-immich_redis}
+    image: ${SERVICES_REDIS_IMAGE:-docker.io/redis:6.2-alpine@sha256}:${SERVICES_REDIS_IMAGE_VERSION:-eaba718fecd1196d88533de7ba49bf903ad33664a92debb24660a922ecd9cac8}
     healthcheck:
       test: redis-cli ping || exit 1
     restart: unless-stopped
@@ -71,8 +74,9 @@ services:
     networks:
       - backend
   database:
-    container_name: immich_postgres
-    image: docker.io/tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0
+    container_name: ${SERVICES_DATABASE_CONTAINER_NAME:-immich_postgres}
+    hostname: ${SERVICES_DATABASE_HOSTNAME:-immich_postgres}
+    image: ${SERVICES_DATABASE_IMAGE:-docker.io/tensorchord/pgvecto-rs:pg14-v0.2.0@sha256}:${SERVICES_DATABASE_IMAGE_VERSION:-90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0}
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_USER: ${DB_USERNAME:-immich}

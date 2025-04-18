@@ -1,8 +1,8 @@
 services:
   vorta:
-    image: ghcr.io/borgbase/vorta-docker:latest
-    container_name: vorta
-    hostname: vorta
+    image: ${SERVICES_VORTA_IMAGE:-ghcr.io/borgbase/vorta-docker}:${SERVICES_VORTA_IMAGE_VERSION:-latest}
+    container_name: ${SERVICES_VORTA_CONTAINER_NAME:-vorta}
+    hostname: ${SERVICES_VORTA_HOSTNAME:-vorta}
     # cap_add:
     #   - SYS_ADMIN
     #    security_opt:
