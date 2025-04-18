@@ -9,7 +9,7 @@
 
 services:
   mongo:
-    image: mongo
+    image: ${SERVICES_MONGO_IMAGE:-mongo}:${SERVICES_MONGO_IMAGE_VERSION:-latest}
     labels:
       komodo.skip: null # Prevent Komodo from stopping with StopAllContainers
     command: --quiet --wiredTigerCacheSizeGB 0.25
@@ -27,7 +27,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${DB_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD}
   core:
-    image: ghcr.io/mbecker20/komodo:${COMPOSE_KOMODO_IMAGE_TAG:-latest}
+    image: ${SERVICES_CORE_IMAGE:-ghcr.io/mbecker20/komodo:${COMPOSE_KOMODO_IMAGE_TAG}:${SERVICES_CORE_IMAGE_VERSION:--latest}
     labels:
       komodo.skip: null # Prevent Komodo from stopping with StopAllContainers
     restart: unless-stopped
@@ -60,7 +60,7 @@ services:
       ## or deploy the Periphery binary with systemd using 
       ## https://github.com/mbecker20/komodo/tree/main/scripts
   periphery:
-    image: ghcr.io/mbecker20/periphery:${COMPOSE_KOMODO_IMAGE_TAG:-latest}
+    image: ${SERVICES_PERIPHERY_IMAGE:-ghcr.io/mbecker20/periphery:${COMPOSE_KOMODO_IMAGE_TAG}:${SERVICES_PERIPHERY_IMAGE_VERSION:--latest}
     labels:
       komodo.skip: null # Prevent Komodo from stopping with StopAllContainers
     restart: unless-stopped

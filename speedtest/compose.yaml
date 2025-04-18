@@ -1,7 +1,8 @@
 services:
   speedtest:
-    container_name: speedtest
-    image: henrywhitaker3/speedtest-tracker
+    container_name: ${SERVICES_SPEEDTEST_CONTAINER_NAME:-speedtest}
+    hostname: ${SERVICES_SPEEDTEST_HOSTNAME:-speedtest}
+    image: ${SERVICES_SPEEDTEST_IMAGE:-henrywhitaker3/speedtest-tracker}:${SERVICES_SPEEDTEST_IMAGE_VERSION:-latest}
     ports:
       - 8765:80
     volumes:

@@ -1,12 +1,12 @@
 services:
   adguardhome-sync:
-    container_name: ${SERVICES_ADGUARDHOME_SYNC_CONTAINER_NAME:-adguardhome}
-    hostname: ${SERVICES_ADGUARDHOME_SYNC_HOSTNAME:-adguardhome}
-    image: ${SERVICES_ADGUARDHOME_SYNC_IMAGE:-lscr.io/linuxserver/adguardhome-sync}:${SERVICES_ADGUARDHOME_SYNC_IMAGE_VERSION:-latest}
+    container_name: ${SERVICES_ADGUARDHOME-SYNC_CONTAINER_NAME:-adguardhome}
+    hostname: ${SERVICES_ADGUARDHOME-SYNC_HOSTNAME:-adguardhome}
+    image: ${SERVICES_ADGUARDHOME-SYNC_IMAGE:-lscr.io/linuxserver/adguardhome-sync}:${SERVICES_ADGUARDHOME-SYNC_IMAGE_VERSION:-latest}
     network_mode: host
     environment:
-      - PUID=99
-      - PGID=100
+      - PUID=0
+      - PGID=0
       - TZ=Etc/UTC
       - CONFIGFILE=/config/adguardhome-sync.yaml #optional
     volumes:

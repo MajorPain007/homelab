@@ -1,8 +1,8 @@
 services:
   borgmatic-collective:
-    container_name: ${SERVICES_BORGNATIC_CONTAINER_NAME:-borgmatic}
-    hostname: ${SERVICES_BORGNATIC_HOSTNAME:-borgmatic}
-    image: ${SERVICES_BORGNATIC_IMAGE:-ghcr.io/borgmatic-collective/borgmatic} #:${SERVICES_BORGNATIC_IMAGE_VERSION:-latest}
+    container_name: ${SERVICES_BORGMATIC-COLLECTIVE_CONTAINER_NAME:-borgmatic}
+    hostname: ${SERVICES_BORGMATIC-COLLECTIVE_HOSTNAME:-borgmatic}
+    image: ${SERVICES_BORGMATIC-COLLECTIVE_IMAGE:-ghcr.io/borgmatic-collective/borgmatic #}:${SERVICES_BORGMATIC-COLLECTIVE_IMAGE_VERSION:-latest}
     restart: unless-stopped
     cap_add:
       - SYS_ADMIN

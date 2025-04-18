@@ -1,7 +1,8 @@
 services:
   postgresql:
-    image: docker.io/library/postgres:16-alpine
-    container_name: authentik-db
+    image: ${SERVICES_POSTGRESQL_IMAGE:-docker.io/library/postgres}:${SERVICES_POSTGRESQL_IMAGE_VERSION:-16-alpine}
+    container_name: ${SERVICES_POSTGRESQL_CONTAINER_NAME:-authentik-db}
+    hostname: ${SERVICES_POSTGRESQL_HOSTNAME:-authentik-db}
     restart: unless-stopped
     healthcheck:
       test:
@@ -25,8 +26,9 @@ services:
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.icon=https://github.com/juusujanar/unraid-templates/raw/master/img/PostgreSQL-logo.png
   redis:
-    image: docker.io/library/redis:alpine
-    container_name: authentik-redis
+    image: ${SERVICES_REDIS_IMAGE:-docker.io/library/redis}:${SERVICES_REDIS_IMAGE_VERSION:-alpine}
+    container_name: ${SERVICES_REDIS_CONTAINER_NAME:-authentik-redis}
+    hostname: ${SERVICES_REDIS_HOSTNAME:-authentik-redis}
     command: --save 60 1 --loglevel warning
     restart: unless-stopped
     healthcheck:
@@ -45,8 +47,9 @@ services:
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.icon=https://raw.githubusercontent.com/juusujanar/unraid-templates/master/img/Redis-logo.png
   server:
-    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG}
-    container_name: authentik-server
+    image: ${SERVICES_SERVER_IMAGE:-ghcr.io/goauthentik/server}:${SERVICES_SERVER_IMAGE_VERSION:-${AUTHENTIK_TAG}
+    container_name: ${SERVICES_SERVER_CONTAINER_NAME:-authentik-server}
+    hostname: ${SERVICES_SERVER_HOSTNAME:-authentik-server}
     restart: unless-stopped
     command: server
     environment:
@@ -80,8 +83,9 @@ services:
       - backend
       - frontend
   worker:
-    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG}
-    container_name: authentik-worker
+    image: ${SERVICES_WORKER_IMAGE:-ghcr.io/goauthentik/server}:${SERVICES_WORKER_IMAGE_VERSION:-${AUTHENTIK_TAG}
+    container_name: ${SERVICES_WORKER_CONTAINER_NAME:-authentik-worker}
+    hostname: ${SERVICES_WORKER_HOSTNAME:-authentik-worker}
     restart: unless-stopped
     command: worker
     environment:

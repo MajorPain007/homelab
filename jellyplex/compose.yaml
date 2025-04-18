@@ -1,7 +1,8 @@
 services:
   jellyplex-watched:
-    image: luigi311/jellyplex-watched:latest
-    container_name: jellyplex-watched
+    image: ${SERVICES_JELLYPLEX-WATCHED_IMAGE:-luigi311/jellyplex-watched}:${SERVICES_JELLYPLEX-WATCHED_IMAGE_VERSION:-latest}
+    container_name: ${SERVICES_JELLYPLEX-WATCHED_CONTAINER_NAME:-jellyplex-watched}
+    hostname: ${SERVICES_JELLYPLEX-WATCHED_HOSTNAME:-jellyplex-watched}
     restart: unless-stopped
     environment:
       - PUID=99

@@ -1,8 +1,8 @@
 services:
   audiobook:
-    container_name: ${SERVICES_AUDIOBOOKSHELF_CONTAINER_NAME:-audiobook}
-    hostname: ${SERVICES_AUDIOBOOKSHELF_HOSTNAME:-audiobook}
-    image: ${SERVICES_AUDIOBOOKSHELF_IMAGE:-ghcr.io/advplyr/audiobookshelf}:${SERVICES_AUDIOBOOKSHELF_IMAGE_VERSION:-latest}
+    container_name: ${SERVICES_AUDIOBOOK_CONTAINER_NAME:-audiobook}
+    hostname: ${SERVICES_AUDIOBOOK_HOSTNAME:-audiobook}
+    image: ${SERVICES_AUDIOBOOK_IMAGE:-ghcr.io/advplyr/audiobookshelf}:${SERVICES_AUDIOBOOK_IMAGE_VERSION:-latest}
     healthcheck:
       disable: true
     restart: unless-stopped

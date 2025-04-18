@@ -1,8 +1,8 @@
 services:
   backrest:
-    image: garethgeorge/backrest:latest
-    container_name: backrest
-    hostname: backrest
+    image: ${SERVICES_BACKREST_IMAGE:-garethgeorge/backrest}:${SERVICES_BACKREST_IMAGE_VERSION:-latest}
+    container_name: ${SERVICES_BACKREST_CONTAINER_NAME:-backrest}
+    hostname: ${SERVICES_BACKREST_HOSTNAME:-backrest}
     volumes:
       - ./backrest/data:/data
       - ./backrest/config:/config

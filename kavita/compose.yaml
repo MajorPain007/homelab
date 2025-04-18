@@ -1,8 +1,8 @@
 services:
   kavita:
-    container_name: ${SERVICES_KAVITAR_CONTAINER_NAME:-kavita}
-    hostname: ${SERVICES_KAVITAR_HOSTNAME:-kavita}
-    image: ${SERVICES_KAVITAR_IMAGE:-jvmilazz0/kavita}:${SERVICES_KAVITAR_IMAGE_VERSION:-latest}
+    container_name: ${SERVICES_KAVITA_CONTAINER_NAME:-kavita}
+    hostname: ${SERVICES_KAVITA_HOSTNAME:-kavita}
+    image: ${SERVICES_KAVITA_IMAGE:-jvmilazz0/kavita}:${SERVICES_KAVITA_IMAGE_VERSION:-latest}
     healthcheck:
       disable: true
     restart: unless-stopped

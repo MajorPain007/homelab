@@ -1,0 +1,21 @@
+services:
+  dockwatch:
+    container_name: ${SERVICES_DOCKWATCH_CONTAINER_NAME:-dockwatch}
+    hostname: ${SERVICES_DOCKWATCH_HOSTNAME:-dockwatch}
+    image: ${SERVICES_DOCKWATCH_IMAGE:-ghcr.io/notifiarr/dockwatch}:${SERVICES_DOCKWATCH_IMAGE_VERSION:-main}
+    restart: unless-stopped
+    ports:
+      - 9999:80/tcp
+    environment:
+      #-DOCKER_HOST=127.0.0.1:2375 # Uncomment and adjust accordingly if you use a socket proxy
+      - PUID=99
+      - PGID=100
+      - TZ=Europe/Berlin
+    volumes:
+      - ./dockwatch/config:/config
+      - /var/run/docker.sock:/var/run/docker.sock # Comment this line if you use a socket proxy
+    networks:
+      - backend
+networks:
+  backend:
+    external: true

@@ -1,7 +1,8 @@
 services:
   spottube:
-    image: thewicklowwolf/spottube:latest
-    container_name: spottube
+    container_name: ${SERVICES_SPOTTUBE_CONTAINER_NAME:-spottube}
+    hostname: ${SERVICES_SPOTTUBE_HOSTNAME:-spottube}
+    image: ${SERVICES_SPOTTUBE_IMAGE:-thewicklowwolf/spottube}:${SERVICES_SPOTTUBE_IMAGE_VERSION:-latest}
     environment:
       - PUID=99
       - PGID=100

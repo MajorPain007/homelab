@@ -1,12 +1,13 @@
 services:
   tdarr:
+    image: ${SERVICES_TDARR_IMAGE:-ghcr.io/haveagitgat/tdarr}:${SERVICES_TDARR_IMAGE_VERSION:-latest}
+    container_name: ${SERVICES_TDARR_CONTAINER_NAME:-tdarr}
+    hostname: ${SERVICES_TDARR_HOSTNAME:-tdarr}
     devices:
       - /dev/dri:/dev/dri
-    container_name: tdarr
     restart: unless-stopped
     healthcheck:
       disable: true
-    image: ghcr.io/haveagitgat/tdarr:latest
     environment:
       - TZ=${TIMEZONE}
       - serverIP=0.0.0.0
