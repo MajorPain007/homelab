@@ -24,7 +24,7 @@ services:
       - backend
     restart: unless-stopped
   redis:
-    image: redis
+    image: ${SERVICES_REDIS_IMAGE:-redis}:${SERVICES_REDIS_IMAGE_VERSION:-latest}
     container_name: ${SERVICES_REDIS_CONTAINER_NAME:-outline-redis}
     hostname: ${SERVICES_REDIS_HOSTNAME:-outline-redis}
     env_file: .env

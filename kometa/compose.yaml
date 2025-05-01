@@ -46,7 +46,7 @@ services:
       - SCHEDULE=07:00|weekly(wednesday)
     volumes:
       - ./config/imagemaid:/config
-      - '/mnt/user/appdata/dockge/stacks/plex/Plex-Media-Server/Library/Application Support/Plex Media Server/:/plex'
+      - /mnt/user/appdata/dockge/stacks/plex/Plex-Media-Server/Library/Application Support/Plex Media Server/:/plex
     restart: unless-stopped
     labels:
       - net.unraid.docker.managed=dockerman
