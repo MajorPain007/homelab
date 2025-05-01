@@ -1,0 +1,33 @@
+services:
+  huntarr-sonarr:
+    image: ${SERVICES_HUNTARR-SONARR_IMAGE:-huntarr/4sonarr}:${SERVICES_HUNTARR-SONARR_IMAGE_VERSION:-latest}
+    container_name: ${SERVICES_HUNTARR-SONARR_CONTAINER_NAME:-huntarr-sonarr}
+    hostname: ${SERVICES_HUNTARR-SONARR_HOSTNAME:-huntarr-sonarr}
+    restart: always
+    ports:
+      - 8988:8988
+    volumes:
+      - ./huntarr-sonarr:/config
+    environment:
+      API_KEY: 
+      API_URL: http://sonarr_as:8989
+      API_TIMEOUT: "60"
+      MONITORED_ONLY: "true"
+      HUNT_MISSING_SHOWS: "0"
+      HUNT_UPGRADE_EPISODES: "10"
+      SLEEP_DURATION: "900"
+      STATE_RESET_INTERVAL_HOURS: "168"
+      DEBUG_MODE: "false"
+      ENABLE_WEB_UI: "true"
+      SKIP_FUTURE_EPISODES: "true"
+      SKIP_SERIES_REFRESH: "false"
+      COMMAND_WAIT_DELAY: "1"
+      COMMAND_WAIT_ATTEMPTS: "600"
+      MINIMUM_DOWNLOAD_QUEUE_SIZE: "-1"
+      RANDOM_MISSING: "false"
+      RANDOM_UPGRADES: "false"
+    networks:
+      - backend
+networks:
+  backend:
+    external: true

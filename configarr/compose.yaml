@@ -14,7 +14,7 @@ services:
     restart: unless-stopped
     labels:
       - net.unraid.docker.managed=composeman
-      - net.unraid.docker.icon=https://raw.githubusercontent.com/raydak-labs/configarr/77246c84aac88ada621840467c01f06aea383652/docs/static/img/logo.svg
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/wiki/raydak-labs/configarr/img/logo.png
     networks:
       - backend
 networks:

@@ -43,7 +43,7 @@ services:
     volumes:
       - ${SERVICES_DIR}/radarr:/config
       - ${DATA_DIR}:/data
-      - ${DOWNLOADS_DIR}/complete:/downloads/complete
+      # - ${DATA_DIR}/Media/complete:/data/downloads/complete
     labels:
       - traefik.enable=true
       - traefik.docker.network=backend
@@ -68,7 +68,7 @@ services:
     volumes:
       - ${SERVICES_DIR}/radarr_kids:/config
       - ${DATA_DIR}:/data
-      - ${DOWNLOADS_DIR}/complete:/downloads/complete
+      # - ${DATA_DIR}/Media/complete:/data/downloads/complete
     labels:
       - traefik.enable=true
       - traefik.docker.network=backend
@@ -93,7 +93,7 @@ services:
     volumes:
       - ${SERVICES_DIR}/sonarr:/config
       - ${DATA_DIR}:/data
-      - ${DOWNLOADS_DIR}/complete:/downloads/complete
+      # - ${DATA_DIR}/Media/complete:/data/downloads/complete
     labels:
       - traefik.enable=true
       - traefik.docker.network=backend
@@ -119,7 +119,7 @@ services:
     volumes:
       - ${SERVICES_DIR}/sonarr_as:/config
       - ${DATA_DIR}:/data
-      - ${DOWNLOADS_DIR}/complete:/downloads/complete
+      # - ${DATA_DIR}/Media/complete:/data/downloads/complete
     labels:
       - traefik.enable=true
       - traefik.docker.network=backend
@@ -144,7 +144,7 @@ services:
     volumes:
       - ${SERVICES_DIR}/readarr:/config
       - ${DATA_DIR}:/data
-      - ${DOWNLOADS_DIR}/complete:/downloads/complete
+      # - ${DATA_DIR}/Media/complete:/data/downloads/complete
     labels:
       - traefik.enable=true
       - traefik.docker.network=backend
@@ -216,9 +216,10 @@ services:
       - TZ=${TIMEZONE}
     volumes:
       - ${SERVICES_DIR}/sabnzbd:/config
-      - ${DATA_DIR}/:/data
-      - ${TMP_DOWNLOADS_DIR}/incomplete:/downloads/incomplete
-      - ${DOWNLOADS_DIR}/complete:/downloads/complete
+      #- ${DATA_DIR}/:/data
+      - ${TMP_DOWNLOADS_DIR}:/data/downloads/incomplete
+      #- ${DOWNLOADS_DIR}:/data/downloads/complete
+      - ${DOWNLOADS_DIR}:/data/Media/complete
     labels:
       - traefik.enable=true
       - traefik.docker.network=backend

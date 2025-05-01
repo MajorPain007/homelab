@@ -1,21 +1,21 @@
 {
-    "trash_id": "German_Subbed",
-    "trash_scores": {
-      "default": 6000
-    },
-    "trash_description": "German_Subbed",
-    "custom_inf": "German_Subbed",
-    "name": "German_Subbed",
-    "includeCustomFormatWhenRenaming": false,
-    "specifications": [
+  "trash_id": "German Subbed",
+  "trash_scores": {
+    "default": 6000
+  },
+  "trash_description": "German Subbed",
+  "custom_inf": "German Subbed",
+  "name": "German Subbed",
+  "includeCustomFormatWhenRenaming": true,
+  "specifications": [
 {
-    "name": "german Subs",
-    "implementation": "ReleaseTitleSpecification",
-    "negate": false,
-    "required": false,
-    "fields": {
-      "value": "(?=.*(German|Ger))(?=.*(Sub|Multi(ple)?Sub))"
-        }
-        }
-    ]
+  "name": "german Subs",
+  "implementation": "ReleaseTitleSpecification",
+  "negate": false,
+  "required": false,
+  "fields": {
+    "value": "(?i)\\b(German|Ger)[\\.\\-_ ]*.*?(Subs?|Subbed|Multi(ple)?Subs?)\\b"
+      }
+    }
+  ]
 }

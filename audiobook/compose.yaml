@@ -10,6 +10,7 @@ services:
       - 13378:80
     volumes:
       - ${DATA_DIR}:/audiobooks
+      - ${EBOOK_DIR}:/ebooks
       - ./audiobookshelf:/config
       - ./audiobookshelf/metadata:/metadata
     labels:

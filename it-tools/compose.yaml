@@ -1,8 +1,8 @@
 services:
   it-tools:
-    container_name: ${SERVICES_IT-TOOLS_CONTAINER_NAME:-it-tools}
-    hostname: ${SERVICES_IT-TOOLS_HOSTNAME:-it-tools}
-    image: ${SERVICES_IT-TOOLS_IMAGE:-corentinth/it-tools}:${SERVICES_IT-TOOLS_IMAGE_VERSION:-latest}
+    container_name: ${SERVICES_IT_TOOLS_CONTAINER_NAME:-it-tools}
+    hostname: ${SERVICES_IT_TOOLS_HOSTNAME:-it-tools}
+    image: ${SERVICES_IT_TOOLS_IMAGE:-corentinth/it-tools}:${SERVICES_IT_TOOLS_IMAGE_VERSION:-latest}
     healthcheck:
       disable: true
     restart: unless-stopped
