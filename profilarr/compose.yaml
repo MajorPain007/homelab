@@ -1,0 +1,18 @@
+services:
+  profilarr:
+    image: santiagosayshey/profilarr:latest
+    container_name: profilarr
+    ports:
+      - 6868:6868
+    volumes:
+      - /mnt/cache/appdata/profilarr:/config
+    environment:
+      - TZ=Europe/Berlin
+    restart: unless-stopped
+    networks:
+      - backend
+    security_opt:
+      - no-new-privileges:true
+networks:
+  backend:
+    external: true

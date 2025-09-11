@@ -1,8 +1,8 @@
 services:
   plex:
-    container_name: ${SERVICES_PLEX_CONTAINER_NAME:-plex}
-    hostname: ${SERVICES_PLEX_HOSTNAME:-plex}
-    image: ${SERVICES_PLEX_IMAGE:-plexinc/pms-docker}:${SERVICES_PLEX_IMAGE_VERSION:-latest}
+    container_name: plex
+    hostname: plex
+    image: plexinc/pms-docker:latest
     devices:
       - /dev/dri:/dev/dri
     extra_hosts:
@@ -28,21 +28,20 @@ services:
       - PLEX_CLAIM=${PLEX_CLAIM}
       - ADVERTISE_IP=${ADVERTISE_IP}
     volumes:
-      - ./Plex-Media-Server:/config
+      - /mnt/cache/appdata/Plex-Media-Server:/config
       - ${DATA_DIR}:/media:ro
       - ${TMP_TRANSCODE}:/transcode
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.plex.entrypoints=websecure,homesec
-      - traefik.http.routers.plex.rule=Host(`plex.${DOMAIN}`)
-      - traefik.http.services.plex.loadbalancer.server.port=32400
-      - net.unraid.docker.managed=composeman
-      - net.unraid.docker.webui=http://[IP]:[PORT:32400]/web
-      - net.unraid.docker.icon=https://raw.githubusercontent.com/plexinc/pms-docker/master/img/plex-server.png
     restart: unless-stopped
     networks:
       - frontend
       - backend
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.plex.entrypoints: websecure,homesec
+      traefik.http.routers.plex.rule: Host(`plex.${DOMAIN}`)
+      traefik.http.services.plex.loadbalancer.server.port: "32400"
 networks:
   frontend:
     external: true

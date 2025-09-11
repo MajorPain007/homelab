@@ -1,0 +1,21 @@
+services:
+  quickstart:
+    image: kometateam/quickstart:develop
+    #image: kometateam/quickstart:620-fix-headless-mode-quitting-immediately
+    container_name: quickstart
+    ports:
+      - 7171:7171
+    environment:
+      - TZ=Europe/Berlin #optional
+      - QS_PORT=7171
+      - QS_DEBUG=0
+    volumes:
+      - /mnt/cache/appdata/kometa-quickstart:/config #edit this line for your setup
+    restart: unless-stopped
+    networks:
+      - backend
+    security_opt:
+      - no-new-privileges:true
+networks:
+  backend:
+    external: true

@@ -1,0 +1,22 @@
+services:
+  palmr:
+    image: kyantech/palmr:latest
+    container_name: palmr
+    hostname: palmr
+    networks:
+      - backend
+    environment:
+      - PALMR_UID=99
+      - PALMR_GID=100
+      - DISABLE_FILESYSTEM_ENCRYPTION=true
+      - ENCRYPTION_KEY=
+      - DEFAULT_LANGUAGE=de-DE
+      - SECURE_SITE=false
+    ports:
+      - 5487:5487/tcp
+      - 3333:3333/tcp
+    volumes:
+      - /mnt/cache/appdata/palmr:/app/server
+networks:
+  backend:
+    external: true

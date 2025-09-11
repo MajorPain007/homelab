@@ -1,8 +1,8 @@
 services:
   kometa:
-    container_name: ${SERVICES_KOMETA_CONTAINER_NAME:-kometa}
-    hostname: ${SERVICES_KOMETA_HOSTNAME:-kometa}
-    image: ${SERVICES_KOMETA_IMAGE:-kometateam/kometa}:${SERVICES_KOMETA_IMAGE_VERSION:-latest}
+    container_name: kometa
+    hostname: kometa
+    image: kometateam/kometa:latest
     environment:
       - PUID=${ENV_PUID}
       - PGID=${ENV_PGID}
@@ -14,19 +14,18 @@ services:
       - KOMETA_NO_COUNTDOWN=True
       # - KOMETA_RUN=True
     volumes:
-      - ./config:/config
-      - ../posterizarr/config/posterizarr/assets/:/config/assets
+      - /mnt/cache/appdata/Kometa:/config
+      - /mnt/cache/appdata/posterizarr/assets/:/config/assets
     restart: unless-stopped
-    labels:
-      - net.unraid.docker.managed=composeman
-      - net.unraid.docker.icon=https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/kometa-logo.png
     networks:
       - frontend
       - backend
+    security_opt:
+      - no-new-privileges:true
   imagemaid:
-    container_name: ${SERVICES_IMAGEMAID_CONTAINER_NAME:-imagemaid}
-    hostname: ${SERVICES_IMAGEMAID_HOSTNAME:-imagemaid}
-    image: ${SERVICES_IMAGEMAID_IMAGE:-kometateam/imagemaid}:${SERVICES_IMAGEMAID_IMAGE_VERSION:-develop}
+    container_name: imagemaid
+    hostname: imagemaid
+    image: kometateam/imagemaid:develop
     environment:
       - TZ=${TIMEZONE}
       - PLEX_URL=http://plex:32400
@@ -45,14 +44,13 @@ services:
       - LOG_REQUESTS=False
       - SCHEDULE=07:00|weekly(wednesday)
     volumes:
-      - ./config/imagemaid:/config
-      - /mnt/user/appdata/dockge/stacks/plex/Plex-Media-Server/Library/Application Support/Plex Media Server/:/plex
+      - /mnt/cache/appdata/ImageMaid:/config
+      - /mnt/cache/appdata/Plex-Media-Server/:/plex
     restart: unless-stopped
-    labels:
-      - net.unraid.docker.managed=dockerman
-      - net.unraid.docker.icon=https://raw.githubusercontent.com/Kometa-Team/ImageMaid/refs/heads/develop/.github/logo.png
     networks:
       - backend
+    security_opt:
+      - no-new-privileges:true
 networks:
   backend:
     external: true

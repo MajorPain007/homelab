@@ -1,47 +1,46 @@
 services:
   adguardhome:
-    container_name: ${SERVICES_ADGUARDHOME_CONTAINER_NAME:-adguardhome}
-    hostname: ${SERVICES_ADGUARDHOME_HOSTNAME:-adguardhome}
-    image: ${SERVICES_ADGUARDHOME_IMAGE:-adguard/adguardhome}:${SERVICES_ADGUARDHOME_IMAGE_VERSION:-latest}
-    depends_on:
-      - unbound
+    container_name: adguardhome
+    hostname: adguardhome
+    image: adguard/adguardhome:latest
+    # depends_on:
+    #   - unbound
     ports:
-      - 53:53/tcp
-      - 53:53/udp
+      - 54:53/tcp
+      - 54:53/udp
       - 784:784/udp
       - 853:853/tcp
       - 3003:3000/tcp
-      - 80:80/tcp
-      - 443:443/tcp
+      - 87:80/tcp
+      # - 443:443/tcp
     volumes:
-      - ./config/adguard/workingdir:/opt/adguardhome/work
-      - ./config/adguard/config:/opt/adguardhome/conf
-    labels:
-      - net.unraid.docker.managed=composeman
-      - 'net.unraid.docker.webui=http://[IP]/'
-      - 'net.unraid.docker.icon=https://raw.githubusercontent.com/SiwatINC/unraid-ca-repository/master/icons/adguard.png'
+      - /mnt/cache/appdata/adguard/config/adguard/workingdir:/opt/adguardhome/work
+      - /mnt/cache/appdata/adguard/config/adguard/config:/opt/adguardhome/conf
     restart: unless-stopped
-    networks:
-      locale-net:
-        ipv4_address: 192.168.178.254
-  unbound:
-    container_name: ${SERVICES_UNBOUND_CONTAINER_NAME:-unbound}
-    hostname: ${SERVICES_UNBOUND_HOSTNAME:-unbound}
-    image: ${SERVICES_UNBOUND_IMAGE:-mvance/unbound}:${SERVICES_UNBOUND_IMAGE_VERSION:-latest}
-    expose:
-      - 53
-    networks:
-      locale-net:
-        ipv4_address: 192.168.178.253
-    ports:
-      - 53:53/tcp
-      - 53:53/udp
-    volumes:
-      - ./config/unbound/unbound.conf:/opt/unbound/etc/unbound/unbound.conf
-    labels:
-      - net.unraid.docker.managed=dockerman
-      - 'net.unraid.docker.icon=https://raw.githubusercontent.com/kutzilla/unraid-templates/master/images/unbound.png'
-    restart: unless-stopped
+      # networks:
+      #   locale-net:
+      #     ipv4_address: 192.168.178.254
+    security_opt:
+      - no-new-privileges:true
+#   unbound:
+#     container_name: unbound
+#     hostname: unbound
+#     image: mvance/unbound:latest
+#     expose:
+#       - 53
+#         networks:
+#           locale-net:
+#             ipv4_address: 192.168.178.253
+#     ports:
+#       - 53:53/tcp
+#       - 53:53/udp
+#     volumes:
+#       - /mnt/cache/appdata/adguard/config/unbound/unbound.conf:/opt/unbound/etc/unbound/unbound.conf
+#     restart: unless-stopped
+#     security_opt:
+#       - no-new-privileges:true
+# networks: {}
+
 networks:
   locale-net:
     external: true

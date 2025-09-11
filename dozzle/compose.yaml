@@ -1,14 +1,22 @@
 services:
   dozzle:
     container_name: dozzle
-    restart: unless-stopped
+    hostname: dozzle
     image: amir20/dozzle:latest
+    restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     ports:
       - 7070:8080
     networks:
       - backend
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: backend
+      traefik.http.routers.dozzle1.entrypoints: homesec
+      traefik.http.routers.dozzle1.rule: Host(`doo.${DOMAIN}`)
 networks:
   backend:
     external: true

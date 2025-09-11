@@ -1,15 +1,12 @@
 services:
   jellyfin:
-    container_name: ${SERVICES_JELLYFIN_CONTAINER_NAME:-jellyfin}
-    hostname: ${SERVICES_JELLYFIN_HOSTNAME:-jellyfin}
-    image: ${SERVICES_JELLYFIN_IMAGE:-lscr.io/linuxserver/jellyfin}:${SERVICES_JELLYFIN_IMAGE_VERSION:-latest}
+    container_name: jellyfin1
+    hostname: jellyfin1
+    image: lscr.io/linuxserver/jellyfin:latest
     devices:
       - /dev/dri:/dev/dri
     ports:
-      - 8096:8096
-      # - 8920:8920 #optional Https webUI
-      # - 1900:1900/udp #optional Service discovery used by DNLA and clients
-      # - 7359:7359/udp #optional Allows clients to discover Jellyfin on the local network.
+      - 8097:8096
     restart: unless-stopped
     networks:
       - frontend
@@ -19,18 +16,16 @@ services:
       - PGID=${ENV_PGID}
       - TZ=${TIMEZONE}
     volumes:
-      - ./jellyfin:/config
+      - /mnt/cache/appdata/jellyfin1:/config
       - ${DATA_DIR}:/data/media
       - ${TMP_TRANSCODE}:/transcode
+    security_opt:
+      - no-new-privileges:true
     labels:
-      - traefik.enable=true
-      - traefik.http.routers.jellyfin.entrypoints=websecure,homesec
-      - traefik.http.routers.jellyfin.rule=Host(`${DOMAIN}`)
-      - traefik.http.services.jellyfin.loadbalancer.server.port=8096
-      - traefik.http.routers.jellyfin.middlewares=authelia@file
-      - net.unraid.docker.managed=composeman
-      - net.unraid.docker.webui=http://[IP]:[PORT:8096]
-      - net.unraid.docker.icon=https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/jellyfin-logo.png
+      traefik.enable: "true"
+      traefik.http.routers.jellyfin.entrypoints: websecure,homesec
+      traefik.http.routers.jellyfin.rule: Host(`${DOMAIN}`)
+      traefik.http.services.jellyfin.loadbalancer.server.port: "8096"
 networks:
   frontend:
     external: true

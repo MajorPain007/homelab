@@ -1,0 +1,22 @@
+services:
+  signal:
+    container_name: signal
+    hostname: signal
+    image: bbernhard/signal-cli-rest-api:latest
+    environment:
+      - MODE=normal
+      - SIGNAL_CLI_UID=99
+      - SIGNAL_CLI_GID=100
+      - AUTO_RECEIVE_SCHEDULE=0 22 * * *
+    ports:
+      - 8080:8080
+    volumes:
+      - /mnt/cache/appdata/signal-api:/home/.local/share/signal-cli
+    restart: unless-stopped
+    networks:
+      - backend
+    security_opt:
+      - no-new-privileges:true
+networks:
+  backend:
+    external: true

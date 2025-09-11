@@ -1,31 +1,30 @@
 services:
   memcached:
-    image: ${SERVICES_MEMCACHED_IMAGE:-memcached}:${SERVICES_MEMCACHED_IMAGE_VERSION:-latest}
+    image: memcached:latest
     restart: unless-stopped
     expose:
       - "11211"
-    labels:
-      - net.unraid.docker.managed=composeman
-      - net.unraid.docker.icon=https://raw.githubusercontent.com/jhaals/yopass/refs/heads/master/logo/512.png
     networks:
       - backend
+    security_opt:
+      - no-new-privileges:true
   yopass:
-    image: ${SERVICES_YOPASS_IMAGE:-jhaals/yopass}:${SERVICES_YOPASS_IMAGE_VERSION:-latest}
+    image: jhaals/yopass:latest
     restart: unless-stopped
     command: --memcached=memcached:11211 --port 80
     environment:
       - VIRTUAL_HOST=yopass.${DOMAIN}
       - MAX_LENGTH=8000000
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.yopass.entrypoints=websecure,homesec
-      - traefik.http.routers.yopass.rule=Host(`yopass.${DOMAIN}`)
-      - "traefik.http.services.yopass.loadbalancer.server.port=80"
-      - net.unraid.docker.managed=composeman
-      - net.unraid.docker.icon=https://raw.githubusercontent.com/jhaals/yopass/refs/heads/master/logo/512.png
     networks:
       - backend
       - frontend
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.yopass.entrypoints: websecure,homesec
+      traefik.http.routers.yopass.rule: Host(`yopass.${DOMAIN}`)
+      traefik.http.services.yopass.loadbalancer.server.port: "80"
 networks:
   backend:
     external: true

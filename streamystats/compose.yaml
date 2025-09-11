@@ -1,0 +1,58 @@
+services:
+  streamystats:
+    container_name: streamystats
+    image: fredrikburmester/streamystats-nextjs:edge
+    ports:
+      - 3007:3000
+    depends_on:
+      - phoenix
+    networks:
+      - backend
+    environment:
+      API_URL: http://phoenix:4000/api
+      TZ: ${TZ}
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: backend
+      traefik.http.routers.streamystats.entrypoints: homesec
+      traefik.http.routers.streamystats.rule: Host(`streamystats.${DOMAIN}`)
+      traefik.http.services.streamystats.loadbalancer.server.port: "3000"
+  phoenix:
+    container_name: phoenix
+    image: fredrikburmester/streamystats-phoenix:edge
+    environment:
+      DATABASE_URL: ecto://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres/streamystat
+      SECRET_KEY_BASE: 
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+    ports:
+      - 4000:4000
+    depends_on:
+      - postgres
+    networks:
+      - backend
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+      # postgres:
+      #   container_name: postgres_16
+      #   image: pgvector/pgvector:pg16
+      #   environment:
+      #     POSTGRES_USER: ${POSTGRES_USER}
+      #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      #     PGDATA: /var/lib/postgresql/data/pgdata
+      #   restart: unless-stopped
+      #   networks:
+      #     - backend
+      #   volumes:
+      #     - /mnt/cache/appdata/streamystats/config/pgdata:/var/lib/postgresql/data
+      #   security_opt:
+      #     - no-new-privileges:true
+networks:
+  backend:
+    external: true

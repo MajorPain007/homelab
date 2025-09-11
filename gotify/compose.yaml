@@ -1,8 +1,8 @@
 services:
   gotify:
-    container_name: ${SERVICES_GOTIFY_CONTAINER_NAME:-gotify}
-    hostname: ${SERVICES_GOTIFY_HOSTNAME:-gotify}
-    image: ${SERVICES_GOTIFY_IMAGE:-gotify/server}:${SERVICES_GOTIFY_IMAGE_VERSION:-latest}
+    container_name: gotify
+    hostname: gotify
+    image: gotify/server:latest
     security_opt:
       - no-new-privileges:true
     # ports:
@@ -12,20 +12,17 @@ services:
       - TZ=${TIMEZONE}
       - GOTIFY_REGISTRATION=true
     volumes:
-      - ./gotify_data:/app/data
-    labels:
-      - traefik.enable=true
-      - traefik.docker.network=backend
-      - traefik.http.routers.gotify.entrypoints=websecure,homesec
-      - traefik.http.routers.gotify.rule=Host(`gotify.${DOMAIN}`)
-      # - traefik.http.routers.gotify.middlewares=authentik@file
-      - net.unraid.docker.managed=composeman
-      - net.unraid.docker.webui=http://[IP]:[PORT:7878]/system/status
-      - net.unraid.docker.icon=https://raw.githubusercontent.com/A75G/docker-templates/master/templates/icons/gotify.png
+      - /mnt/cache/appdata/gotify/:/app/data
+      - /mnt/cache/appdata/gotify/config/:/etc/gotify
     restart: unless-stopped
     networks:
       - backend
       - frontend
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: backend
+      traefik.http.routers.gotify.entrypoints: websecure,homesec
+      traefik.http.routers.gotify.rule: Host(`gotify.${DOMAIN}`)
 networks:
   backend:
     external: true

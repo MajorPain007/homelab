@@ -1,8 +1,8 @@
 services:
   pihole:
-    container_name: ${SERVICES_PIHOLE_CONTAINER_NAME:-pihole}
-    hostname: ${SERVICES_PIHOLE_HOSTNAME:-pihole}
-    image: ${SERVICES_PIHOLE_IMAGE:-pihole/pihole}:${SERVICES_PIHOLE_IMAGE_VERSION:-latest}
+    container_name: pihole
+    hostname: pihole
+    image: pihole/pihole:latest
     depends_on:
       - unbound
     ports:
@@ -22,27 +22,19 @@ services:
       REV_SERVER_TARGET: 192.168.178.1
       REV_SERVER_CIDR: 192.168.178.0/24
       WEBTHEME: default-darker
-    labels:
-      - net.unraid.docker.webui=http://[IP]:[PORT:83]/
-      - net.unraid.docker.managed=composeman
-      - net.unraid.docker.icon=https://raw.githubusercontent.com/binhex/docker-templates/master/binhex/images/official-pihole-icon.png
     # Volumes store your data between container upgrades
     volumes:
-      - ./etc-pihole:/etc/pihole
+      - /mnt/cache/appdata/pihole/etc-pihole:/etc/pihole
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
   unbound:
-    container_name: ${SERVICES_UNBOUND_CONTAINER_NAME:-unbound}
-    hostname: ${SERVICES_UNBOUND_HOSTNAME:-unbound}
-    image: ${SERVICES_UNBOUND_IMAGE:-mvance/unbound}:${SERVICES_UNBOUND_IMAGE_VERSION:-latest}
-    # ports:
-    #   - 5335:53/tcp
-    #   - 5335:53/udp
-    # volumes:
-    #   - ./unbound.conf:/opt/unbound/etc/unbound/unbound.conf
-    labels:
-      - net.unraid.docker.managed=composeman
-      - net.unraid.docker.icon=https://raw.githubusercontent.com/kutzilla/unraid-templates/master/images/unbound.png
+    container_name: unbound
+    hostname: unbound
+    image: mvance/unbound:latest
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
 networks:
   default:
     name: "pihole"
