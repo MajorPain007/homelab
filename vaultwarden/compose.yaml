@@ -1,8 +1,8 @@
 services:
   vaultwarden:
-    container_name: ${SERVICES_VAULTWARDEN_CONTAINER_NAME:-vaultwarden}
-    hostname: ${SERVICES_VAULTWARDEN_HOSTNAME:-vaultwarden}
-    image: ${SERVICES_VAULTWARDEN_IMAGE:-vaultwarden/server}:${SERVICES_VAULTWARDEN_IMAGE_VERSION:-latest}
+    container_name: vaultwarden
+    hostname: vaultwarden
+    image: vaultwarden/server:latest
     restart: unless-stopped
     # ports:
     #   - 4744:80
@@ -19,17 +19,15 @@ services:
       SMTP_USERNAME: ${SMTP_USERNAME}
       SMTP_PASSWORD: ${SMTP_PASSWORD}
     volumes:
-      - ./vaultwarden:/data
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.vaultwarden.entrypoints=websecure,homesec
-      - traefik.http.routers.vaultwarden.rule=Host(`bw.${DOMAIN}`)
-      - traefik.http.routers.vaultwarden.middlewares=authelia@file
-      - net.unraid.docker.managed=composeman
-      - net.unraid.docker.webui=http://[IP]:[PORT:80]/admin
-      - net.unraid.docker.icon=https://raw.githubusercontent.com/selfhosters/unRAID-CA-templates/master/templates/img/vaultwarden.png
+      - /mnt/cache/appdata/vaultwarden:/data
     networks:
       - frontend
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.vaultwarden.entrypoints: websecure,homesec
+      traefik.http.routers.vaultwarden.rule: Host(`${DOMAIN}`)
 networks:
   frontend:
     external: true

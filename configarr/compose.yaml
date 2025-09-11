@@ -1,22 +1,21 @@
 services:
   configarr:
-    container_name: ${SERVICES_CONFIGARR_CONTAINER_NAME:-configarr}
-    hostname: ${SERVICES_CONFIGARR_HOSTNAME:-configarr}
-    image: ${SERVICES_CONFIGARR_IMAGE:-ghcr.io/raydak-labs/configarr}:${SERVICES_CONFIGARR_IMAGE_VERSION:-latest}
-    user: 99:100 # Optional, defaults to root:root
+    container_name: configarr
+    hostname: configarr
+    image: ghcr.io/raydak-labs/configarr:latest
+    user: 99:100
     environment:
       - TZ=Europe/Berlin
     volumes:
-      - ./configarr/config:/app/config # Contains the config.yml and secrets.yml
-      - ./configarr/dockerrepos:/app/repos # Cache repositories
-      # - ./configarr/custom/cfs:/app/cfs # Optional if custom formats locally provided
-      # - ./configarr/custom/templates:/app/templates # Optional if custom templates
-    restart: unless-stopped
-    labels:
-      - net.unraid.docker.managed=composeman
-      - net.unraid.docker.icon=https://raw.githubusercontent.com/wiki/raydak-labs/configarr/img/logo.png
+      - /mnt/cache/appdata/configarr/config:/app/config
+      - /mnt/cache/appdata/configarr/repos:/app/repos
+      - /mnt/cache/appdata/configarr/cfs:/app/cfs
+      - /mnt/cache/appdata/configarr/templates:/app/templates
+    restart: no
     networks:
       - backend
+    security_opt:
+      - no-new-privileges:true
 networks:
   backend:
     external: true

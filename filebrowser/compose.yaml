@@ -1,29 +1,26 @@
 services:
   filebrowser:
-    container_name: ${SERVICES_FILEBROWSER_CONTAINER_NAME:-filebrowser}
-    hostname: ${SERVICES_FILEBROWSER_HOSTNAME:-filebrowser}
-    image: ${SERVICES_FILEBROWSER_IMAGE:-filebrowser/filebrowser}:${SERVICES_FILEBROWSER_IMAGE_VERSION:-latest}
+    container_name: filebrowser
+    hostname: filebrowser
+    image: filebrowser/filebrowser:latest
     restart: unless-stopped
+    user: 99:100
     healthcheck:
       disable: true
     ports:
       - 99:80
     volumes:
       - ${DATA_DIR}:/srv
-      - ./filebrowser/filebrowser.db:/database.db #/config
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.filebrowser.entrypoints=websecure,homesec
-      - traefik.http.routers.filebrowser.rule=Host(`fb.${DOMAIN}`)
-      - traefik.http.routers.filebrowser.middlewares=authelia@file
-      - net.unraid.docker.managed=composeman
-      - net.unraid.docker.webui=http://[IP]:[PORT:99]/files/
-      - net.unraid.docker.icon=https://github.com/maschhoff/docker/raw/master/filebrowser/35781395.png
+      - /mnt/cache/appdata/filebrowser:/config
+      - /mnt/cache/appdata/filebrowser:/database
     networks:
       - frontend
-    environment:
-      - PUID=99
-      - PGID=100
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.filebrowser.entrypoints: websecure,homesec
+      traefik.http.routers.filebrowser.rule: Host(`fb.${DOMAIN}`)
 networks:
   frontend:
     external: true

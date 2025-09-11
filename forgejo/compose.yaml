@@ -1,0 +1,22 @@
+services:
+  server:
+    image: codeberg.org/forgejo/forgejo:11
+    container_name: forgejo
+    restart: unless-stopped
+    ports:
+      - 3005:3000
+      - 222:22
+    environment:
+      - USER_UID=99
+      - USER_GID=100
+    volumes:
+      - /mnt/cache/appdata/forgejo/forgejo:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - backend
+    security_opt:
+      - no-new-privileges:true
+networks:
+  backend:
+    external: true

@@ -1,15 +1,15 @@
 services:
   ntfy:
-    container_name: ${SERVICES_NTFY_CONTAINER_NAME:-ntfy}
-    hostname: ${SERVICES_NTFY_HOSTNAME:-ntfy}
-    image: ${SERVICES_NTFY_IMAGE:-binwiederhier/ntfy}:${SERVICES_NTFY_IMAGE_VERSION:-latest}
+    container_name: ntfy
+    hostname: ntfy
+    image: binwiederhier/ntfy:latest
     restart: unless-stopped
     command:
       - serve
     # ports:
     #   - '89:80/tcp'
     volumes:
-      - ./ntfy:/config:rw
+      - /mnt/cache/appdata/ntfy/ntfy:/config:rw
     environment:
       - TZ=Europe/Berlin
       - NTFY_BASE_URL=https://ntfy.local
@@ -29,17 +29,16 @@ services:
       - NTFY_SMTP_SENDER_FROM=
       - NTFY_SMTP_SERVER_ADDR_PREFIX=
       - NTFY_LOG_LEVEL=info
-    labels:
-      - traefik.enable=true
-      - traefik.docker.network=frontend
-      - traefik.http.routers.ntfy.entrypoints=homesec
-      - traefik.http.routers.ntfy.rule=Host(`ntfy.${DOMAIN}`)
-      - net.unraid.docker.managed=composeman
-      - net.unraid.docker.webui=http://[IP]:[PORT:80]/
-      - net.unraid.docker.icon=https://raw.githubusercontent.com/binwiederhier/ntfy/main/docs/static/img/ntfy.png
     networks:
       - frontend
       - backend
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: frontend
+      traefik.http.routers.ntfy.entrypoints: homesec
+      traefik.http.routers.ntfy.rule: Host(`ntfy.${DOMAIN}`)
 networks:
   backend:
     external: true

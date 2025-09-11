@@ -1,0 +1,74 @@
+services:
+  authentik-server:
+    image: ghcr.io/goauthentik/server:${AUTHENTIK_TAG}
+    container_name: authentik-server
+    hostname: authentik-server
+    restart: unless-stopped
+    command: server
+    environment:
+      AUTHENTIK_REDIS__HOST: ${AUTHENTIK_REDIS__HOST}
+      AUTHENTIK_POSTGRESQL__HOST: ${AUTHENTIK_POSTGRESQL__HOST}
+      AUTHENTIK_POSTGRESQL__USER: ${AUTHENTIK_POSTGRESQL__USER:-authentik}
+      AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_POSTGRESQL__NAME:-authentik}
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_POSTGRESQL__PASSWORD}
+    volumes:
+      - /mnt/cache/appdata/authentik/media:/media
+      - /mnt/cache/appdata/authentik/custom-templates:/templates
+    env_file:
+      - .env
+    ports:
+      - ${COMPOSE_PORT_HTTP:-9000}:9000
+      - ${COMPOSE_PORT_HTTPS:-9443}:9443
+      # depends_on:
+      #   - postgresql
+      #   - redis
+    # security_opt:
+    #   - no-new-privileges:true
+    networks:
+      - backend
+      - frontend
+    labels:
+      traefik.enable: true
+      traefik.docker.network: backend
+      traefik.http.routers.authentik-server.entrypoints: homesec,websecure
+      traefik.http.routers.authentik-server.rule: Host(`authentik.${DOMAIN}`) || (HostRegexp(`{subdomain:[a-z0-9-]+}.${DOMAIN}`) && PathPrefix(`/outpost.goauthentik.io/`))
+      traefik.http.routers.authentik-server.service: authentik-server
+      traefik.http.services.authentik-server.loadbalancer.server.port: 9000
+  authentik-worker:
+    image: ghcr.io/goauthentik/server:${AUTHENTIK_TAG}
+    container_name: authentik-worker
+    hostname: authentik-worker
+    restart: unless-stopped
+    command: worker
+    environment:
+      AUTHENTIK_REDIS__HOST: ${AUTHENTIK_REDIS__HOST}
+      AUTHENTIK_POSTGRESQL__HOST: ${AUTHENTIK_POSTGRESQL__HOST}
+      AUTHENTIK_POSTGRESQL__USER: ${AUTHENTIK_POSTGRESQL__USER:-authentik}
+      AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_POSTGRESQL__NAME:-authentik}
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_POSTGRESQL__PASSWORD}
+    # `user: root` and the docker socket volume are optional.
+    # See more for the docker socket integration here:
+    # https://goauthentik.io/docs/outposts/integrations/docker
+    # Removing `user: root` also prevents the worker from fixing the permissions
+    # on the mounted folders, so when removing this make sure the folders have the correct UID/GID
+    # (1000:1000 by default)
+    user: 99:100
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /mnt/cache/appdata/authentik/media:/media
+      - /mnt/cache/appdata/authentik/certs:/certs
+      - /mnt/cache/appdata/authentik/custom-templates:/templates
+    env_file:
+      - .env
+    # depends_on:
+    #   - postgresql
+    #   - redis
+    # security_opt:
+    #   - no-new-privileges:true
+    networks:
+      - backend
+networks:
+  backend:
+    external: true
+  frontend:
+    external: true

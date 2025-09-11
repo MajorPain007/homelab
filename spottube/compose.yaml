@@ -1,22 +1,24 @@
 services:
   spottube:
-    container_name: ${SERVICES_SPOTTUBE_CONTAINER_NAME:-spottube}
-    hostname: ${SERVICES_SPOTTUBE_HOSTNAME:-spottube}
-    image: ${SERVICES_SPOTTUBE_IMAGE:-thewicklowwolf/spottube}:${SERVICES_SPOTTUBE_IMAGE_VERSION:-latest}
+    container_name: spottube
+    hostname: spottube
+    image: thewicklowwolf/spottube:latest
     environment:
       - PUID=99
       - PGID=100
       - thread_limit=2
       - artist_track_selection=all
     volumes:
-      - ./spottube/config:/spottube/config # Pfad für die Konfiguration
-      - /mnt/fast/Downloads/spottube:/spottube/downloads # Pfad für die Downloads 
+      - /mnt/cache/appdata/spottube:/spottube/config # Pfad für die Konfiguration
+      - /mnt/cache/Downloads/spottube:/spottube/downloads # Pfad für die Downloads 
       - /etc/localtime:/etc/localtime:ro
     ports:
       - 5010:5000
     restart: unless-stopped
     networks:
       - backend
+    security_opt:
+      - no-new-privileges:true
 networks:
   backend:
     external: true

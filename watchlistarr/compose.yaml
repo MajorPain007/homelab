@@ -1,6 +1,6 @@
 services:
   watchlistarr:
-    image: ${SERVICES_WATCHLISTARR_IMAGE:-nylonee/watchlistarr}:${SERVICES_WATCHLISTARR_IMAGE_VERSION:-latest}
+    image: nylonee/watchlistarr:latest
     environment:
       SONARR_BASE_URL: http://sonarr:8989
       SONARR_API_KEY: ${SONARR_API_KEY}
@@ -15,11 +15,10 @@ services:
     volumes:
       - .config:/app/config
     restart: unless-stopped
-    labels:
-      - net.unraid.docker.managed=composeman
-      - net.unraid.docker.icon=https://github.com/nylonee/watchlistarr/blob/main/watchlistarr.png?raw=true
     networks:
       - backend
+    security_opt:
+      - no-new-privileges:true
 networks:
   backend:
     external: true

@@ -15,13 +15,9 @@ container_name:
 labels:
   type: authentik
 ---
-filenames:
- - /var/log/jellyfin/log_*.log
+listen_addr: 0.0.0.0:7422
+appsec_config: crowdsecurity/appsec-default
+name: myAppSecComponent
+source: appsec
 labels:
-  type: jellyfin
----
-source: docker
-container_name:
-  - sftpgo
-labels:
-  type: sshd
+  type: appsec

@@ -1,17 +1,23 @@
 services:
   adguardhome-sync:
-    container_name: ${SERVICES_ADGUARDHOME-SYNC_CONTAINER_NAME:-adguardhome}
-    hostname: ${SERVICES_ADGUARDHOME-SYNC_HOSTNAME:-adguardhome}
-    image: ${SERVICES_ADGUARDHOME-SYNC_IMAGE:-lscr.io/linuxserver/adguardhome-sync}:${SERVICES_ADGUARDHOME-SYNC_IMAGE_VERSION:-latest}
-    network_mode: host
+    container_name: adguardhome
+    hostname: adguardhome
+    image: lscr.io/linuxserver/adguardhome-sync:latest
+    # network_mode: host
+    ports:
+      - 87:80
     environment:
       - PUID=0
       - PGID=0
       - TZ=Etc/UTC
-      - CONFIGFILE=/config/adguardhome-sync.yaml #optional
+      - CONFIGFILE=/config/adguardhome-sync.yaml
     volumes:
-      - ./adguardhome-sync/config:/config
-    # ports:
-      # - 8089:8080
+      - /mnt/cache/appdata/adguardhome-sync/config:/config
     restart: unless-stopped
-networks: {}
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - backend
+networks:
+  backend:
+    external: true

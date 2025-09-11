@@ -1,8 +1,8 @@
 services:
   upgradinatorr:
-    container_name: ${SERVICES_POWERSHELL_CONTAINER_NAME:-upgradinatorr}
-    hostname: ${SERVICES_POWERSHELL_HOSTNAME:-upgradinatorr}
-    image: ${SERVICES_POWERSHELL_IMAGE:-mcr.microsoft.com/powershell}:${SERVICES_POWERSHELL_IMAGE_VERSION:-latest}
+    container_name: upgradinatorr
+    hostname: upgradinatorr
+    image: mcr.microsoft.com/powershell:latest
     restart: no
     # optional
     logging:
@@ -15,13 +15,12 @@ services:
       - PUID=99
       - PGID=100
     volumes:
-      - ./powershell:/scripts
-    command: pwsh /scripts/Upgradinatorr/upgradinatorr.ps1 -ApplicationList SonarrAS
-    labels:
-      - net.unraid.docker.managed=composeman
-      - net.unraid.docker.icon=https://icon.icepanel.io/Technology/png-shadow-512/Powershell.png
+      - /mnt/cache/appdata/upgradinatorr/scripts:/scripts
+    command: pwsh /scripts/Upgradinatorr/upgradinatorr.ps1 -ApplicationList Radarr
     networks:
       - backend
+    security_opt:
+      - no-new-privileges:true
 networks:
   backend:
     external: true

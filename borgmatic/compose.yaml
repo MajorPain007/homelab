@@ -1,8 +1,8 @@
 services:
-  borgmatic-collective:
-    container_name: ${SERVICES_BORGMATIC-COLLECTIVE_CONTAINER_NAME:-borgmatic}
-    hostname: ${SERVICES_BORGMATIC-COLLECTIVE_HOSTNAME:-borgmatic}
-    image: ${SERVICES_BORGMATIC-COLLECTIVE_IMAGE:-ghcr.io/borgmatic-collective/borgmatic #}:${SERVICES_BORGMATIC-COLLECTIVE_IMAGE_VERSION:-latest}
+  borgmatic:
+    container_name: borgmatic
+    hostname: borgmatic
+    image: ghcr.io/borgmatic-collective/borgmatic:latest
     restart: unless-stopped
     cap_add:
       - SYS_ADMIN
@@ -21,14 +21,11 @@ services:
       - /mnt/user:/mnt/user:ro
       - /boot:/boot:ro
       - /mnt/user/borg_backup/repo:/mnt/borg-repository
-      - ./borgmatic/cache:/root/.cache/borg
-      - ./borgmatic/config:/etc/borgmatic.d
-      - ./borgmatic/borg_keys:/root/.config/borg
-      - ./borgmatic/ssh_keys:/root/.ssh
-      - /mnt/fast/test/:/mnt/fast/test
-    labels:
-      - net.unraid.docker.managed=dockerman
-      - net.unraid.docker.icon=https://raw.githubusercontent.com/Sdub76/unraid_docker_templates/main/images/borgmatic.png
+      - /mnt/cache/appdata/borgmatic/cache:/root/.cache/borg
+      - /mnt/cache/appdata/borgmatic/config:/etc/borgmatic.d
+      - /mnt/cache/appdata/borgmatic/borg_keys:/root/.config/borg
+      - /mnt/cache/appdata/borgmatic/ssh_keys:/root/.ssh
+      - /mnt/cache/test/:/mnt/cache/test
     networks:
       - backend
 networks:

@@ -1,0 +1,23 @@
+services:
+  tautulli:
+    image: lscr.io/linuxserver/tautulli:latest
+    container_name: tautulli
+    hostname: tautulli
+    environment:
+      - PUID=${ENV_PUID}
+      - PGID=${ENV_PGID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - /mnt/cache/appdata/tautulli:/config
+    # ports:
+    #   - 8181:8181
+    restart: unless-stopped
+    networks:
+      - frontend
+    labels:
+      traefik.enable: true
+      traefik.http.routers.tautulli.entrypoints: homesec
+      traefik.http.routers.tautulli.rule: Host(`tautulli.${DOMAIN}`)
+networks:
+  frontend:
+    external: true

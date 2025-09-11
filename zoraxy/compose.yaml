@@ -1,28 +1,24 @@
 services:
   zoraxy:
-    image: ${SERVICES_ZORAXY_IMAGE:-zoraxydocker/zoraxy}:${SERVICES_ZORAXY_IMAGE_VERSION:-latest}
-    container_name: ${SERVICES_ZORAXY_CONTAINER_NAME:-zoraxy}
-    hostname: ${SERVICES_ZORAXY_HOSTNAME:-zoraxy}
+    image: zoraxydocker/zoraxy:latest
+    container_name: zoraxy
+    hostname: zoraxy
     restart: unless-stopped
     ports:
       - 801:80
       - 4431:443
       - 8000:8000
     volumes:
-      - ./zoraxy/config/:/opt/zoraxy/config/
-      - ./zerotier/config/:/var/lib/zerotier-one/
+      - /mnt/cache/appdata/zoraxy:/opt/zoraxy/config
       - /var/run/docker.sock:/var/run/docker.sock
-      - /etc/localtime:/etc/localtime
     environment:
       FASTGEOIP: "true"
       ZEROTIER: "true"
-    labels:
-      - net.unraid.docker.managed=composeman
-      - net.unraid.docker.webui=http://[IP]:[PORT:8000]/files/
-      - net.unraid.docker.icon=
     networks:
       - frontend
       - backend
+    security_opt:
+      - no-new-privileges:true
 networks:
   frontend:
     external: true

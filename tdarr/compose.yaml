@@ -1,8 +1,8 @@
 services:
   tdarr:
-    image: ${SERVICES_TDARR_IMAGE:-ghcr.io/haveagitgat/tdarr}:${SERVICES_TDARR_IMAGE_VERSION:-latest}
-    container_name: ${SERVICES_TDARR_CONTAINER_NAME:-tdarr}
-    hostname: ${SERVICES_TDARR_HOSTNAME:-tdarr}
+    image: ghcr.io/haveagitgat/tdarr:latest
+    container_name: tdarr
+    hostname: tdarr
     devices:
       - /dev/dri:/dev/dri
     restart: unless-stopped
@@ -19,25 +19,25 @@ services:
       - nodeName=Internal
       - PUID=${ENV_PUID}
       - PGID=${ENV_PGID}
-    # ports:
-    #   - 8266:8266 # server port
-    #   - 8265:8265 # webUI port
-    #   - 8264:8264 # Node Port
+    ports:
+      - 8266:8266 # server port
+      - 8265:8265 # webUI port
+      - 8264:8264 # Node Port
     volumes:
-      - ./tdarr/server:/app/server
-      - ./tdarr/configs:/app/configs
-      - ./tdarr/logs:/app/logs
+      - /mnt/cache/appdata/tdarr/server:/app/server
+      - /mnt/cache/appdata/tdarr/configs:/app/configs
+      - /mnt/cache/appdata/tdarr/logs:/app/logs
       - ${DATA_DIR}/:/data/media
-    labels:
-      - traefik.enable=true
-      - traefik.docker.network=backend
-      - traefik.http.routers.tdarr.entrypoints=homesec
-      - traefik.http.routers.tdarr.rule=Host(`tdarr.${DOMAIN}`)
-      - net.unraid.docker.managed=composeman
-      - net.unraid.docker.webui=http://[IP]:[PORT:8265]
-      - net.unraid.docker.icon=https://raw.githubusercontent.com/selfhosters/unRAID-CA-templates/master/templates/img/tdarr.png
     networks:
       - backend
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: backend
+      traefik.http.routers.tdarr.entrypoints: homesec
+      traefik.http.routers.tdarr.rule: Host(`tdarr.${DOMAIN}`)
+      traefik.http.services.tdarr.loadbalancer.server.port: "8265"
 networks:
   backend:
     external: true
