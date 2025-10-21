@@ -3,6 +3,9 @@ services:
     container_name: spottube
     hostname: spottube
     image: thewicklowwolf/spottube:latest
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     environment:
       - PUID=99
       - PGID=100
@@ -14,11 +17,13 @@ services:
       - /etc/localtime:/etc/localtime:ro
     ports:
       - 5010:5000
-    restart: unless-stopped
     networks:
       - backend
-    security_opt:
-      - no-new-privileges:true
+    labels:
+
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/KRTirtho/spotube/refs/heads/master/assets/spotube-logo-item.png
+      - net.unraid.docker.shell=bash
 networks:
   backend:
     external: true

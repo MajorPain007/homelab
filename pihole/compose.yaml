@@ -3,6 +3,9 @@ services:
     container_name: pihole
     hostname: pihole
     image: pihole/pihole:latest
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     depends_on:
       - unbound
     ports:
@@ -25,9 +28,11 @@ services:
     # Volumes store your data between container upgrades
     volumes:
       - /mnt/cache/appdata/pihole/etc-pihole:/etc/pihole
-    restart: unless-stopped
-    security_opt:
-      - no-new-privileges:true
+    labels:
+      - net.unraid.docker.webui=http://[IP]:[PORT:83]/
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/binhex/docker-templates/master/binhex/images/official-pihole-icon.png
+      - net.unraid.docker.shell=bash
   unbound:
     container_name: unbound
     hostname: unbound
@@ -35,6 +40,10 @@ services:
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/kutzilla/unraid-templates/master/images/unbound.png
+      - net.unraid.docker.shell=bash
 networks:
   default:
     name: "pihole"

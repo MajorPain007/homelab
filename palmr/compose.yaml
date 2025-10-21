@@ -1,5 +1,7 @@
 services:
   palmr:
+    security_opt:
+      - no-new-privileges:true
     image: kyantech/palmr:latest
     container_name: palmr
     hostname: palmr
@@ -17,6 +19,10 @@ services:
       - 3333:3333/tcp
     volumes:
       - /mnt/cache/appdata/palmr:/app/server
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:5487]
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/kyantech/Palmr/main/docs/assets/logo.png
 networks:
   backend:
     external: true

@@ -4,6 +4,8 @@ services:
     hostname: vaultwarden
     image: vaultwarden/server:latest
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     # ports:
     #   - 4744:80
     environment:
@@ -22,12 +24,16 @@ services:
       - /mnt/cache/appdata/vaultwarden:/data
     networks:
       - frontend
-    security_opt:
-      - no-new-privileges:true
     labels:
-      traefik.enable: "true"
-      traefik.http.routers.vaultwarden.entrypoints: websecure,homesec
-      traefik.http.routers.vaultwarden.rule: Host(`${DOMAIN}`)
+      - crowdsec.enable=true
+      - crowdsec.labels.type=vaultwarden
+      - traefik.enable=true
+      - traefik.http.routers.vaultwarden.entrypoints=websecure,homesec
+      - traefik.http.routers.vaultwarden.rule=Host(`${DOMAIN}`)
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:80]/admin
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/selfhosters/unRAID-CA-templates/master/templates/img/vaultwarden.png
+      - net.unraid.docker.shell=bash
 networks:
   frontend:
     external: true

@@ -1,31 +1,35 @@
 services:
   jellyfin:
-    container_name: jellyfin1
-    hostname: jellyfin1
-    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    hostname: jellyfin
+    image: jellyfin/jellyfin:latest
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     devices:
       - /dev/dri:/dev/dri
     ports:
-      - 8097:8096
-    restart: unless-stopped
-    networks:
-      - frontend
-      - backend
+      - 8096:8096
     environment:
       - PUID=${ENV_PUID}
       - PGID=${ENV_PGID}
       - TZ=${TIMEZONE}
     volumes:
-      - /mnt/cache/appdata/jellyfin1:/config
+      - /mnt/cache/appdata/jellyfin:/config
       - ${DATA_DIR}:/data/media
       - ${TMP_TRANSCODE}:/transcode
-    security_opt:
-      - no-new-privileges:true
+    networks:
+      - frontend
+      - backend
     labels:
-      traefik.enable: "true"
-      traefik.http.routers.jellyfin.entrypoints: websecure,homesec
-      traefik.http.routers.jellyfin.rule: Host(`${DOMAIN}`)
-      traefik.http.services.jellyfin.loadbalancer.server.port: "8096"
+      - traefik.enable=true
+      - traefik.http.routers.jellyfin.entrypoints=websecure,homesec
+      - traefik.http.routers.jellyfin.rule=Host(`${DOMAIN}`)
+      - traefik.http.services.jellyfin.loadbalancer.server.port=8096
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:8096]
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/jellyfin-logo.png
+      - net.unraid.docker.shell=bash
 networks:
   frontend:
     external: true

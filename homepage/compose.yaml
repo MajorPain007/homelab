@@ -3,9 +3,11 @@ services:
     container_name: homepage
     hostname: homepage
     image: ghcr.io/gethomepage/homepage:latest
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     healthcheck:
       disable: true
-    restart: unless-stopped
     ports:
       - 3000:3000
     volumes:
@@ -19,14 +21,18 @@ services:
       - frontend
     environment:
       - HOMEPAGE_ALLOWED_HOSTS=192.168.20.3:3000,ho.${DOMAIN}
-    security_opt:
-      - no-new-privileges:true
+      # - PUID=$PUID
+      # - PGID=$PGID
     labels:
-      traefik.enable: 'true'
-      traefik.docker.network: 'backend'
-      traefik.http.routers.homepage.entrypoints: 'homesec'
-      traefik.http.routers.homepage.rule: 'Host(`ho.${DOMAIN}`)'
-      traefik.http.services.homepage.loadbalancer.server.port: '3000'
+      - traefik.enable=true
+      - traefik.docker.network=backend
+      - traefik.http.routers.homepage.entrypoints=homesec
+      - traefik.http.routers.homepage.rule=Host(`ho.${DOMAIN}`)
+      - traefik.http.services.homepage.loadbalancer.server.port=3000
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:3000]
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/gethomepage/homepage/main/public/android-chrome-512x512.png
+      - net.unraid.docker.shell=sh
 networks:
   backend:
     external: true

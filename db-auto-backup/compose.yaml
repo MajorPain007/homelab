@@ -1,0 +1,21 @@
+services:
+  backup:
+    image: ghcr.io/realorangeone/db-auto-backup:latest
+    container_name: db-auto-backup
+    hostname: db-auto-backup
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /mnt/cache/appdata/db-auto-backup/backups:/var/backups
+    environment:
+      - INCLUDE_LOGS=true
+      - SCHEDULE=0 0 * * *
+      - COMPRESSION=gzip
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.shell=sh
+    networks:
+      - backend
+networks:
+  backend:
+    external: true

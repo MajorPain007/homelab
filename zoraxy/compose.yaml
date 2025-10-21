@@ -1,9 +1,11 @@
 services:
   zoraxy:
-    image: zoraxydocker/zoraxy:latest
     container_name: zoraxy
     hostname: zoraxy
+    image: zoraxydocker/zoraxy:latest
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     ports:
       - 801:80
       - 4431:443
@@ -17,8 +19,11 @@ services:
     networks:
       - frontend
       - backend
-    security_opt:
-      - no-new-privileges:true
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:8000]/files/
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/PlazzmiK/unraid_templates/main/images/zoraxy.png
+      - net.unraid.docker.shell=sh
 networks:
   frontend:
     external: true

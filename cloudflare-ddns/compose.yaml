@@ -1,14 +1,15 @@
 services:
   cloudflare-ddns:
     image: favonia/cloudflare-ddns:latest
+    restart: always
+    security_opt:
+      - no-new-privileges:true
     # Choose the appropriate tag based on your need:
     # - "latest" for the latest stable version (which could become 2.x.y
     #   in the future and break things)
     # - "1" for the latest stable version whose major version is 1
     # - "1.x.y" to pin the specific version 1.x.y
     network_mode: host
-    # This bypasses network isolation and makes IPv6 easier (optional; see below)
-    restart: always
     # Restart the updater after reboot
     user: 99:100
     # Run the updater with specific user and group IDs (in that order).
@@ -17,13 +18,15 @@ services:
     # Make the container filesystem read-only (optional but recommended)
     cap_drop:
       - all
-    # Drop all Linux capabilities (optional but recommended)
-    security_opt:
-      - no-new-privileges:true
     # Another protection to restrict superuser privileges (optional but recommended)
     environment:
       - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN} # Your Cloudflare API token
       - DOMAINS=${DOMAIN} # Your domains (separated by commas)
       - PROXIED=true # Tell Cloudflare to cache webpages and hide your IP (optional)
       - IP6_PROVIDER=none
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:8011]
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/qdm12/ddns-updater/master/readme/ddnsgopher.svg
+      - net.unraid.docker.shell=bash
 networks: {}

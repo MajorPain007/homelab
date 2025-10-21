@@ -3,17 +3,27 @@ filenames:
  - /var/log/syslog
 labels:
   type: syslog
----
-filenames:
-  - /var/log/traefik/*
-labels:
-  type: traefik
+# ---
+# filenames:
+#   - /var/log/traefik/*
+# labels:
+#   type: traefik
 ---
 source: docker
-container_name:
- - authentik-server
-labels:
-  type: authentik
+docker_host: unix:///var/run/docker.sock
+use_container_labels: true
+# ---
+# source: docker
+# container_name:
+#  - traefik
+# labels:
+#   type: traefik
+# ---
+# source: docker
+# container_name:
+#  - authentik-server
+# labels:
+#   type: authentik
 ---
 listen_addr: 0.0.0.0:7422
 appsec_config: crowdsecurity/appsec-default

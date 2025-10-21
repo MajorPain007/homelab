@@ -3,6 +3,9 @@ services:
     container_name: plex
     hostname: plex
     image: plexinc/pms-docker:latest
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     devices:
       - /dev/dri:/dev/dri
     extra_hosts:
@@ -31,17 +34,18 @@ services:
       - /mnt/cache/appdata/Plex-Media-Server:/config
       - ${DATA_DIR}:/media:ro
       - ${TMP_TRANSCODE}:/transcode
-    restart: unless-stopped
     networks:
       - frontend
       - backend
-    security_opt:
-      - no-new-privileges:true
     labels:
-      traefik.enable: "true"
-      traefik.http.routers.plex.entrypoints: websecure,homesec
-      traefik.http.routers.plex.rule: Host(`plex.${DOMAIN}`)
-      traefik.http.services.plex.loadbalancer.server.port: "32400"
+      - traefik.enable=true
+      - traefik.http.routers.plex.entrypoints=websecure,homesec
+      - traefik.http.routers.plex.rule=Host(`plex.${DOMAIN}`)
+      - traefik.http.services.plex.loadbalancer.server.port=32400
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:32400]/web
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/plexinc/pms-docker/master/img/plex-server.png
+      - net.unraid.docker.shell=bash
 networks:
   frontend:
     external: true

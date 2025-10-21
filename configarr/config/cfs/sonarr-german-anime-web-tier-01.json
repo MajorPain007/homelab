@@ -1,0 +1,74 @@
+{
+  "trash_id": "sonarr-german-anime-web-tier-01",
+  "trash_scores": {
+    "default": 2100
+  },
+  "trash_description": "German Anime Web Tier 01 Groups",
+  "name": "German Anime Web Tier 01",
+  "includeCustomFormatWhenRenaming": false,
+  "specifications": [
+    {
+      "name": "Baka",
+      "implementation": "ReleaseGroupSpecification",
+      "negate": false,
+      "required": false,
+      "fields": {
+        "value": "^(Baka)$"
+      }
+    },
+    {
+      "name": "CNY",
+      "implementation": "ReleaseGroupSpecification",
+      "negate": false,
+      "required": false,
+      "fields": {
+        "value": "^(CNY)$"
+      }
+    },
+    {
+      "name": "FumoFriday",
+      "implementation": "ReleaseGroupSpecification",
+      "negate": false,
+      "required": false,
+      "fields": {
+        "value": "^(FumoFriday)$"
+      }
+    },
+    {
+      "name": "GP",
+      "implementation": "ReleaseGroupSpecification",
+      "negate": false,
+      "required": false,
+      "fields": {
+        "value": "^(GP)$"
+      }
+    },
+    {
+      "name": "snk",
+      "implementation": "ReleaseGroupSpecification",
+      "negate": false,
+      "required": false,
+      "fields": {
+        "value": "\\b(snk|shw)\\b"
+      }
+    },
+    {
+      "name": "WebDL",
+      "implementation": "SourceSpecification",
+      "negate": false,
+      "required": false,
+      "fields": {
+        "value": 3
+      }
+    },
+    {
+      "name": "WebRip",
+      "implementation": "SourceSpecification",
+      "negate": false,
+      "required": false,
+      "fields": {
+        "value": 4
+      }
+    }
+  ]
+}

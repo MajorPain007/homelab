@@ -1,17 +1,21 @@
 services:
   jellyplex:
-    image: luigi311/jellyplex-watched:latest
     container_name: jellyplex
     hostname: jellyplex
+    image: luigi311/jellyplex-watched:latest
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     environment:
       - PUID=99
       - PGID=100
     env_file: ./.env
     networks:
       - backend
-    security_opt:
-      - no-new-privileges:true
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://avatars.githubusercontent.com/u/4695527?v=4
+      - net.unraid.docker.shell=bash
 networks:
   backend:
     external: true

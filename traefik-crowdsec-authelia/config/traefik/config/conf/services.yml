@@ -1,0 +1,31 @@
+http:
+#-------------------------------------------- routers --------------------------------------------#
+
+  routers:
+    jetkvm:
+      entryPoints:
+        - "homesec"
+      rule: "Host(`jetkvm.example.de`)"
+      service: jetkvm
+      tls: {}
+
+
+    krusader:
+      entryPoints:
+        - "homesec"
+      rule: "Host(`krusader.example.de`)"
+      service: krusader
+      tls: {}
+
+#-------------------------------------------- services --------------------------------------------#
+
+  services:
+    jetkvm:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.20.200"
+
+    krusader:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.20.3:6080"

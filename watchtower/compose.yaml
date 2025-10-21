@@ -3,9 +3,11 @@ services:
     container_name: watchtower
     hostname: watchtower
     image: containrrr/watchtower:latest
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    restart: unless-stopped
     environment:
       - TZ=Europe/Berlin
       - WATCHTOWER_RUN_ONCE=false
@@ -19,8 +21,10 @@ services:
       - WATCHTOWER_NOTIFICATIONS_LEVEL=info
     networks:
       - backend
-    security_opt:
-      - no-new-privileges:true
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://containrrr.dev/watchtower/images/logo-450px.png
+      - net.unraid.docker.shell=sh
 networks:
   backend:
     external: true

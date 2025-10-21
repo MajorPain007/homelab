@@ -1,5 +1,7 @@
 services:
   postgres:
+    security_opt:
+      - no-new-privileges:true
     image: postgres:17
     container_name: postgresql17
     hostname: postgresql17
@@ -14,6 +16,10 @@ services:
       - /mnt/cache/appdata/postgresql17:/var/lib/postgresql/data:rw
     networks:
       - backend
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/sgraaf/Unraid-Docker-Templates/main/postgresql17/icon.png
+      - net.unraid.docker.shell=bash
 networks:
   backend:
     external: true

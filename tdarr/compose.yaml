@@ -1,11 +1,13 @@
 services:
   tdarr:
-    image: ghcr.io/haveagitgat/tdarr:latest
     container_name: tdarr
     hostname: tdarr
+    image: ghcr.io/haveagitgat/tdarr:latest
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     devices:
       - /dev/dri:/dev/dri
-    restart: unless-stopped
     healthcheck:
       disable: true
     environment:
@@ -30,14 +32,23 @@ services:
       - ${DATA_DIR}/:/data/media
     networks:
       - backend
-    security_opt:
-      - no-new-privileges:true
     labels:
-      traefik.enable: "true"
-      traefik.docker.network: backend
-      traefik.http.routers.tdarr.entrypoints: homesec
-      traefik.http.routers.tdarr.rule: Host(`tdarr.${DOMAIN}`)
-      traefik.http.services.tdarr.loadbalancer.server.port: "8265"
+      # - homepage.group=Download
+      # - homepage.name=Tdarr
+      # - homepage.icon=/images/png/tdarr.png
+      # - homepage.href=https://tdarr.${DOMAIN}
+      # - homepage.weight=11
+      # - homepage.widget.type=tdarr
+      # - homepage.widget.url=http://tdarr:8265
+      - traefik.enable=true
+      - traefik.docker.network=backend
+      - traefik.http.routers.tdarr.entrypoints=homesec
+      - traefik.http.routers.tdarr.rule=Host(`tdarr.${DOMAIN}`)
+      - traefik.http.services.tdarr.loadbalancer.server.port=8265
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:8265]
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/selfhosters/unRAID-CA-templates/master/templates/img/tdarr.png
+      - net.unraid.docker.shell=bash
 networks:
   backend:
     external: true

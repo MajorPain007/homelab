@@ -1,0 +1,74 @@
+{
+  "trash_id": "sonarr-german-anime-bluray-tier-02",
+  "trash_scores": {
+    "default": 2650
+  },
+  "trash_description": "German Anime Bluray Tier 02 Groups",
+  "name": "German Anime Bluray Tier 02",
+  "includeCustomFormatWhenRenaming": false,
+  "specifications": [
+    {
+      "name": "ABJ",
+      "implementation": "ReleaseGroupSpecification",
+      "negate": false,
+      "required": false,
+      "fields": {
+        "value": "^(ABJ)$"
+      }
+    },
+    {
+    "name": "Hugo",
+    "implementation": "ReleaseGroupSpecification",
+    "negate": false,
+    "required": false,
+    "fields": {
+        "value": "Hugo"
+    }
+    },
+    {
+      "name": "GP",
+      "implementation": "ReleaseGroupSpecification",
+      "negate": false,
+      "required": false,
+      "fields": {
+        "value": "^(GP)$"
+      }
+    },
+    {
+    "name": "DK",
+    "implementation": "ReleaseGroupSpecification",
+    "negate": false,
+    "required": false,
+    "fields": {
+        "value": "DK"
+    }
+    },
+    {
+      "name": "DRiFTKiNG",
+      "implementation": "ReleaseGroupSpecification",
+      "negate": false,
+      "required": false,
+      "fields": {
+        "value": "\\b(DRiFTKiNG|DK)\\b"
+      }
+    },
+    {
+      "name": "Bluray",
+      "implementation": "SourceSpecification",
+      "negate": false,
+      "required": true,
+      "fields": {
+        "value": 6
+      }
+    },
+    {
+      "name": "Not REMUX",
+      "implementation": "SourceSpecification",
+      "negate": true,
+      "required": true,
+      "fields": {
+        "value": 7
+      }
+    }
+  ]
+}

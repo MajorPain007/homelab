@@ -6,14 +6,14 @@ http:
     jetkvm:
       entryPoints:
         - homesec
-      rule: 'Host(`jetkvm.domain.de`)'
+      rule: 'Host(`jetkvm.example.de`)'
       service: jetkvm
       # middlewares:
       #   - local-ipwhitelist
     krusader:
       entryPoints:
         - homesec
-      rule: 'Host(`krusader.domain.de`)'
+      rule: 'Host(`krusader.example.de`)'
       service: krusader
       # middlewares:
       #   - local-ipwhitelist
@@ -56,7 +56,7 @@ http:
 
     authelia:
         forwardAuth:
-            address: http://authelia:9091//api/verify?rd=https://auth.domain.de
+            address: http://authelia:9091//api/verify?rd=https://auth.example.de
             trustForwardHeader: true
             authResponseHeaders:
               - "Remote-User"

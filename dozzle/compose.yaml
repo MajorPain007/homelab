@@ -3,20 +3,20 @@ services:
     container_name: dozzle
     hostname: dozzle
     image: amir20/dozzle:latest
-    restart: unless-stopped
+    restart: always
+    security_opt:
+      - no-new-privileges:true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     ports:
       - 7070:8080
     networks:
       - backend
-    security_opt:
-      - no-new-privileges:true
     labels:
-      traefik.enable: "true"
-      traefik.docker.network: backend
-      traefik.http.routers.dozzle1.entrypoints: homesec
-      traefik.http.routers.dozzle1.rule: Host(`doo.${DOMAIN}`)
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:8080]/
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/selfhosters/unRAID-CA-templates/master/templates/img/dozzle.png
+      - net.unraid.docker.shell=bash
 networks:
   backend:
     external: true

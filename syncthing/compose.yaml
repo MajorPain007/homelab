@@ -1,5 +1,7 @@
 services:
   syncthing:
+    security_opt:
+      - no-new-privileges:true
     image: lscr.io/linuxserver/syncthing
     container_name: syncthing
     hostname: syncthing
@@ -18,6 +20,11 @@ services:
       - /mnt/cache/appdata/syncthing:/config:rw
     networks:
       - backend
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:8384]
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/syncthing-logo.png
+      - net.unraid.docker.shell=bash
 networks:
   backend:
     external: true

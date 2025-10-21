@@ -1,6 +1,9 @@
 services:
   profilarr:
     image: santiagosayshey/profilarr:latest
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     container_name: profilarr
     ports:
       - 6868:6868
@@ -8,11 +11,10 @@ services:
       - /mnt/cache/appdata/profilarr:/config
     environment:
       - TZ=Europe/Berlin
-    restart: unless-stopped
     networks:
       - backend
-    security_opt:
-      - no-new-privileges:true
+    labels:
+      - net.unraid.docker.managed=composeman
 networks:
   backend:
     external: true

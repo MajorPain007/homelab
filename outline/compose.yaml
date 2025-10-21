@@ -3,6 +3,9 @@ services:
     container_name: outline
     hostname: outline
     image: docker.getoutline.com/outlinewiki/outline:latest
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     env_file: .env
     volumes:
       - /mnt/cache/appdata/outline:/var/lib/outline/data
@@ -12,64 +15,73 @@ services:
     networks:
       - frontend
       - backend
-    restart: unless-stopped
-    security_opt:
-      - no-new-privileges:true
     labels:
-      traefik.enable: "true"
-      traefik.docker.network: frontend
-      traefik.http.routers.outline.entrypoints: homesec
-      traefik.http.routers.outline.rule: Host(`outline.${DOMAIN}`)
-  redis:
-    image: redis:latest
-    container_name: outline-redis
-    hostname: outline-redis
-    env_file: .env
-    #ports:
-    #  - 6379:6379
-    volumes:
-      - ./outline/redis.conf:/redis.conf
-    command:
-      - redis-server
-      - /redis.conf
-    healthcheck:
-      test:
-        - CMD
-        - redis-cli
-        - ping
-      interval: 10s
-      timeout: 30s
-      retries: 3
-    networks:
-      - backend
-    restart: unless-stopped
-  postgres:
-    image: postgres:16.4-bullseye
-    container_name: outline-postgres
-    hostname: outline-postgres
-    env_file: .env
-    #ports:
-    #  - "5432:5432"
-    volumes:
-      - ./outline/database-data:/var/lib/postgresql/data
-    healthcheck:
-      test:
-        - CMD
-        - pg_isready
-        - -d
-        - outline
-        - -U
-        - outline
-      interval: 30s
-      timeout: 20s
-      retries: 3
-    environment:
-      POSTGRES_USER: outline
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} # (nehmt am besten keine Sonderzeichen, dass kann zu problemen führen)
-      POSTGRES_DB: outline
-    networks:
-      - backend
-    restart: unless-stopped
+      - traefik.enable=true
+      - traefik.docker.network=frontend
+      - traefik.http.routers.outline.entrypoints=homesec
+      - traefik.http.routers.outline.rule=Host(`outline.${DOMAIN}`)
+      - net.unraid.docker.webui=http://[IP]:[PORT:3000]/
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/outline/outline/refs/heads/main/public/images/icon-512.png
+      - net.unraid.docker.shell=bash
+  # redis:
+  #   container_name: outline-redis
+  #   hostname: outline-redis
+  #   image: redis:latest
+  #   restart: unless-stopped
+  #   security_opt:
+  #     - no-new-privileges:true
+  #   env_file: .env
+  #   #ports:
+  #   #  - 6379:6379
+  #   volumes:
+  #     - /mnt/cache/appdata/outline/redis.conf:/redis.conf
+  #   command:
+  #     - redis-server
+  #     - /redis.conf
+  #   healthcheck:
+  #     test:
+  #       - CMD
+  #       - redis-cli
+  #       - ping
+  #     interval: 10s
+  #     timeout: 30s
+  #     retries: 3
+  #   networks:
+  #     - backend
+  #   labels:
+  #     - net.unraid.docker.managed=composeman
+  # postgres:
+  #   container_name: outline-postgres
+  #   hostname: outline-postgres
+  #   image: postgres:16.4-bullseye
+  #   restart: unless-stopped
+  #   security_opt:
+  #     - no-new-privileges:true
+  #   env_file: .env
+  #   #ports:
+  #   #  - "5432:5432"
+  #   volumes:
+  #     - /mnt/cache/appdata/outline/database-data:/var/lib/postgresql/data
+  #   healthcheck:
+  #     test:
+  #       - CMD
+  #       - pg_isready
+  #       - -d
+  #       - outline
+  #       - -U
+  #       - outline
+  #     interval: 30s
+  #     timeout: 20s
+  #     retries: 3
+  #   environment:
+  #     POSTGRES_USER: outline
+  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} # (nehmt am besten keine Sonderzeichen, dass kann zu problemen führen)
+  #     POSTGRES_DB: outline
+  #   networks:
+  #     - backend
+  #   labels:
+  #     - net.unraid.docker.managed=composeman
 networks:
   backend:
     external: true

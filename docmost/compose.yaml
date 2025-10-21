@@ -1,8 +1,11 @@
 services:
   docmost:
-    image: docmost/docmost:latest
     container_name: docmost
     hostname: docmost
+    image: docmost/docmost:latest
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     # depends_on:
     # - docmost_db
     # - docmost_redis
@@ -13,19 +16,20 @@ services:
       REDIS_URL: ${REDIS_URL}
     ports:
       - 3005:3000
-    restart: unless-stopped
     volumes:
       - /mnt/cache/appdata/docmost/app:/app/data/storage
     networks:
       - backend
       - frontend
-    security_opt:
-      - no-new-privileges:true
     labels:
-      traefik.enable: "true"
-      traefik.docker.network: backend
-      traefik.http.routers.docmost.entrypoints: homesec
-      traefik.http.routers.docmost.rule: Host(`docmost.${DOMAIN}`)
+      - traefik.enable=true
+      - traefik.docker.network=backend
+      - traefik.http.routers.docmost.entrypoints=homesec
+      - traefik.http.routers.docmost.rule=Host(`docmost.${DOMAIN}`)
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:3005]/system/status
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/devzwf/unraid-docker-templates/main/images/docmost-logo.png
+      - net.unraid.docker.shell=bash
 networks:
   backend:
     external: true

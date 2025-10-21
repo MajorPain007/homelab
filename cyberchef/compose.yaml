@@ -1,0 +1,17 @@
+services:
+  cyberchef:
+    container_name: cyberchef
+    image: mpepping/cyberchef:latest
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    ports:
+      - 7318:8000
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.shell=sh
+    networks:
+      - backend
+networks:
+  backend:
+    external: true
