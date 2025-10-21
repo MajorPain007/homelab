@@ -1,7 +1,7 @@
 {
     "trash_id": "Anime BD Tier 1",
     "trash_scores": {
-      "default": 3000
+      "default": 4000
     },
     "trash_description": "Anime BD Tier 1",
     "custom_inf": "Anime BD Tier 1",
@@ -69,6 +69,24 @@
         "required": false,
         "fields": {
             "value": "^(AO)$"
+        }
+        },
+        {
+        "name": "DK",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "DK"
+        }
+        },
+        {
+        "name": "DRiFTKiNG",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "DRiFTKiNG"
         }
         },
         {

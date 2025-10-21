@@ -1,8 +1,11 @@
 services:
   calibre-web-automated:
-    image: crocodilestick/calibre-web-automated:latest
     container_name: calibre-web-automated
     hostname: calibre-web-automated
+    image: crocodilestick/calibre-web-automated:latest
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     environment:
       - PUID=99
       - PGID=100
@@ -13,16 +16,17 @@ services:
       - /mnt/cache/appdata/calibre-web-automated/calibre/library:/calibre-library
     ports:
       - 8083:8083
-    restart: unless-stopped
     networks:
       - frontend
-    security_opt:
-      - no-new-privileges:true
     labels:
-      traefik.enable: "true"
-      traefik.docker.network: backend
-      traefik.http.routers.cwa.entrypoints: homesec
-      traefik.http.routers.cwa.rule: Host(`cwa.${DOMAIN}`)
+      - traefik.enable=true
+      - traefik.docker.network=backend
+      - traefik.http.routers.cwa.entrypoints=homesec
+      - traefik.http.routers.cwa.rule=Host(`cwa.${DOMAIN}`)
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:8383]/system/status
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/JPDVM2014/icons/35eb799864f41502e741075abfc6457ba0edefd6/calibre-web-logo.png
+      - net.unraid.docker.shell=bash
 networks:
   frontend:
     external: true

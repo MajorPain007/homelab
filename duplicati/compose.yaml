@@ -1,31 +1,34 @@
 services:
   duplicati:
-    container_name: ${SERVICES_DUPLICATI_CONTAINER_NAME:-duplicati}
-    hostname: ${SERVICES_DUPLICATI_HOSTNAME:-duplicati}
-    image: ${SERVICES_DUPLICATI_IMAGE:-lscr.io/linuxserver/duplicati}:${SERVICES_DUPLICATI_IMAGE_VERSION:-latest}
+    container_name: duplicati
+    hostname: duplicati
+    image: duplicati/duplicati:latest
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     ports:
       - 8200:8200
     environment:
-      - PUID=99
-      - PGID=100
+      # - PUID=99
+      # - PGID=100
       - TZ={TZ}
-      - SETTINGS_ENCRYPTION_KEY={PASSWORD}
-      - CLI_ARGS= #optional
-      - DUPLICATI__WEBSERVICE_PASSWORD= #optional
+      - SETTINGS_ENCRYPTION_KEY=${PASSWORD}
+      # - CLI_ARGS= #optional
+      - DUPLICATI__WEBSERVICE_PASSWORD=${WEBPASSWORD}
     volumes:
-      - ./config:/config
-      - ./ssh_keys:root/.ssh
-      - /mnt/user/test/New Folder/:/backups
-      - /mnt/user/Daten/:/source
-      - /mnt/user/rsync_backup/:/source2
+      - /mnt/cache/appdata/duplicati/config:/config
+      - /mnt/cache/appdata/duplicati/ssh_keys:/root/.ssh
+      - /mnt/user/Backup/duplicati/:/backups
+      - /mnt/user/:/source
     labels:
       - traefik.enable=true
+      - traefik.docker.network=backend
       - traefik.http.routers.duplicati.entrypoints=homesec
       - traefik.http.routers.duplicati.rule=Host(`duplicati.${DOMAIN}`)
-      - net.unraid.docker.managed=dockerman
+      - net.unraid.docker.shell=bash
+      - net.unraid.docker.managed=composeman
       - net.unraid.docker.webui=http://[IP]:[PORT:8200]/login.html
       - net.unraid.docker.icon=https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/duplicati-logo.png
-    restart: unless-stopped
     networks:
       - backend
 networks:

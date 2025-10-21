@@ -1,23 +1,27 @@
 services:
   tautulli:
-    image: lscr.io/linuxserver/tautulli:latest
     container_name: tautulli
     hostname: tautulli
+    image: lscr.io/linuxserver/tautulli:latest
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     environment:
       - PUID=${ENV_PUID}
       - PGID=${ENV_PGID}
       - TZ=${TIMEZONE}
     volumes:
       - /mnt/cache/appdata/tautulli:/config
-    # ports:
-    #   - 8181:8181
-    restart: unless-stopped
     networks:
       - frontend
     labels:
-      traefik.enable: true
-      traefik.http.routers.tautulli.entrypoints: homesec
-      traefik.http.routers.tautulli.rule: Host(`tautulli.${DOMAIN}`)
+      - traefik.enable=true
+      - traefik.http.routers.tautulli.entrypoints=homesec
+      - traefik.http.routers.tautulli.rule=Host(`tautulli.${DOMAIN}`)
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:8181]/files/
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/tautulli-logo.png
+      - net.unraid.docker.shell=bash
 networks:
   frontend:
     external: true

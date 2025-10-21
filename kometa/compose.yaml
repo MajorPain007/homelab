@@ -3,6 +3,9 @@ services:
     container_name: kometa
     hostname: kometa
     image: kometateam/kometa:latest
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     environment:
       - PUID=${ENV_PUID}
       - PGID=${ENV_PGID}
@@ -16,16 +19,20 @@ services:
     volumes:
       - /mnt/cache/appdata/Kometa:/config
       - /mnt/cache/appdata/posterizarr/assets/:/config/assets
-    restart: unless-stopped
     networks:
       - frontend
       - backend
-    security_opt:
-      - no-new-privileges:true
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/kometa-logo.png
+      - net.unraid.docker.shell=bash
   imagemaid:
     container_name: imagemaid
     hostname: imagemaid
     image: kometateam/imagemaid:develop
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     environment:
       - TZ=${TIMEZONE}
       - PLEX_URL=http://plex:32400
@@ -46,11 +53,13 @@ services:
     volumes:
       - /mnt/cache/appdata/ImageMaid:/config
       - /mnt/cache/appdata/Plex-Media-Server/:/plex
-    restart: unless-stopped
     networks:
       - backend
-    security_opt:
-      - no-new-privileges:true
+    labels:
+
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/Kometa-Team/ImageMaid/refs/heads/develop/.github/logo.png
+      - net.unraid.docker.shell=bash
 networks:
   backend:
     external: true

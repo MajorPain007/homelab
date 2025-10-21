@@ -4,6 +4,8 @@ services:
     hostname: ntfy
     image: binwiederhier/ntfy:latest
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     command:
       - serve
     # ports:
@@ -32,13 +34,15 @@ services:
     networks:
       - frontend
       - backend
-    security_opt:
-      - no-new-privileges:true
     labels:
-      traefik.enable: "true"
-      traefik.docker.network: frontend
-      traefik.http.routers.ntfy.entrypoints: homesec
-      traefik.http.routers.ntfy.rule: Host(`ntfy.${DOMAIN}`)
+      - traefik.enable=true
+      - traefik.docker.network=frontend
+      - traefik.http.routers.ntfy.entrypoints=homesec
+      - traefik.http.routers.ntfy.rule=Host(`ntfy.${DOMAIN}`)
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:80]/
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/binwiederhier/ntfy/main/docs/static/img/ntfy.png
+      - net.unraid.docker.shell=bash
 networks:
   backend:
     external: true

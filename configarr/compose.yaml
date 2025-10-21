@@ -3,6 +3,9 @@ services:
     container_name: configarr
     hostname: configarr
     image: ghcr.io/raydak-labs/configarr:latest
+    restart: no
+    security_opt:
+      - no-new-privileges:true
     user: 99:100
     environment:
       - TZ=Europe/Berlin
@@ -11,11 +14,12 @@ services:
       - /mnt/cache/appdata/configarr/repos:/app/repos
       - /mnt/cache/appdata/configarr/cfs:/app/cfs
       - /mnt/cache/appdata/configarr/templates:/app/templates
-    restart: no
     networks:
       - backend
-    security_opt:
-      - no-new-privileges:true
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/wiki/raydak-labs/configarr/img/logo.png
+      - net.unraid.docker.shell=bash
 networks:
   backend:
     external: true

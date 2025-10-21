@@ -1,5 +1,7 @@
 services:
   redis:
+    security_opt:
+      - no-new-privileges:true
     image: redis
     container_name: redis
     hostname: redis
@@ -7,6 +9,10 @@ services:
       - '6379:6379/tcp'
     networks:
       - backend
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/juusujanar/unraid-templates/master/img/Redis-logo.png
+      - net.unraid.docker.shell=bash
 networks:
   backend:
     external: true

@@ -1,6 +1,9 @@
 services:
   quickstart:
     image: kometateam/quickstart:develop
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     #image: kometateam/quickstart:620-fix-headless-mode-quitting-immediately
     container_name: quickstart
     ports:
@@ -11,11 +14,10 @@ services:
       - QS_DEBUG=0
     volumes:
       - /mnt/cache/appdata/kometa-quickstart:/config #edit this line for your setup
-    restart: unless-stopped
     networks:
       - backend
-    security_opt:
-      - no-new-privileges:true
+    labels:
+      - net.unraid.docker.managed=composeman
 networks:
   backend:
     external: true

@@ -1,7 +1,7 @@
 {
     "trash_id": "Baka HQ German Anime Release Groups BD",
     "trash_scores": {
-      "default": 3000
+      "default": 4000
     },
     "trash_description": "Baka HQ German Anime Release Groups BD",
     "custom_inf": "Baka HQ German Anime Release Groups BD",
@@ -24,15 +24,6 @@
         "required": false,
         "fields": {
             "value": "^(HiSHiRO)$"
-        }
-        },
-        {
-        "name": "DRiFTKiNG",
-        "implementation": "ReleaseGroupSpecification",
-        "negate": false,
-        "required": false,
-        "fields": {
-            "value": "DRiFTKiNG"
         }
         },
         {

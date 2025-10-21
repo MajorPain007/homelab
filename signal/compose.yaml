@@ -3,6 +3,9 @@ services:
     container_name: signal
     hostname: signal
     image: bbernhard/signal-cli-rest-api:latest
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     environment:
       - MODE=normal
       - SIGNAL_CLI_UID=99
@@ -12,11 +15,13 @@ services:
       - 8080:8080
     volumes:
       - /mnt/cache/appdata/signal-api:/home/.local/share/signal-cli
-    restart: unless-stopped
     networks:
       - backend
-    security_opt:
-      - no-new-privileges:true
+    labels:
+
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/signalapp/Signal-Desktop/refs/heads/main/images/signal-logo-desktop-linux.png
+      - net.unraid.docker.shell=bash
 networks:
   backend:
     external: true

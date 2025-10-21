@@ -3,9 +3,9 @@ services:
     container_name: jellyseerr
     hostname: jellyseerr
     image: fallenbagel/jellyseerr:latest
-    # ports:
-    #   - 5055:5055
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     networks:
       - backend
       - frontend
@@ -15,19 +15,29 @@ services:
       - TZ=${TIMEZONE}
     volumes:
       - ${SERVICES_DIR}/jellyseerr:/app/config
-    security_opt:
-      - no-new-privileges:true
     labels:
-      traefik.enable: true
-      traefik.http.routers.jellyseerr.entrypoints: homesec
-      traefik.http.routers.jellyseerr.rule: Host(`js.${DOMAIN}`)
+      # - homepage.group=Download
+      # - homepage.name=Jellyseerr
+      # - homepage.icon=/images/png/jellyseerr.png
+      # - homepage.href=https://js.${DOMAIN}
+      # - homepage.weight=10
+      # - homepage.widget.type=jellyseerr
+      # - homepage.widget.url=http://jellyseerr:5055
+      # - homepage.widget.key=${JELLYSEERR_KEY}
+      - traefik.enable=true
+      - traefik.http.routers.jellyseerr.entrypoints=homesec
+      - traefik.http.routers.jellyseerr.rule=Host(`js.${DOMAIN}`)
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://hotio.dev/webhook-avatars/jellyseerr.png
+      - net.unraid.docker.webui=http://[IP]:[PORT:5055]
+      - net.unraid.docker.shell=sh
   radarr:
     container_name: radarr
     hostname: radarr
     image: lscr.io/linuxserver/radarr:latest
-    # ports:
-    #   - 7878:7878
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     networks:
       - backend
     environment:
@@ -37,21 +47,30 @@ services:
     volumes:
       - ${SERVICES_DIR}/radarr:/config
       - ${DATA_DIR}:/data
-      # - ${DATA_DIR}/Media/complete:/data/downloads/complete
-    security_opt:
-      - no-new-privileges:true
     labels:
-      traefik.enable: true
-      traefik.docker.network: backend
-      traefik.http.routers.radarr.entrypoints: homesec
-      traefik.http.routers.radarr.rule: Host(`radarr.${DOMAIN}`)
+      # - homepage.group=Download
+      # - homepage.name=Radarr
+      # - homepage.icon=/images/png/radarr.png
+      # - homepage.href=https://radarr.${DOMAIN}
+      # - homepage.weight=5
+      # - homepage.widget.type=radarr
+      # - homepage.widget.url=http://radarr:7878
+      # - homepage.widget.key=${RADARR_API_KEY}
+      - traefik.enable=true
+      - traefik.docker.network=backend
+      - traefik.http.routers.radarr.entrypoints=homesec
+      - traefik.http.routers.radarr.rule=Host(`radarr.${DOMAIN}`)
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:7878]/system/status
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/radarr-logo.png
+      - net.unraid.docker.shell=bash
   radarr_kids:
     container_name: radarr_kids
     hostname: radarr_kids
     image: lscr.io/linuxserver/radarr:latest
-    # ports:
-    #   - 7879:7878
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     networks:
       - backend
     environment:
@@ -61,21 +80,30 @@ services:
     volumes:
       - ${SERVICES_DIR}/radarr_kids:/config
       - ${DATA_DIR}:/data
-      # - ${DATA_DIR}/Media/complete:/data/downloads/complete
-    security_opt:
-      - no-new-privileges:true
     labels:
-      traefik.enable: true
-      traefik.docker.network: backend
-      traefik.http.routers.radarr-kids.entrypoints: homesec
-      traefik.http.routers.radarr-kids.rule: Host(`radarr-kids.${DOMAIN}`)
+      # - homepage.group=Download
+      # - homepage.name=Radarr_Kids
+      # - homepage.icon=/images/png/radarr.png
+      # - homepage.href=https://radarr-kids.${DOMAIN}
+      # - homepage.weight=6
+      # - homepage.widget.type=radarr
+      # - homepage.widget.url=http://radarr_kids:7878
+      # - homepage.widget.key=${RADARR_KIDS_API_KEY}
+      - traefik.enable=true
+      - traefik.docker.network=backend
+      - traefik.http.routers.radarr-kids.entrypoints=homesec
+      - traefik.http.routers.radarr-kids.rule=Host(`radarr-kids.${DOMAIN}`)
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:7879]/system/status
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/radarr-logo.png
+      - net.unraid.docker.shell=bash
   sonarr:
     container_name: sonarr
     hostname: sonarr
     image: lscr.io/linuxserver/sonarr:latest
-    # ports:
-    #   - 8989:8989
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     networks:
       - backend
     environment:
@@ -85,22 +113,31 @@ services:
     volumes:
       - ${SERVICES_DIR}/sonarr:/config
       - ${DATA_DIR}:/data
-      # - ${DATA_DIR}/Media/complete:/data/downloads/complete
-    security_opt:
-      - no-new-privileges:true
     labels:
-      traefik.enable: true
-      traefik.docker.network: backend
-      traefik.http.routers.sonarr.entrypoints: homesec
-      traefik.http.routers.sonarr.rule: Host(`sonarr.${DOMAIN}`)
+      # - homepage.group=Download
+      # - homepage.name=Sonarr
+      # - homepage.icon=/images/png/sonarr.png
+      # - homepage.href=https://sonarr.${DOMAIN}
+      # - homepage.weight=3
+      # - homepage.widget.type=sonarr
+      # - homepage.widget.url=http://sonarr:8989
+      # - homepage.widget.key=${SONARR_API_KEY}
+      - traefik.enable=true
+      - traefik.docker.network=backend
+      - traefik.http.routers.sonarr.entrypoints=homesec
+      - traefik.http.routers.sonarr.rule=Host(`sonarr.${DOMAIN}`)
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:8989]/system/status
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/sonarr-logo.png
+      - net.unraid.docker.shell=bash
   sonarr_as:
     # Animes
     container_name: sonarr_as
     hostname: sonarr_as
     image: lscr.io/linuxserver/sonarr:latest
-    # ports:
-    #   - 8990:8989
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     networks:
       - backend
     environment:
@@ -110,21 +147,30 @@ services:
     volumes:
       - ${SERVICES_DIR}/sonarr_as:/config
       - ${DATA_DIR}:/data
-      # - ${DATA_DIR}/Media/complete:/data/downloads/complete
-    security_opt:
-      - no-new-privileges:true
     labels:
-      traefik.enable: true
-      traefik.docker.network: backend
-      traefik.http.routers.sonarr-as.entrypoints: homesec
-      traefik.http.routers.sonarr-as.rule: Host(`sonarr-as.${DOMAIN}`)
+      # - homepage.group=Download
+      # - homepage.name=Sonarr_AS
+      # - homepage.icon=/images/png/sonarr.png
+      # - homepage.href=https://sonarr-as.${DOMAIN}
+      # - homepage.weight=4
+      # - homepage.widget.type=sonarr
+      # - homepage.widget.url=http://sonarr_as:8989
+      # - homepage.widget.key=${SONARR_AS_API_KEY}
+      - traefik.enable=true
+      - traefik.docker.network=backend
+      - traefik.http.routers.sonarr-as.entrypoints=homesec
+      - traefik.http.routers.sonarr-as.rule=Host(`sonarr-as.${DOMAIN}`)
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:8990]/system/status
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/sonarr-logo.png
+      - net.unraid.docker.shell=bash
   readarr:
     container_name: readarr
     hostname: readarr
     image: lscr.io/linuxserver/readarr:0.4.18-develop
-    # ports:
-    #   - 8787:8787
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     networks:
       - backend
     environment:
@@ -134,21 +180,30 @@ services:
     volumes:
       - ${SERVICES_DIR}/readarr:/config
       - ${DATA_DIR}:/data
-      # - ${DATA_DIR}/Media/complete:/data/downloads/complete
-    security_opt:
-      - no-new-privileges:true
     labels:
-      traefik.enable: true
-      traefik.docker.network: backend
-      traefik.http.routers.readarr.entrypoints: homesec
-      traefik.http.routers.readarr.rule: Host(`readarr.${DOMAIN}`)
+      # - homepage.group=Download
+      # - homepage.name=Readarr
+      # - homepage.icon=/images/png/readarr.png
+      # - homepage.href=https://readarr.${DOMAIN}
+      # - homepage.weight=8
+      # - homepage.widget.type=readarr
+      # - homepage.widget.url=http://readarr:8989
+      # - homepage.widget.key=${READARR_API_KEY}
+      - traefik.enable=true
+      - traefik.docker.network=backend
+      - traefik.http.routers.readarr.entrypoints=homesec
+      - traefik.http.routers.readarr.rule=Host(`readarr.${DOMAIN}`)
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:8787]/system/status
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/readarr-logo.png
+      - net.unraid.docker.shell=bash
   prowlarr:
     container_name: prowlarr
     hostname: prowlarr
     image: lscr.io/linuxserver/prowlarr:latest
-    # ports:
-    #   - 9696:9696
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     networks:
       - backend
     environment:
@@ -157,42 +212,97 @@ services:
       - TZ=${TIMEZONE}
     volumes:
       - ${SERVICES_DIR}/prowlarr:/config
+    labels:
+      # - homepage.group=Download
+      # - homepage.name=Prowlarr
+      # - homepage.icon=/images/png/prowlarr.png
+      # - homepage.href=https://prowlarr.${DOMAIN}
+      # - homepage.weight=7
+      # - homepage.widget.type=prowlarr
+      # - homepage.widget.url=http://prowlarr:9696
+      # - homepage.widget.key=${PROWLARR_API_KEY}
+      # - homepage.widget.fields=["numberOfGrabs", "numberOfQueries"]
+      - traefik.enable=true
+      - traefik.docker.network=backend
+      - traefik.http.routers.prowlarr.entrypoints=homesec
+      - traefik.http.routers.prowlarr.rule=Host(`prowlarr.${DOMAIN}`)
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:9696]/system/status
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/binhex/docker-templates/master/binhex/images/prowlarr-icon.png
+      - net.unraid.docker.shell=bash
+  posterizarr:
+    container_name: posterizarr
+    hostname: posterizarr
+    image: ghcr.io/fscorrupt/docker-posterizarr-dev:latest
+    user: ${ENV_PUID}:${ENV_PGID} # <- ersetzt PUID/PGID
+    ports:
+      - 8000:8000
     security_opt:
       - no-new-privileges:true
+    environment:
+      - TZ=${TIMEZONE}
+      - TERM=xterm
+      - RUN_TIME=02:30 #,19:30
+    restart: unless-stopped
+    networks:
+      - frontend
+    volumes:
+      - ${SERVICES_DIR}/posterizarr:/config:rw
+      - ${SERVICES_DIR}/posterizarr/assets:/assets:rw
+      - ${SERVICES_DIR}/posterizarr/assetsbackup:/assetsbackup:rw
+      - ${SERVICES_DIR}/posterizarr/manualassets:/manualassets:rw
     labels:
-      traefik.enable: true
-      traefik.docker.network: backend
-      traefik.http.routers.prowlarr.entrypoints: homesec
-      traefik.http.routers.prowlarr.rule: Host(`prowlarr.${DOMAIN}`)
-  # bazarr:
-  #   container_name: bazarr
-  #   hostname: bazarr
-  #   image: lscr.io/linuxserver/bazarr:latest
-  #   # ports:
-  #   #   - 6767:6767
-  #   restart: unless-stopped
-  #   networks:
-  #     - backend
-  #   volumes:
-  #     - ${SERVICES_DIR}/bazarr/config:/config
-  #     - ${DATA_DIR}:/data
-  #   environment:
-  #     - PUID=${ENV_PUID}
-  #     - PGID=${ENV_PGID}
-  #     - TZ=${TIMEZONE}
-  #   labels:
-  #     traefik.enable: true
-  #     traefik.docker.network: backend
-  #     traefik.http.routers.bazarr.entrypoints: homesec
-  #     traefik.http.routers.bazarr.rule: Host(`bazarr.${DOMAIN}`)
+      # - homepage.group=Download
+      # - homepage.name=Posterizarr
+      # - homepage.icon=/images/png/posterizarr.png
+      # - homepage.weight=
+      # - homepage.widget.type=posterizarr
+      # - homepage.widget.url=http://posterizarr.home
+      # - homepage.widget.key=yourembyapikeyhere
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/nwithan8/unraid_templates/master/images/posterizarr-icon.png
+      - net.unraid.docker.shell=bash
+      # bazarr:
+      #   container_name: bazarr
+      #   hostname: bazarr
+      #   image: lscr.io/linuxserver/bazarr:latest
+      #   # ports:
+      #   #   - 6767:6767
+      #   restart: unless-stopped
+      #   networks:
+      #     - backend
+      #   volumes:
+      #     - ${SERVICES_DIR}/bazarr/config:/config
+      #     - ${DATA_DIR}:/data
+      #   environment:
+      #     - PUID=${ENV_PUID}
+      #     - PGID=${ENV_PGID}
+      #     - TZ=${TIMEZONE}
+      #  labels:
+      # - homepage.group=Download
+      # - homepage.name=Bazarr
+      # - homepage.icon=/images/png/emby.png
+      # - homepage.href=https://bazarr.${DOMAIN}
+      # - homepage.weight=9
+      # - homepage.widget.type=bazarr
+      # - homepage.widget.url=http://bazarr:6767
+      # - homepage.widget.key=${BAZARR_API_KEY}
+      # - homepage.widget.fields=["missingEpisodes", "missingMovies"]
+      #     - traefik.enable=true
+      #     - traefik.docker.network=backend
+      #     - traefik.http.routers.bazarr.entrypoints=homesec
+      #     - traefik.http.routers.bazarr.rule=Host(`bazarr.${DOMAIN}`)
+      #     - net.unraid.docker.managed:=omposeman
+      #     - net.unraid.docker.webui=http://[IP]:[PORT:6767]/system/status
+      #     - net.unraid.docker.icon=https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/bazarr-logo.png
+      #     - net.unraid.docker.shell='bash'
   sabnzbd:
     container_name: sabnzbd
     hostname: sabnzbd
     image: lscr.io/linuxserver/sabnzbd:latest
-    # ports:
-    #   - 8087:8080 # HTTP port for the WebUI
-    #   - 9090:9090 # HTTPS port for the WebUI
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     networks:
       - backend
     environment:
@@ -201,18 +311,26 @@ services:
       - TZ=${TIMEZONE}
     volumes:
       - ${SERVICES_DIR}/sabnzbd:/config
-      #- ${DATA_DIR}/:/data
+      - ${DATA_DIR}/complete:/data/complete
       - ${TMP_DOWNLOADS_DIR}:/data/downloads/incomplete
-      #- ${DOWNLOADS_DIR}:/data/downloads/complete
-      - ${DOWNLOADS_DIR}:/data/complete
-    security_opt:
-      - no-new-privileges:true
     labels:
-      traefik.enable: true
-      traefik.docker.network: backend
-      traefik.http.routers.sabnzbd.entrypoints: homesec
-      traefik.http.routers.sabnzbd.rule: Host(`sabnzbd.${DOMAIN}`)
-      traefik.http.services.sabnzbd.loadbalancer.server.port: 8080
+      # - homepage.group=Download
+      # - homepage.name=Sabnzbd
+      # - homepage.icon=/images/png/sabnzbd.png
+      # - homepage.href=https://sabnzbd.${DOMAIN}
+      # - homepage.weight=1
+      # - homepage.widget.type=sabnzbd
+      # - homepage.widget.url=http://sabnzbd:8080
+      # - homepage.widget.key=${SAB_API_KEY}
+      - traefik.enable=true
+      - traefik.docker.network=backend
+      - traefik.http.routers.sabnzbd.entrypoints=homesec
+      - traefik.http.routers.sabnzbd.rule=Host(`sabnzbd.${DOMAIN}`)
+      - traefik.http.services.sabnzbd.loadbalancer.server.port=8080
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:8087]
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/sabnzbd-logo.png
+      - net.unraid.docker.shell=bash
   umlautadaptarr:
     container_name: umlautadaptarr
     hostname: umlautadaptarr
@@ -222,6 +340,8 @@ services:
     #   - 5006:5006
     #   - 5005:5005
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     networks:
       - backend
     environment:
@@ -250,8 +370,10 @@ services:
       - LIDARR__ENABLED=false
       - LIDARR__HOST="http://lidarr:8686"
       - LIDARR__APIKEY="API_KEY"
-    security_opt:
-      - no-new-privileges:true
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/tschoerk/unraid-templates/main/umlautadaptarr/umlaute.png
+      - net.unraid.docker.shell=bash
 networks:
   frontend:
     external: true

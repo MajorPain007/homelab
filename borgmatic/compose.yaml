@@ -4,11 +4,11 @@ services:
     hostname: borgmatic
     image: ghcr.io/borgmatic-collective/borgmatic:latest
     restart: unless-stopped
-    cap_add:
-      - SYS_ADMIN
     security_opt:
       - apparmor:unconfined
       - label:disable
+    cap_add:
+      - SYS_ADMIN
     devices:
       - /dev/fuse:/dev/fuse
     # command: /bin/sh
@@ -20,14 +20,17 @@ services:
     volumes:
       - /mnt/user:/mnt/user:ro
       - /boot:/boot:ro
-      - /mnt/user/borg_backup/repo:/mnt/borg-repository
+      - /mnt/user/Backup/borg_backup/repo:/mnt/borg-repository
       - /mnt/cache/appdata/borgmatic/cache:/root/.cache/borg
       - /mnt/cache/appdata/borgmatic/config:/etc/borgmatic.d
       - /mnt/cache/appdata/borgmatic/borg_keys:/root/.config/borg
       - /mnt/cache/appdata/borgmatic/ssh_keys:/root/.ssh
-      - /mnt/cache/test/:/mnt/cache/test
     networks:
       - backend
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/Sdub76/unraid_docker_templates/main/images/borgmatic.png
+      - net.unraid.docker.shell=bash
 networks:
   backend:
     external: true

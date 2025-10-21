@@ -1,8 +1,11 @@
 services:
   backrest:
-    image: garethgeorge/backrest:latest
     container_name: backrest
     hostname: backrest
+    image: garethgeorge/backrest:latest
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     volumes:
       - /mnt/cache/appdata/backrest/data:/data
       - /mnt/cache/appdata/backrest/config:/config
@@ -19,16 +22,17 @@ services:
       - TZ=Europe/Berlin
     ports:
       - 9898:9898
-    restart: unless-stopped
     networks:
       - backend
-    security_opt:
-      - no-new-privileges:true
     labels:
-      traefik.enable: "true"
-      traefik.docker.network: backend
-      traefik.http.routers.backrest.entrypoints: homesec
-      traefik.http.routers.backrest.rule: Host(`backrest.${DOMAIN}`)
+      - traefik.enable=true
+      - traefik.docker.network=backend
+      - traefik.http.routers.backrest.entrypoints=homesec
+      - traefik.http.routers.backrest.rule=Host(`backrest.${DOMAIN}`)
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:9898]/
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/garethgeorge/backrest/refs/heads/main/webui/assets/favicon.png
+      - net.unraid.docker.shell=bash
 networks:
   backend:
     external: true

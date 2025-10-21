@@ -3,6 +3,9 @@ services:
     container_name: adguardhome
     hostname: adguardhome
     image: adguard/adguardhome:latest
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     # depends_on:
     #   - unbound
     ports:
@@ -16,12 +19,16 @@ services:
     volumes:
       - /mnt/cache/appdata/adguard/config/adguard/workingdir:/opt/adguardhome/work
       - /mnt/cache/appdata/adguard/config/adguard/config:/opt/adguardhome/conf
-    restart: unless-stopped
-      # networks:
-      #   locale-net:
-      #     ipv4_address: 192.168.178.254
-    security_opt:
-      - no-new-privileges:true
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]/
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/SiwatINC/unraid-ca-repository/master/icons/adguard.png
+      - net.unraid.docker.shell=bash
+      # unbound:
+      #   labels:
+      #     net.unraid.docker.managed: dockerman
+      #     net.unraid.docker.icon: https://raw.githubusercontent.com/kutzilla/unraid-templates/master/images/unbound.png
+      #     net.unraid.docker.shell: 'bash'
 #   unbound:
 #     container_name: unbound
 #     hostname: unbound

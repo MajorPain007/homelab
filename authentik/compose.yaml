@@ -1,9 +1,11 @@
 services:
   authentik-server:
-    image: ghcr.io/goauthentik/server:${AUTHENTIK_TAG}
     container_name: authentik-server
     hostname: authentik-server
+    image: ghcr.io/goauthentik/server:${AUTHENTIK_TAG}
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     command: server
     environment:
       AUTHENTIK_REDIS__HOST: ${AUTHENTIK_REDIS__HOST}
@@ -17,28 +19,34 @@ services:
     env_file:
       - .env
     ports:
-      - ${COMPOSE_PORT_HTTP:-9000}:9000
+      - ${COMPOSE_PORT_HTTP:-9001}:9000
       - ${COMPOSE_PORT_HTTPS:-9443}:9443
       # depends_on:
       #   - postgresql
       #   - redis
-    # security_opt:
-    #   - no-new-privileges:true
     networks:
       - backend
       - frontend
     labels:
-      traefik.enable: true
-      traefik.docker.network: backend
-      traefik.http.routers.authentik-server.entrypoints: homesec,websecure
-      traefik.http.routers.authentik-server.rule: Host(`authentik.${DOMAIN}`) || (HostRegexp(`{subdomain:[a-z0-9-]+}.${DOMAIN}`) && PathPrefix(`/outpost.goauthentik.io/`))
-      traefik.http.routers.authentik-server.service: authentik-server
-      traefik.http.services.authentik-server.loadbalancer.server.port: 9000
+      - crowdsec.enable=true
+      - crowdsec.labels.type=authentik
+      - traefik.enable=true
+      - traefik.docker.network=backend
+      - traefik.http.routers.authentik-server.entrypoints=homesec,websecure
+      - traefik.http.routers.authentik-server.rule=Host(`authentik.${DOMAIN}`) || (HostRegexp(`{subdomain:[a-z0-9-]+}.${DOMAIN}`) && PathPrefix(`/outpost.goauthentik.io/`))
+      - traefik.http.routers.authentik-server.service=authentik-server
+      - traefik.http.services.authentik-server.loadbalancer.server.port=9000
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:9000]/
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/ibracorp/app-logos/main/authentik/authentik.png
+      - net.unraid.docker.shell=bash
   authentik-worker:
-    image: ghcr.io/goauthentik/server:${AUTHENTIK_TAG}
     container_name: authentik-worker
     hostname: authentik-worker
+    image: ghcr.io/goauthentik/server:${AUTHENTIK_TAG}
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     command: worker
     environment:
       AUTHENTIK_REDIS__HOST: ${AUTHENTIK_REDIS__HOST}
@@ -63,10 +71,13 @@ services:
     # depends_on:
     #   - postgresql
     #   - redis
-    # security_opt:
-    #   - no-new-privileges:true
+
     networks:
       - backend
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/ibracorp/app-logos/main/authentik/authentik.png
+      - net.unraid.docker.shell=bash
 networks:
   backend:
     external: true

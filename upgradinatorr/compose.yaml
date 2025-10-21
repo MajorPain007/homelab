@@ -4,6 +4,8 @@ services:
     hostname: upgradinatorr
     image: mcr.microsoft.com/powershell:latest
     restart: no
+    security_opt:
+      - no-new-privileges:true
     # optional
     logging:
       driver: json-file
@@ -19,8 +21,10 @@ services:
     command: pwsh /scripts/Upgradinatorr/upgradinatorr.ps1 -ApplicationList Radarr
     networks:
       - backend
-    security_opt:
-      - no-new-privileges:true
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://icon.icepanel.io/Technology/png-shadow-512/Powershell.png
+      - net.unraid.docker.shell=bash
 networks:
   backend:
     external: true

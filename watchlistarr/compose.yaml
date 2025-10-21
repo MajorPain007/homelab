@@ -1,6 +1,9 @@
 services:
   watchlistarr:
     image: nylonee/watchlistarr:latest
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     environment:
       SONARR_BASE_URL: http://sonarr:8989
       SONARR_API_KEY: ${SONARR_API_KEY}
@@ -14,11 +17,12 @@ services:
       REFRESH_INTERVAL_SECONDS: 60
     volumes:
       - .config:/app/config
-    restart: unless-stopped
     networks:
       - backend
-    security_opt:
-      - no-new-privileges:true
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://github.com/nylonee/watchlistarr/blob/main/watchlistarr.png?raw=true
+      - net.unraid.docker.shell=bash
 networks:
   backend:
     external: true

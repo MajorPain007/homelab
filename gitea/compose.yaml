@@ -1,8 +1,11 @@
 services:
   gitea:
-    image: gitea/gitea:1.22.4
     container_name: gitea
     hostname: gitea
+    image: gitea/gitea:1.22.4
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     environment:
       - USER_UID=${USER_UID}
       - USER_GID=${USER_GID}
@@ -14,7 +17,6 @@ services:
       # -- (Optional) Change your server settings here...
       - GITEA__server__SSH_PORT=2221 # <-- (Optional) Replace with your desired SSH port
       - GITEA__server__ROOT_URL=http://${DOMAIN} # <-- Replace with your FQDN
-
       # Mailer
       - GITEA_MAILER_ENABLED=${GITEA_MAIL_ENABLED}
       - GITEA_MAILER_SMTP_ADDR=$(GITEA_SMTP_ADDR}
@@ -33,17 +35,13 @@ services:
     ports:
       # - "3000:3000"
       - 2221:22 # <-- (Optional) Replace with your desired SSH port
-    # depends_on:
-    #   - db
-    restart: unless-stopped
-    security_opt:
-      - no-new-privileges:true
     labels:
-      traefik.enable: "true"
-      traefik.docker.network: backend
-      traefik.http.services.gitea.loadbalancer.server.port: "3000"
-      traefik.http.routers.gitea-https.entrypoints: homesec
-      traefik.http.routers.gitea-https.rule: Host(`${DOMAIN}`)
+      - traefik.enable=true
+      - traefik.docker.network=backend
+      - traefik.http.services.gitea.loadbalancer.server.port=3000
+      - traefik.http.routers.gitea-https.entrypoints=homesec
+      - traefik.http.routers.gitea-https.rule=Host(`${DOMAIN}`)
+      - net.unraid.docker.managed=composeman
   # db:
   #   image: postgres:14
   #   container_name: gitea-db
@@ -61,9 +59,12 @@ services:
   #     - no-new-privileges:true
 
   gitea-runner:
-    image: gitea/act_runner:latest
     container_name: gitea-runner
     hostname: gitea-runner
+    image: gitea/act_runner:latest
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     environment:
       - CONFIG_FILE=/config-yaml
       - GITEA_INSTANCE_URL=${GITEA_INSTANCE_URL}
@@ -78,11 +79,10 @@ services:
     depends_on:
       gitea:
         condition: service_started
-    restart: unless-stopped
-    security_opt:
-      - no-new-privileges:true
     networks:
       - backend
+    labels:
+      - net.unraid.docker.managed=composeman
 networks:
   backend:
     external: true

@@ -3,6 +3,9 @@ services:
     container_name: adguardhome
     hostname: adguardhome
     image: lscr.io/linuxserver/adguardhome-sync:latest
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     # network_mode: host
     ports:
       - 87:80
@@ -13,11 +16,10 @@ services:
       - CONFIGFILE=/config/adguardhome-sync.yaml
     volumes:
       - /mnt/cache/appdata/adguardhome-sync/config:/config
-    restart: unless-stopped
-    security_opt:
-      - no-new-privileges:true
     networks:
       - backend
+    labels:
+      - net.unraid.docker.managed=composeman
 networks:
   backend:
     external: true

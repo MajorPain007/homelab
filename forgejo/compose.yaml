@@ -1,8 +1,10 @@
 services:
   server:
     image: codeberg.org/forgejo/forgejo:11
-    container_name: forgejo
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    container_name: forgejo
     ports:
       - 3005:3000
       - 222:22
@@ -15,8 +17,8 @@ services:
       - /etc/localtime:/etc/localtime:ro
     networks:
       - backend
-    security_opt:
-      - no-new-privileges:true
+    labels:
+      - net.unraid.docker.managed=composeman
 networks:
   backend:
     external: true

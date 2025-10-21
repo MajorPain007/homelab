@@ -1,8 +1,8 @@
 services:
   trilium:
-    image: triliumnext/notes
     container_name: trilium
     hostname: trilium
+    image: triliumnext/notes
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
@@ -22,9 +22,13 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     labels:
-      traefik.enable: "true"
-      traefik.http.routers.trilium.entrypoints: homesec
-      traefik.http.routers.trilium.rule: Host(`trilium.${DOMAIN}`)
+      - traefik.enable=true
+      - traefik.http.routers.trilium.entrypoints=homesec
+      - traefik.http.routers.trilium.rule=Host(`trilium.${DOMAIN}`)
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:8080]
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/selfhosters/unRAID-CA-templates/master/templates/img/triliumnext.png
+      - net.unraid.docker.shell=bash
 networks:
   frontend:
     external: true

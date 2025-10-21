@@ -26,11 +26,20 @@ services:
       - DOMAIN=${DOMAIN}
       - EMAIL=${EMAIL}
       - CROWDSEC_API_KEY=${CROWDSEC_API_KEY}
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=
+      - net.unraid.docker.icon=https://hotio.dev/webhook-avatars/caddy.png
+      - net.unraid.docker.shell=bash
+    security_opt:
+      - no-new-privileges:true
   crowdsec:
     container_name: crowdsec
     hostname: crowdsec
     image: crowdsecurity/crowdsec:latest
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     depends_on:
       - caddy
     healthcheck:
@@ -61,11 +70,14 @@ services:
       - COLLECTIONS=crowdsecurity/traefik crowdsecurity/caddy crowdsecurity/http-cve crowdsecurity/appsec-generic-rules crowdsecurity/appsec-virtual-patching crowdsecurity/sshd crowdsecurity/linux
       - PUID=${ENV_PUID}
       - PGID=${ENV_PGID}
-    security_opt:
-      - no-new-privileges:true
     networks:
       - frontend
       - backend
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:8081]/
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/ibracorp/app-logos/main/crowdsec/crowdsec.png
+      - net.unraid.docker.shell=sh
 networks:
   frontend:
     external: true

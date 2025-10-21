@@ -10,8 +10,11 @@
 name: immich
 services:
   immich-server:
+    image: ghcr.io/immich-app/immich-server:release
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     container_name: immich_server
-    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
     # extends:
     #   file: hwaccel.transcoding.yml
     #   service: cpu # set to one of [nvenc, quicksync, rkmpp, vaapi, vaapi-wsl] for accelerated transcoding
@@ -29,21 +32,25 @@ services:
     depends_on:
       #   - redis
       - pgvecto-rs
-    restart: unless-stopped
     healthcheck:
       disable: false
     networks:
       - backend
     labels:
-      traefik.enable: true
-      traefik.docker.network: backend
-      traefik.http.routers.immich.entrypoints: homesec
-      traefik.http.routers.immich.rule: Host(`immich.${DOMAIN}`)
+      - traefik.enable=true
+      - traefik.docker.network=backend
+      - traefik.http.routers.immich.entrypoints=homesec
+      - traefik.http.routers.immich.rule=Host(`immich.${DOMAIN}`)
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/imagegenius/templates/main/unraid/img/immich.png
+      - net.unraid.docker.webui=http://[IP]:[PORT:2283]
+      - net.unraid.docker.shell=bash
   immich-machine-learning:
+    image: ghcr.io/immich-app/immich-machine-learning:release-openvino
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     container_name: immich_machine_learning
-    # For hardware acceleration, add one of -[armnn, cuda, rocm, openvino, rknn] to the image tag.
-    # Example tag: ${IMMICH_VERSION:-release}-cuda
-    image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}-openvino
     # extends: # uncomment this section for hardware acceleration - see https://immich.app/docs/features/ml-hardware-acceleration
     #   file: hwaccel.ml.yml
     #   service: cpu # set to one of [armnn, cuda, rocm, openvino, openvino-wsl, rknn] for accelerated inference - use the `-wsl` version for WSL2 where applicable
@@ -56,12 +63,18 @@ services:
       - /mnt/cache/appdata/immich/model-cache:/cache
     env_file:
       - .env
-    restart: unless-stopped
     healthcheck:
       disable: false
     networks:
       - backend
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/imagegenius/templates/main/unraid/img/immich.png
+      - net.unraid.docker.webui=
+      - net.unraid.docker.shell=bash
   pgvecto-rs:
+    security_opt:
+      - no-new-privileges:true
     image: tensorchord/pgvecto-rs:pg16-v0.3.0
     container_name: PostgreSQL_Immich
     hostname: PostgreSQL_Immich
@@ -75,6 +88,10 @@ services:
       - /mnt/cache/appdata/PostgreSQL_Immich:/var/lib/postgresql/data:rw
     networks:
       - backend
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://github.com/SpaceinvaderOne/Docker-Templates-Unraid/blob/master/spaceinvaderone/docker_icons/postgresql-immich-logo.png?raw
+      - net.unraid.docker.shell=bash
 networks:
   backend:
     external: true

@@ -1,0 +1,56 @@
+{
+  "trash_id": "sonarr-german-anime-web-tier-02",
+  "trash_scores": {
+    "default": 1900
+  },
+  "trash_description": "German Anime Web Tier 02 Groups",
+  "name": "German Anime Web Tier 02",
+  "includeCustomFormatWhenRenaming": false,
+  "specifications": [
+    {
+      "name": "ABJ",
+      "implementation": "ReleaseGroupSpecification",
+      "negate": false,
+      "required": false,
+      "fields": {
+        "value": "^(ABJ)$"
+      }
+    },
+    {
+      "name": "DRiFTKiNG",
+      "implementation": "ReleaseGroupSpecification",
+      "negate": false,
+      "required": false,
+      "fields": {
+        "value": "\\b(DRiFTKiNG|DK)\\b"
+      }
+    },
+    {
+      "name": "MELD",
+      "implementation": "ReleaseGroupSpecification",
+      "negate": false,
+      "required": false,
+      "fields": {
+        "value": "^(MELD)$"
+      }
+    },
+    {
+      "name": "WebDL",
+      "implementation": "SourceSpecification",
+      "negate": false,
+      "required": false,
+      "fields": {
+        "value": 3
+      }
+    },
+    {
+      "name": "WebRip",
+      "implementation": "SourceSpecification",
+      "negate": false,
+      "required": false,
+      "fields": {
+        "value": 4
+      }
+    }
+  ]
+}

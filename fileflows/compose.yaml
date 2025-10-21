@@ -1,21 +1,19 @@
 services:
   fileflows:
-    container_name: ${SERVICES_FILEFLOWS_CONTAINER_NAME:-fileflows}
-    hostname: ${SERVICES_FILEFLOWS_HOSTNAME:-fileflows}
-    image: ${SERVICES_FILEFLOWS_IMAGE:-revenz/fileflows}:${SERVICES_FILEFLOWS_IMAGE_VERSION:-latest}
+    image: revenz/fileflows
     restart: unless-stopped
     ports:
       - 19200:5000
     devices:
       - /dev/dri:/dev/dri
     environment:
-      - TZ=${TIMEZONE}
-      - PUID=${ENV_PUID}
-      - PGID=${ENV_PGID}
+      - TZ=Europe/Berlin
+      - PUID=99
+      - PGID=10
     volumes:
-      - ./fileflows/config:/app/Data
-      - ./fileflows/logs:/app/Logs
-      - ${DATA_DIR}:/data/media
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /mnt/cache/appdata/fileflows:/app/Data
+      - /mnt/user/Media:/media
     labels:
       - traefik.enable=true
       - traefik.docker.network=backend
