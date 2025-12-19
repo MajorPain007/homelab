@@ -1,15 +1,12 @@
-# HEY, YOU! READ THE DOCS BEFORE YOU DO ANYTHING!
-# https://spotizerr.rtfd.io
-
 services:
   spotizerr:
-    image: cooldockerizer93/spotizerr
+    image: spotizerrphoenix/spotizerr
     user: 99:100
     volumes:
-      - /mnt/cache/appdata/spotizerr/data:/app/data
+      - ./spotizerr/data:/app/data
       - /mnt/user/Downloads/spotizerr:/app/downloads
-      - /mnt/cache/appdata/spotizerr/logs:/app/logs
-      # - /mnt/cache/appdata/spotizerr/.cache:/app/.cache
+      - ./spotizerr/logs:/app/logs
+      # - ./spotizerr/.cache:/app/.cache
     ports:
       - 7171:7171
     container_name: spotizerr-app

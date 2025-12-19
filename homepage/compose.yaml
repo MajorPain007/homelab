@@ -4,18 +4,20 @@ services:
     hostname: homepage
     image: ghcr.io/gethomepage/homepage:latest
     restart: unless-stopped
-    security_opt:
-      - no-new-privileges:true
+    env_file:
+      - .env
+    # security_opt:
+    #   - no-new-privileges:true
     healthcheck:
       disable: true
     ports:
       - 3000:3000
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /mnt/cache/appdata/homepage/config:/app/config
-      - /mnt/cache/appdata/homepage/images:/app/public/images
-      - /mnt/cache:/mnt/cache:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./homepage/config:/app/config
+      - ./homepage/images:/app/public/images
       - /mnt/user:/mnt/user:ro
+      - /mnt/cache:/mnt/cache:ro
     networks:
       - backend
       - frontend

@@ -17,8 +17,8 @@ services:
       - KOMETA_NO_COUNTDOWN=True
       # - KOMETA_RUN=True
     volumes:
-      - /mnt/cache/appdata/Kometa:/config
-      - /mnt/cache/appdata/posterizarr/assets/:/config/assets
+      - ./Kometa:/config
+      - /mnt/cache/appdata/arr-stack/arr/posterizarr/assets/:/config/assets
     networks:
       - frontend
       - backend
@@ -51,8 +51,8 @@ services:
       - LOG_REQUESTS=False
       - SCHEDULE=07:00|weekly(wednesday)
     volumes:
-      - /mnt/cache/appdata/ImageMaid:/config
-      - /mnt/cache/appdata/Plex-Media-Server/:/plex
+      - ./ImageMaid:/config
+      - /mnt/cache/appdata/plex/Plex-Media-Server/:/plex
     networks:
       - backend
     labels:

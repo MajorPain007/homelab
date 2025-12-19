@@ -1,0 +1,30 @@
+services:
+  embyserver:
+    image: emby/embyserver:latest
+    container_name: Emby
+    devices:
+      - /dev/dri
+    ports:
+      - 8097:8096/tcp
+    environment:
+      - UID=99
+      - GID=100
+      - GIDLIST=100
+    volumes:
+      - /mnt/user/Media/:/media:ro
+      - /dev/shm:/transcode:rw
+      - ./Emby:/config:rw
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.emby.entrypoints=websecure,homesec
+      - traefik.http.routers.emby.rule=(Host(`emby.${DOMAIN}`))
+      - traefik.http.services.emby.loadbalancer.server.port=8096
+      - net.unraid.docker.managed=dockerman
+      - net.unraid.docker.webui=http://[IP]:[PORT:8096]/
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/MediaBrowser/Emby.Resources/master/images/Logos/logoicon.png
+    restart: unless-stopped
+    networks:
+      - backend
+networks:
+  backend:
+    external: true

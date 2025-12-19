@@ -16,9 +16,8 @@ services:
       # - CLI_ARGS= #optional
       - DUPLICATI__WEBSERVICE_PASSWORD=${WEBPASSWORD}
     volumes:
-      - /mnt/cache/appdata/duplicati/config:/config
-      - /mnt/cache/appdata/duplicati/ssh_keys:/root/.ssh
-      - /mnt/user/Backup/duplicati/:/backups
+      - ./duplicati/config:/config
+      # - ./duplicati/ssh_keys:/root/.ssh
       - /mnt/user/:/source
     labels:
       - traefik.enable=true

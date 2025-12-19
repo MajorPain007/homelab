@@ -10,10 +10,10 @@ services:
     environment:
       - TZ=Europe/Berlin
     volumes:
-      - /mnt/cache/appdata/configarr/config:/app/config
-      - /mnt/cache/appdata/configarr/repos:/app/repos
-      - /mnt/cache/appdata/configarr/cfs:/app/cfs
-      - /mnt/cache/appdata/configarr/templates:/app/templates
+      - ./configarr/config:/app/config
+      - ./configarr/repos:/app/repos
+      - ./configarr/cfs:/app/cfs
+      - ./configarr/templates:/app/templates
     networks:
       - backend
     labels:

@@ -17,7 +17,7 @@ services:
     volumes:
       - /mnt/user/:/data1:rw
       - /mnt/cache/Daten/:/data2:rw
-      - /mnt/cache/appdata/syncthing:/config:rw
+      - ./syncthing:/config:rw
     networks:
       - backend
     labels:

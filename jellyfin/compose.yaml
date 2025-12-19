@@ -15,7 +15,7 @@ services:
       - PGID=${ENV_PGID}
       - TZ=${TIMEZONE}
     volumes:
-      - /mnt/cache/appdata/jellyfin:/config
+      - ./jellyfin:/config
       - ${DATA_DIR}:/data/media
       - ${TMP_TRANSCODE}:/transcode
     networks:

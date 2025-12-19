@@ -14,7 +14,7 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - /mnt/cache/appdata/signal-api:/home/.local/share/signal-cli
+      - ./signal-api:/home/.local/share/signal-cli
     networks:
       - backend
     labels:

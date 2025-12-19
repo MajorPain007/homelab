@@ -15,8 +15,8 @@ services:
       - frontend
     volumes:
       - ${DATA_DIR}:/srv
-      - /mnt/cache/appdata/filebrowser:/config
-      - /mnt/cache/appdata/filebrowser:/database
+      - ./filebrowser:/config
+      - ./filebrowser:/database
     labels:
       - traefik.enable=true
       - traefik.docker.network=frontend

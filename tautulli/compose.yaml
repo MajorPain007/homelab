@@ -11,7 +11,7 @@ services:
       - PGID=${ENV_PGID}
       - TZ=${TIMEZONE}
     volumes:
-      - /mnt/cache/appdata/tautulli:/config
+      - ./tautulli:/config
     networks:
       - frontend
     labels:

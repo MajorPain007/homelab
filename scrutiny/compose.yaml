@@ -1,8 +1,8 @@
 services:
   scrutiny:
-    container_name: ${SERVICES_SCRUTINY_CONTAINER_NAME:-scrutiny}
-    hostname: ${SERVICES_SCRUTINY_HOSTNAME:-scrutiny}
-    image: ${SERVICES_SCRUTINY_IMAGE:-ghcr.io/analogj/scrutiny}:${SERVICES_SCRUTINY_IMAGE_VERSION:-master-omnibus}
+    container_name: scrutiny
+    hostname: scrutiny
+    image: ghcr.io/analogj/scrutiny:master-omnibus
     cap_add:
       - SYS_RAWIO
     ports:

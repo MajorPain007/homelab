@@ -1,0 +1,27 @@
+services:
+  linkwarden:
+    restart: unless-stopped
+    image: ghcr.io/linkwarden/linkwarden:latest
+    container_name: linkwarden
+    env_file: .env
+    ports:
+      - 3013:3000
+    environment:
+      - DATABASE_URL=postgresql://${DATABASE_USER}:${DATABASE_PW}@postgresql18:5432/${DATABASE_NAME}
+    volumes:
+      - ./linkwarden:/data/data
+    networks:
+      - backend
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.linkwarden.entrypoints=homesec
+      - traefik.http.routers.linkwarden.rule=(Host(`linkwarden.${DOMAIN}`))
+      - traefik.http.services.linkwarden.loadbalancer.server.port=3000
+      - traefik.docker.network=backend
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:3013]
+      - net.unraid.docker.icon=
+      - net.unraid.docker.shell=bash
+networks:
+  backend:
+    external: true

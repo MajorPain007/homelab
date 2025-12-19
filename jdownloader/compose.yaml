@@ -28,11 +28,11 @@ services:
       - JDOWNLOADER_MAX_MEM=
     healthcheck:
       disable: true
-    # ports:
-    #   - 7807:5800/tcp
-    #   - 7907:5900/tcp
+    ports:
+      - 7807:5800/tcp
+      - 7907:5900/tcp
     volumes:
-      - /mnt/cache/appdata/JDownloader2:/config
+      - ./JDownloader2:/config
       - ${DATA_DIR}:/output:rw
     networks:
       - backend

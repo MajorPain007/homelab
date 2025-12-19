@@ -2,97 +2,32 @@ services:
   traefik:
     container_name: traefik
     hostname: traefik
-    image: traefik:latest
+    image: traefik:3
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
     depends_on:
       - crowdsec
-    ports:
-      - 80:80
-      - 443:443
-      - 81:81
-      - 444:444
+    # ports:
+    #   - 80:80
+    #   - 443:443
+    #   - 81:81
+    #   - 444:444
+
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /mnt/cache/appdata/traefik/config:/etc/traefik
-      - /mnt/cache/appdata/traefik/logs:/var/log/traefik
+      - ./traefik:/etc/traefik
+      - ./traefik/logs:/var/log/traefik
     environment:
       - TZ=${TZ}
       - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
-      # --- Konfiguration als Umgebungsvariablen ---
-      - TRAEFIK_GLOBAL_SENDANONYMOUSUSAGE=false
-      - TRAEFIK_GLOBAL_CHECKNEWVERSION=false
-      - TRAEFIK_SERVERSTRANSPORT_INSECURESKIPVERIFY=true
-      # Log & Accesslog
-      - TRAEFIK_LOG_LEVEL=INFO
-      # - TRAEFIK_LOG_FILEPATH=/var/log/traefik/traefik.log
-      - TRAEFIK_ACCESSLOG=true
-      # - TRAEFIK_ACCESSLOG_FILEPATH=/var/log/traefik/access.log
-      - TRAEFIK_ACCESSLOG_FORMAT=json
-      - TRAEFIK_ACCESSLOG_BUFFERINGSIZE=0
-      - TRAEFIK_ACCESSLOG_FILTERS_STATUSCODES=200-299,400-599
-      - TRAEFIK_ACCESSLOG_FILTERS_RETRYATTEMPTS=true
-      - TRAEFIK_ACCESSLOG_FILTERS_MINDURATION=10ms
-      - TRAEFIK_ACCESSLOG_FIELDS_HEADERS_DEFAULTMODE=drop
-      - TRAEFIK_ACCESSLOG_FIELDS_HEADERS_NAMES_USER-AGENT=keep
-      - TRAEFIK_ACCESSLOG_FIELDS_HEADERS_NAMES_AUTHORIZATION=drop
-      - TRAEFIK_ACCESSLOG_FIELDS_HEADERS_NAMES_CONTENT-TYPE=keep
-      # Provider (Docker & File)
-      - TRAEFIK_PROVIDERS_DOCKER=true
-      - TRAEFIK_PROVIDERS_DOCKER_EXPOSEDBYDEFAULT=false
-      - TRAEFIK_PROVIDERS_DOCKER_ENDPOINT=unix:///var/run/docker.sock
-      - TRAEFIK_PROVIDERS_DOCKER_NETWORK=frontend
-      - TRAEFIK_PROVIDERS_DOCKER_DEFAULTRULE=Host(`{{ .Name }}.{{ index .Labels "customLabel"}}`)
-      - TRAEFIK_PROVIDERS_FILE_DIRECTORY=/etc/traefik/conf
-      - TRAEFIK_PROVIDERS_FILE_WATCH=true
-      # API & Dashboard
-      - TRAEFIK_API_INSECURE=false
-      - TRAEFIK_API_DASHBOARD=true
-      # Certificate Resolver (LetsEncrypt via cloudflare)
-      - TRAEFIK_CERTIFICATESRESOLVERS_LETSENCRYPT_ACME_DNSCHALLENGE=true
-      - TRAEFIK_CERTIFICATESRESOLVERS_LETSENCRYPT_ACME_DNSCHALLENGE_PROVIDER=cloudflare
-      - TRAEFIK_CERTIFICATESRESOLVERS_LETSENCRYPT_ACME_DNSCHALLENGE_RESOLVERS=1.1.1.1:53,1.0.0.1:53
-      - TRAEFIK_CERTIFICATESRESOLVERS_LETSENCRYPT_ACME_DNSCHALLENGE_PROPAGATION_DELAYBEFORECHECKS=20
-      - TRAEFIK_CERTIFICATESRESOLVERS_LETSENCRYPT_ACME_EMAIL=${EMAIL}
-      - TRAEFIK_CERTIFICATESRESOLVERS_LETSENCRYPT_ACME_STORAGE=/etc/traefik/certs/acme.json
-      - TRAEFIK_CERTIFICATESRESOLVERS_LETSENCRYPT_ACME_CERTIFICATESDURATION=2160
-      - TRAEFIK_CERTIFICATESRESOLVERS_LETSENCRYPT_ACME_KEYTYPE=EC384
-      - TRAEFIK_CERTIFICATESRESOLVERS_LETSENCRYPT_ACME_CASERVER=https://acme-v02.api.letsencrypt.org/directory
-      # Entrypoints External
-      - TRAEFIK_ENTRYPOINTS_WEB_ADDRESS=:81
-      - TRAEFIK_ENTRYPOINTS_WEBSECURE_ADDRESS=:444
-      - TRAEFIK_ENTRYPOINTS_WEBSECURE_HTTP_MIDDLEWARES=basic-chain@file,crowdsec@file
-      - TRAEFIK_ENTRYPOINTS_WEB_HTTP_REDIRECTIONS_ENTRYPOINT_TO=websecure
-      - TRAEFIK_ENTRYPOINTS_WEB_HTTP_REDIRECTIONS_ENTRYPOINT_SCHEME=https
-      - TRAEFIK_ENTRYPOINTS_WEB_HTTP_REDIRECTIONS_ENTRYPOINT_PERMANENT=true
-      - TRAEFIK_ENTRYPOINTS_WEBSECURE_HTTP3=true
-      - TRAEFIK_ENTRYPOINTS_WEBSECURE_HTTP3_ADVERTISEDPORT=444
-      - TRAEFIK_ENTRYPOINTS_WEBSECURE_HTTP_TLS=true
-      - TRAEFIK_ENTRYPOINTS_WEBSECURE_HTTP_TLS_CERTRESOLVER=letsencrypt
-      - TRAEFIK_ENTRYPOINTS_WEBSECURE_HTTP_TLS_DOMAINS_0_MAIN=${DOMAIN}
-      - TRAEFIK_ENTRYPOINTS_WEBSECURE_HTTP_TLS_DOMAINS_0_SANS=*.${DOMAIN}
-      # Entrypoints Internal
-      - TRAEFIK_ENTRYPOINTS_HOME_ADDRESS=:80
-      - TRAEFIK_ENTRYPOINTS_HOMESEC_ADDRESS=:443
-      - TRAEFIK_ENTRYPOINTS_HOMESEC_HTTP_MIDDLEWARES=basic-chain@file
-      - TRAEFIK_ENTRYPOINTS_HOME_HTTP_REDIRECTIONS_ENTRYPOINT_TO=homesec
-      - TRAEFIK_ENTRYPOINTS_HOME_HTTP_REDIRECTIONS_ENTRYPOINT_SCHEME=https
-      - TRAEFIK_ENTRYPOINTS_HOME_HTTP_REDIRECTIONS_ENTRYPOINT_PERMANENT=true
-      - TRAEFIK_ENTRYPOINTS_HOME_OBSERVABILITY_ACCESSLOGS=false
-      - TRAEFIK_ENTRYPOINTS_HOMESEC_OBSERVABILITY_ACCESSLOGS=false
-      - TRAEFIK_ENTRYPOINTS_HOMESEC_HTTP3=true
-      - TRAEFIK_ENTRYPOINTS_HOMESEC_HTTP3_ADVERTISEDPORT=443
-      - TRAEFIK_ENTRYPOINTS_HOMESEC_HTTP_TLS=true
-      - TRAEFIK_ENTRYPOINTS_HOMESEC_HTTP_TLS_CERTRESOLVER=letsencrypt
-      - TRAEFIK_ENTRYPOINTS_HOMESEC_HTTP_TLS_DOMAINS_0_MAIN=${DOMAIN}
-      - TRAEFIK_ENTRYPOINTS_HOMESEC_HTTP_TLS_DOMAINS_0_SANS=*.${DOMAIN}
-      # Plugins
-      - TRAEFIK_EXPERIMENTAL_PLUGINS_CROWDSEC-BOUNCER-TRAEFIK-PLUGIN_MODULENAME=github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin
-      - TRAEFIK_EXPERIMENTAL_PLUGINS_CROWDSEC-BOUNCER-TRAEFIK-PLUGIN_VERSION=v1.3.5
+      - DOMAIN=${DOMAIN}
+      - EMAIL=${EMAIL}
     networks:
-      - frontend
-      - backend
+      lan_access:
+        ipv4_address: 192.168.20.2
+      frontend: null
+      backend: null
     labels:
       - crowdsec.enable=true
       - crowdsec.labels.type=traefik
@@ -100,10 +35,9 @@ services:
       - traefik.docker.network=frontend
       - traefik.http.routers.traefik.entrypoints=homesec
       - traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`)
-      # traefik.http.services.traefik.loadbalancer.server.port: "8080"
       - traefik.http.routers.traefik.service=api@internal
       - net.unraid.docker.managed=composeman
-      - net.unraid.docker.webui=http://[IP]:[PORT:8183]/
+      - net.unraid.docker.webui=http://192.168.20.2:8080/dashboard/
       - net.unraid.docker.icon=https://raw.githubusercontent.com/ibracorp/unraid-templates/master/icons/traefik.png
       - net.unraid.docker.shell=sh
   authelia:
@@ -114,7 +48,7 @@ services:
     security_opt:
       - no-new-privileges:true
     volumes:
-      - /mnt/cache/appdata/authelia:/config
+      - ./authelia:/config
     networks:
       - frontend
     expose:
@@ -156,18 +90,19 @@ services:
       - 6060:6060/tcp
       - 7422:7422/tcp
     volumes:
-      - /mnt/cache/appdata/crowdsec/data:/var/lib/crowdsec/data
-      - /mnt/cache/appdata/crowdsec/config:/etc/crowdsec
-      - /mnt/cache/appdata/traefik/logs:/var/log/traefik/:ro
+      - ./crowdsec/data:/var/lib/crowdsec/data
+      - ./crowdsec/config:/etc/crowdsec
+      - ./traefik/logs:/var/log/traefik/:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /var/log/auth.log/:/var/log/auth.log:ro
       - /var/log/syslog:/var/log/syslog:ro
-      - ./acquis.yaml:/etc/crowdsec/acquis.yaml
-      - ./http.yaml:/etc/crowdsec/notifications/http.yaml
-      - ./profiles.yaml:/etc/crowdsec/profiles.yaml
     environment:
       - TZ=${TZ}
-      - COLLECTIONS=crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/appsec-generic-rules crowdsecurity/appsec-virtual-patching crowdsecurity/appsec-crs crowdsecurity/sshd crowdsecurity/linux crowdsecurity/base-http-scenarios firix/authentik Dominic-Wagner/vaultwarden
+      - COLLECTIONS=crowdsecurity/traefik crowdsecurity/http-cve
+        crowdsecurity/appsec-generic-rules crowdsecurity/appsec-virtual-patching
+        crowdsecurity/appsec-crs crowdsecurity/sshd crowdsecurity/linux
+        crowdsecurity/base-http-scenarios firix/authentik
+        Dominic-Wagner/vaultwarden
       - PUID=${ENV_PUID}
       - PGID=${ENV_PGID}
     networks:
@@ -182,4 +117,7 @@ networks:
   frontend:
     external: true
   backend:
+    external: true
+  lan_access:
+    name: br0
     external: true

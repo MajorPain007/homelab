@@ -1,0 +1,29 @@
+services:
+  zerobyte:
+    image: ghcr.io/nicotsx/zerobyte:v0.19
+    container_name: zerobyte
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    cap_add:
+      - SYS_ADMIN
+    ports:
+      - 4096:4096
+    devices:
+      - /dev/fuse:/dev/fuse
+    environment:
+      - TZ=Europe/Berlin
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./zerobyte:/var/lib/zerobyte
+      - /mnt/user:/mnt/user:ro
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:4096]
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/nicotsx/zerobyte/refs/heads/main/public/images/favicon/web-app-manifest-192x192.png
+      - net.unraid.docker.shell=sh
+    networks:
+      - backend
+networks:
+  backend:
+    external: true

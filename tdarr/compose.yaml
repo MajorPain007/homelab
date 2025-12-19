@@ -26,20 +26,13 @@ services:
       - 8265:8265 # webUI port
       - 8264:8264 # Node Port
     volumes:
-      - /mnt/cache/appdata/tdarr/server:/app/server
-      - /mnt/cache/appdata/tdarr/configs:/app/configs
-      - /mnt/cache/appdata/tdarr/logs:/app/logs
+      - ./tdarr/server:/app/server
+      - ./tdarr/configs:/app/configs
+      - ./tdarr/logs:/app/logs
       - ${DATA_DIR}/:/data/media
     networks:
       - backend
     labels:
-      # - homepage.group=Download
-      # - homepage.name=Tdarr
-      # - homepage.icon=/images/png/tdarr.png
-      # - homepage.href=https://tdarr.${DOMAIN}
-      # - homepage.weight=11
-      # - homepage.widget.type=tdarr
-      # - homepage.widget.url=http://tdarr:8265
       - traefik.enable=true
       - traefik.docker.network=backend
       - traefik.http.routers.tdarr.entrypoints=homesec

@@ -14,8 +14,8 @@ services:
       AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_POSTGRESQL__NAME:-authentik}
       AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_POSTGRESQL__PASSWORD}
     volumes:
-      - /mnt/cache/appdata/authentik/media:/media
-      - /mnt/cache/appdata/authentik/custom-templates:/templates
+      - ./authentik/media:/media
+      - ./authentik/custom-templates:/templates
     env_file:
       - .env
     ports:
@@ -63,9 +63,9 @@ services:
     user: 99:100
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /mnt/cache/appdata/authentik/media:/media
-      - /mnt/cache/appdata/authentik/certs:/certs
-      - /mnt/cache/appdata/authentik/custom-templates:/templates
+      - ./authentik/media:/media
+      - ./authentik/certs:/certs
+      - ./authentik/custom-templates:/templates
     env_file:
       - .env
     # depends_on:

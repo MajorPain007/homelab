@@ -13,6 +13,10 @@ services:
     networks:
       - backend
     labels:
+      - traefik.enable=true
+      - traefik.docker.network=backend
+      - traefik.http.routers.dozzle.entrypoints=homesec
+      - traefik.http.routers.dozzle.rule=Host(`dozzle.${DOMAIN}`)
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.webui=http://[IP]:[PORT:8080]/
       - net.unraid.docker.icon=https://raw.githubusercontent.com/selfhosters/unRAID-CA-templates/master/templates/img/dozzle.png

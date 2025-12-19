@@ -5,6 +5,15 @@ services:
     image: postgres:17
     container_name: postgresql17
     hostname: postgresql17
+    shm_size: 128mb
+    healthcheck:
+      # Prüft alle 10s, ob die DB antwortet
+      test:
+        - CMD-SHELL
+        - sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'
+      interval: 10s
+      timeout: 5s
+      retries: 5
     ports:
       - 5432:5432/tcp
     environment:
@@ -13,7 +22,7 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_DB=${POSTGRES_DB}
     volumes:
-      - /mnt/cache/appdata/postgresql17:/var/lib/postgresql/data:rw
+      - ./postgresql17:/var/lib/postgresql/data:rw
     networks:
       - backend
     labels:

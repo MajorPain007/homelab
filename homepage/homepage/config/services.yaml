@@ -1,0 +1,280 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/en/configs/services
+
+- Player:
+    - Unraid:
+        href: https://skynet.{{HOMEPAGE_VAR_DOMAIN}}
+        icon: /images/png/unraid.png
+        widget:
+            type: unraid
+            url: https://192.168.20.3
+            key: {{HOMEPAGE_VAR_UNRAID_KEY}}
+            fields: ["cpu", "memoryUsed", "notifications", "arrayUsedSpace"]
+
+    - Jellyfin:
+        href: https://jf.{{HOMEPAGE_VAR_DOMAIN}}/
+        # description: Jellyfin
+        icon: /images/png/jellyfin.png
+        server: my-docker
+        container: jellyfin
+        widget:
+            type: jellyfin
+            url: http://jellyfin:8096
+            key: {{HOMEPAGE_VAR_JELLYFIN_KEY}}
+            enableBlocks: true # optional, defaults to false
+            enableNowPlaying: true # optional, defaults to true
+            enableUser: true # optional, defaults to false
+    
+    - Plex:
+        href: https://plex.{{HOMEPAGE_VAR_DOMAIN}}/web/index.html#!
+        # description: Plex
+        icon: /images/png/plex.png
+        server: my-docker
+        container: plex
+        widgets:
+          - type: tautulli
+            url: http://tautulli:8181
+            key: {{HOMEPAGE_VAR_TAUTULLI_KEY}}
+            enableUser: true # optional, defaults to false
+            showEjetsodeNumber: true # optional, defaults to false
+            expandOneStreamToTwoRows: false
+          - type: plex
+            url: http://plex:32400
+            key: {{HOMEPAGE_VAR_PLEX_KEY}}
+
+# - Media:
+    - Kavita:
+        href: https://eb.{{HOMEPAGE_VAR_DOMAIN}}/
+        # description: Kavita
+        icon: /images/png/kavita.png
+        server: my-docker
+        container: kavita
+        widget:
+            type: kavita
+            url: http://kavita:5000
+            username: {{HOMEPAGE_VAR_KAVITA_USER}}
+            password: {{HOMEPAGE_VAR_KAVITA_KEY}}
+
+    - Audiobook:
+        href: https://ab.{{HOMEPAGE_VAR_DOMAIN}}
+        # description: audiobookshelf
+        icon: /images/png/audiobookshelf.png
+        server: my-docker
+        container: audiobookshelf
+        widget:
+            type: audiobookshelf
+            url: http://audiobookshelf:80
+            key: {{HOMEPAGE_VAR_AUDIOBOOKSHELF_KEY}}
+
+    - Crowdsec:
+        icon: /images/png/crowdsec.png
+        server: my-docker
+        container: crowdsec
+        widget:
+            type: crowdsec
+            url: http://crowdsec:8080
+            username: localhost # machine_id in crowdsec
+            password: {{HOMEPAGE_VAR_CROWDSEC_KEY}}
+
+- Docker:   
+    - jetKVM:
+        href: https://jetkvm.{{HOMEPAGE_VAR_DOMAIN}}
+        # description: JetKVM
+        icon: /images/png/pikvm.png
+    
+    - Krusader:
+        href: https://krusader.{{HOMEPAGE_VAR_DOMAIN}}/vnc.html?resize=remote&host=krusader.{{HOMEPAGE_VAR_DOMAIN}}&port=443&autoconnect=1
+        # description: Krusader
+        icon: /images/png/krusader.png
+        server: my-docker
+        container: krusader
+
+    - Dockge:
+        href: http://192.168.20.3:5001
+        # description: dockge
+        icon: /images/png/dockge.png
+        server: my-docker
+        container: dockge-dockge-1
+
+    - gotify:
+        href: https://gotify.{{HOMEPAGE_VAR_DOMAIN}}/       
+        # description: gotify
+        icon: /images/png/gotify.png
+        server: my-docker
+        container: gotify
+
+    - Dozzle:
+        href: https://do.{{HOMEPAGE_VAR_DOMAIN}}/       
+        # description: dozzle
+        icon: /images/png/dozzle.png
+        server: my-docker
+        container: dozzle
+
+- Network:
+    - Unifi:
+        href: http://192.168.1.1
+        icon: /images/png/unifi.png
+        server: my-docker
+        widget:
+            type: unifi
+            url: https://192.168.20.1
+            # site: Site Name # optional
+            # username: user
+            # password: pass
+            key: {{HOMEPAGE_VAR_UNIFI_KEY}} # required if using API key instead of username/password
+
+# -- Speedtest Tracker End -- #
+    - Traefik:
+       href: https://traefik.{{HOMEPAGE_VAR_DOMAIN}}/
+    #    description: Traefik
+       icon: /images/png/traefik.png
+       server: my-docker
+       container: traefik
+       widget:
+            type: traefik
+            url: http://traefik:8080
+            #username: username # optional
+            #password: password # optional
+
+    - AdGuard:
+        href: http://192.168.20.254:3000
+        # description: AdGuard
+        icon: /images/png/adguard-home.png
+        # server: my-docker
+        # container: AdGuard-Home
+        widget:
+            type: adguard
+            url: http://192.168.20.254:3000
+            username: 
+            password: 
+
+- Download:
+    - SABnzbd:
+        href: https://sabnzbd.{{HOMEPAGE_VAR_DOMAIN}}/
+        # description: SABnzbd
+        icon: /images/png/sabnzbd.png
+        server: my-docker
+        container: sabnzbd
+        widget:
+            type: sabnzbd
+            url: http://sabnzbd:8080
+            key: {{HOMEPAGE_VAR_SABNZBD_KEY}}
+
+    - JDownloader:
+        href: https://jd.{{HOMEPAGE_VAR_DOMAIN}}/
+        # description: JDownloader
+        icon: /images/png/jdownloader.png
+        server: my-docker
+        container: jdownloader
+        widget:
+            type: jdownloader
+            url: http://jdownloader:5800
+            username: {{HOMEPAGE_VAR_JDOWNLOADER_USER}}
+            password: {{HOMEPAGE_VAR_JDOWNLOADER_KEY}}
+            client: docker
+
+# - ARR:
+    - Sonarr:
+        href: https://sonarr.{{HOMEPAGE_VAR_DOMAIN}}/
+        # description: Sonarr
+        icon: /images/png/sonarr.png
+        server: my-docker
+        container: sonarr
+        widget:
+            type: sonarr
+            url: http://sonarr:8989
+            key: {{HOMEPAGE_VAR_SONARR_KEY}}
+            fields: ["wanted", "queued", "series"]
+            enableQueue: false # optional, defaults to false
+ 
+    - Sonarr_AS:
+        href: https://sonarr-as.{{HOMEPAGE_VAR_DOMAIN}}/
+        # description: Sonarr
+        icon: /images/png/sonarr.png
+        server: my-docker
+        container: sonarr_as
+        widget:
+            type: sonarr
+            url: http://sonarr_as:8989
+            key: {{HOMEPAGE_VAR_SONARR_AS_KEY}}
+            fields: ["wanted", "queued", "series"]
+            enableQueue: false # optional, defaults to false
+
+    - Radarr:
+        href: https://radarr.{{HOMEPAGE_VAR_DOMAIN}}/
+        # description: Radarr
+        icon: /images/png/radarr.png
+        server: my-docker
+        container: radarr
+        widget:
+            type: radarr
+            url: http://radarr:7878
+            key: {{HOMEPAGE_VAR_RADARR_KEY}}
+            fields: ["wanted", "queued", "movies"]
+            enableQueue: false # optional, defaults to false
+
+    - Radarr_kids:
+        href: https://radarr-kids.{{HOMEPAGE_VAR_DOMAIN}}/
+        # description: Radarr
+        icon: /images/png/radarr.png
+        server: my-docker
+        container: radarr_kids
+        widget:
+            type: radarr
+            url: http://radarr_kids:7878
+            key: {{HOMEPAGE_VAR_RADARR_KIDS_KEY}}
+            fields: ["wanted", "queued", "movies"]
+            enableQueue: false # optional, defaults to false
+    
+    - Prowlarr:
+        href: https://prowlarr.{{HOMEPAGE_VAR_DOMAIN}}/
+        # description: prowlarr
+        icon: /images/png/prowlarr.png
+        server: my-docker
+        container: prowlarr
+        widget:
+            type: prowlarr
+            url: http://prowlarr:9696
+            key: {{HOMEPAGE_VAR_PROWLARR_KEY}}
+            fields: ["numberOfGrabs", "numberOfQueries"]
+
+    - Jellyseerr:
+        href: https://js.{{HOMEPAGE_VAR_DOMAIN}}/
+        # description: Jellyseerr
+        icon: /images/png/jellyseerr.png
+        server: my-docker
+        container: jellyseerr
+        widget:
+            type: jellyseerr
+            url: http://jellyseerr:5055
+            key: {{HOMEPAGE_VAR_JELLYSEERR_KEY}}
+ 
+- Kalender:
+    - Calendar:
+        icon: nextcloud-calendar.png
+        # description: Übersicht
+        widget:
+            type: calendar
+            view: monthly # Displays the calendar in monthly view
+            maxEvents: 20 # Shows up to 20 events
+            showTime: true # Displays the time of events happening today
+            integrations:
+              - type: sonarr
+                service_group: Download # Muss exakt matchen mit "- Download:" weiter oben
+                service_name: Sonarr    # Muss exakt matchen mit "- Sonarr:"
+                color: red 
+              - type: sonarr
+                service_group: Download 
+                service_name: Sonarr_AS
+                color: blue 
+              - type: radarr
+                service_group: Download 
+                service_name: Radarr
+                color: yellow 
+              - type: radarr
+                service_group: Download 
+                service_name: Radarr_kids
+                color: crimson
+            
+# - Server Stats:
