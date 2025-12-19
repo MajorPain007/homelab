@@ -30,8 +30,9 @@ services:
       - TZ=${TIMEZONE}
       - PLEX_CLAIM=${PLEX_CLAIM}
       - ADVERTISE_IP=${ADVERTISE_IP}
+      - ALLOWED_NETWORKS=${ALLOWED_NETWORKS}
     volumes:
-      - /mnt/cache/appdata/Plex-Media-Server:/config
+      - ./Plex-Media-Server:/config
       - ${DATA_DIR}:/media:ro
       - ${TMP_TRANSCODE}:/transcode
     networks:

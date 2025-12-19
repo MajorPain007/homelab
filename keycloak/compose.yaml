@@ -1,0 +1,39 @@
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    command: start-dev
+    environment:
+      KC_HOSTNAME: keycloak.${DOMAIN}
+      KC_HOSTNAME_ADMIN: null
+      KC_HOSTNAME_STRICT: false
+      KC_DB: postgres
+      KC_DB_URL_HOST: ${KC_DB_URL_HOST}
+      KC_DB_USERNAME: ${DB_USER}
+      KC_DB_PASSWORD: ${DB_PW}
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_ADMIN}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_ADMIN_PW}
+      KEYCLOAK_EXTRA_ARGS: null
+      KC_CACHE: local
+      KC_PROXY_HEADERS: xforwarded
+      KC_HTTP_ENABLED: true
+    ports:
+      - 8085:8080
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=frontend
+      - traefik.http.routers.keycloak.entrypoints=homesec
+      - traefik.http.routers.keycloak.rule=Host(`keycloak.${DOMAIN}`)
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:8085]/files/
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/jcesclapez/unraid-templates/refs/heads/main/keycloak/keycloak.png
+      - net.unraid.docker.shell=sbah
+    networks:
+      - frontend
+      - backend
+networks:
+  frontend:
+    external: true
+  backend:
+    external: true

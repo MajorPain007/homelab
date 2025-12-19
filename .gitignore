@@ -1,1 +1,14 @@
+# General
 **/.DS_Store
+**/.env
+!**/.env.example
+*.log
+
+# Secrets and Keys
+**/*.key
+**/*.cert
+**/*.pem
+**/ssh_keys/
+**/borg_keys/
+**/id_rsa
+**/id_rsa.pub

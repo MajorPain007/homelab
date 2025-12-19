@@ -13,8 +13,8 @@ services:
     volumes:
       - ${DATA_DIR}:/audiobooks
       - ${EBOOK_DIR}:/ebooks
-      - /mnt/cache/appdata/audiobookshelf:/config
-      - /mnt/cache/appdata/audiobookshelf/metadata:/metadata
+      - ./audiobookshelf:/config
+      - ./audiobookshelf/metadata:/metadata
     labels:
       - traefik.enable=true
       - traefik.http.routers.audiobookshelf.entrypoints=websecure,homesec

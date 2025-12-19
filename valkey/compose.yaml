@@ -1,0 +1,20 @@
+services:
+  valkey:
+    image: valkey/valkey:latest
+    container_name: valkey
+    hostname: valkey
+    restart: unless-stopped
+    command: valkey-server --save 60 1 --loglevel warning --requirepass "${VALKEY_PASSWORD}"
+    ports:
+      - 6378:6379/tcp
+    networks:
+      - backend
+    volumes:
+      - ./valkey:/data
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/SnuK87/unraid-templates/refs/heads/main/icons/valkey-logo.png
+      - net.unraid.docker.shell=bash
+networks:
+  backend:
+    external: true

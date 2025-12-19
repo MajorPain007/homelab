@@ -1,0 +1,79 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/en/configs/settings
+
+title: Fuchsbau
+language: de
+theme: dark
+target: _self # Possible options include _blank, _self, and _top
+# color: zinc
+color: slate
+# headerStyle: underlined
+headerStyle: boxed
+statusStyle: "dot"
+useEqualHeights: true
+hideVersion: true
+hideErrors: true
+disableCollapse: true
+
+# Site Assets
+base: https://ho.{{HOMEPAGE_VAR_DOMAIN}}
+favicon: /icons/favicon-small.png
+background: /images/background/wallhaven-gpzve7.png
+backgroundOpacity: 0.5
+
+
+providers:
+  openweathermap: openweathermapapikey
+  weatherapi: weatherapiapikey
+
+
+layout:
+  Player:
+    tab: Media
+    header: false
+    style: row
+    columns: 4
+    icon: mdi-video
+    # disableCollape: true
+    # useEqualHeights: true
+  Media:
+    tab: Media
+    style: row
+    columns: 4
+    header: false
+    icon: mdi-video-vintage
+  Download:
+    tab: Media
+    style: row
+    columns: 4
+    icon: mdi-download
+  Kalender:
+    tab: Media
+    # style: row
+    # columns: 4
+    icon: mdi-video-vintage
+  ARR:
+    tab: Media
+    style: row
+    columns: 4
+    icon: mdi-download
+  Docker:
+    tab: Docker & Network
+    style: row
+    columns: 4
+    icon: mdi-docker
+  Network:
+    tab: Docker & Network
+    style: row
+    columns: 3
+    icon: mdi-network
+  Entertainment:
+    tab: Bookmark & Info
+    style: row
+    columns: 3
+  Server Stats:
+    tab: Bookmark & Info
+    style: row
+    columns: 3
+

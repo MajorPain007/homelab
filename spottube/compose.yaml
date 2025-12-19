@@ -12,7 +12,7 @@ services:
       - thread_limit=2
       - artist_track_selection=all
     volumes:
-      - /mnt/cache/appdata/spottube:/spottube/config # Pfad für die Konfiguration
+      - ./spottube:/spottube/config # Pfad für die Konfiguration
       - /mnt/cache/Downloads/spottube:/spottube/downloads # Pfad für die Downloads 
       - /etc/localtime:/etc/localtime:ro
     ports:

@@ -1,0 +1,28 @@
+services:
+  l2xu:
+    image: ghcr.io/l2xu/betterbahn:latest
+    container_name: betterbahn
+    restart: unless-stopped
+    user: 99:100
+    ports:
+      - 3010:3000/tcp
+    read_only: true
+    tmpfs:
+      - /tmp
+    privileged: false
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges=true
+    environment:
+      - TZ=Europe/Berlin
+    labels:
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:3010]/
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/BetterBahn/betterbahn/refs/heads/main/app/favicon.ico
+      - net.unraid.docker.shell=sh
+    networks:
+      - backend
+networks:
+  backend:
+    external: true

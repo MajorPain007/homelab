@@ -11,7 +11,7 @@ services:
     # ports:
     #   - '89:80/tcp'
     volumes:
-      - /mnt/cache/appdata/ntfy/ntfy:/config:rw
+      - ./ntfy/ntfy:/config:rw
     environment:
       - TZ=Europe/Berlin
       - NTFY_BASE_URL=https://ntfy.local

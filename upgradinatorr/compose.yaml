@@ -17,7 +17,7 @@ services:
       - PUID=99
       - PGID=100
     volumes:
-      - /mnt/cache/appdata/upgradinatorr/scripts:/scripts
+      - ./upgradinatorr/scripts:/scripts
     command: pwsh /scripts/Upgradinatorr/upgradinatorr.ps1 -ApplicationList Radarr
     networks:
       - backend

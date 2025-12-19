@@ -3,16 +3,26 @@ http:
     basic-chain:
       chain:
         middlewares:
-          - authelia@docker
+          # - authelia@docker
           # - crowdsec
+          # - waf
+          - securityHeaders
+          # - ratelimit
+          - gzip
+    sec-chain:
+      chain:
+        middlewares:
+          - authelia@docker
+          - crowdsec
+          - waf
           - securityHeaders
           - ratelimit
           - gzip
-
+    
     ratelimit:
       rateLimit:
-        average: 50
-        burst: 100
+        average: 20
+        burst: 50
 
     gzip:
       compress: {}
@@ -24,6 +34,15 @@ http:
           - "10.0.0.0/8"
           - "192.168.0.0/16"
 
+    waf:
+      plugin:
+        coraza-http-wasm-traefik:
+          directives:
+            - SecRuleEngine On
+            - SecDebugLog /dev/stdout
+            - SecDebugLogLevel 9
+            - SecRule REQUEST_URI "@streq /admin" "id:101,phase:1,log,deny,status:403"
+    
     authelia:
       forwardAuth:
         address: "http://authelia:9091/api/verify?rd=https://auth.example.de"
@@ -85,6 +104,7 @@ http:
         hostsProxyHeaders:
           - "X-Forwarded-Host"
         contentTypeNosniff: true
+        # contentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.plex.tv; style-src 'self' 'unsafe-inline'; img-src * data: blob:; font-src 'self' data:; connect-src 'self' wss: ws: *.plex.tv plex.tv; form-action 'self'; frame-src 'self' *.plex.tv plex.tv; object-src 'none'; frame-ancestors 'self';"
         browserXssFilter: true
         forceSTSHeader: true
         stsIncludeSubdomains: true

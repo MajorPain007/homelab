@@ -7,12 +7,12 @@ services:
     security_opt:
       - no-new-privileges:true
     volumes:
-      - /mnt/cache/appdata/backrest/data:/data
-      - /mnt/cache/appdata/backrest/config:/config
-      - /mnt/cache/appdata/backrest/cache:/cache
-      - /mnt/cache/appdata/backrest/tmp:/tmp
-      - /mnt/cache/appdata/backrest/ssh:/root/.ssh
-      - /mnt/disk8:/userdata # Mount local paths to backup
+      - ./backrest/data:/data
+      - ./backrest/config:/config
+      - ./backrest/cache:/cache
+      - ./backrest/tmp:/tmp
+      - ./backrest/ssh:/root/.ssh
+      - /mnt/user:/userdata # Mount local paths to backup
       #- /mnt/user/Backup/unraid:/repos # Mount local repos (optional for remote storage)
     environment:
       - BACKREST_DATA=/data

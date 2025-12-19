@@ -10,7 +10,7 @@ services:
       - 25600:25600/tcp
     volumes:
       - /mnt/user/Daten/Ebooks/:/books:rw
-      - /mnt/cache/appdata/komga:/config:rw
+      - ./komga:/config:rw
     environment:
       - KOMGA_LIBRARIES_SCAN_DIRECTORY_EXCLUSIONS=#recycle,@eaDir
     labels:

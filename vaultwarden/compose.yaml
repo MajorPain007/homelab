@@ -21,7 +21,7 @@ services:
       SMTP_USERNAME: ${SMTP_USERNAME}
       SMTP_PASSWORD: ${SMTP_PASSWORD}
     volumes:
-      - /mnt/cache/appdata/vaultwarden:/data
+      - ./vaultwarden:/data
     networks:
       - frontend
     labels:

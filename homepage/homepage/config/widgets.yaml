@@ -1,0 +1,67 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/en/configs/widgets
+- logo:
+    icon: /images/png/unraid.png
+
+- greeting:
+    text_size: 2xl
+    text: Fuchsbau
+
+- datetime:
+    text_size: 4xl
+    format:
+        timeStyle: short
+        hour12: false
+
+- datetime:
+    text_size: md
+    format:
+        dateStyle: long
+        hour12: false
+
+# - resources:
+#     cpu: true
+#     memory: true
+#     disk: /
+
+- resources:
+#    label: System
+    expanded: true
+    cpu: true
+    memory: true
+    cputemp: true
+    tempmin: 0
+    tempmax: 90
+
+- resources:
+#    label: Cache
+    expanded: true
+    disk: 
+      - /mnt/cache
+
+- resources:
+#    label: Array Disks
+    expanded: true
+    disk:
+      - /mnt/user
+    #   - /mnt/disk2
+    #   - /mnt/disk3
+
+- resources:
+#    label: Network
+    expanded: true
+    network: eth0
+
+# - search:
+#     provider: custom
+#     focus: true
+#     url: https://www.startpage.com/sp/search?query=
+#     target: _self
+
+# - datetime:
+#     text_size: xs
+#     locale: de
+#     format:
+#         timeStyle: short
+#         hourCycle: h23

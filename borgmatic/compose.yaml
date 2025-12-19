@@ -21,10 +21,10 @@ services:
       - /mnt/user:/mnt/user:ro
       - /boot:/boot:ro
       - /mnt/user/Backup/borg_backup/repo:/mnt/borg-repository
-      - /mnt/cache/appdata/borgmatic/cache:/root/.cache/borg
-      - /mnt/cache/appdata/borgmatic/config:/etc/borgmatic.d
-      - /mnt/cache/appdata/borgmatic/borg_keys:/root/.config/borg
-      - /mnt/cache/appdata/borgmatic/ssh_keys:/root/.ssh
+      - ./borgmatic/cache:/root/.cache/borg
+      - ./borgmatic/config:/etc/borgmatic.d
+      - ./borgmatic/borg_keys:/root/.config/borg
+      - ./borgmatic/ssh_keys:/root/.ssh
     networks:
       - backend
     labels:

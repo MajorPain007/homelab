@@ -13,8 +13,8 @@ services:
       - TZ=${TIMEZONE}
       - GOTIFY_REGISTRATION=true
     volumes:
-      - /mnt/cache/appdata/gotify/:/app/data
-      - /mnt/cache/appdata/gotify/config/:/etc/gotify
+      - ./gotify/:/app/data
+      - ./gotify/config/:/etc/gotify
     networks:
       - backend
       - frontend
