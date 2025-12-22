@@ -1,0 +1,46 @@
+delete_unmanaged_custom_formats:
+  enabled: true
+media_management:
+  id: 1
+  autoUnmonitorPreviouslyDownloadedEpisodes: true
+  recycleBin: 
+  recycleBinCleanupDays: 7
+  downloadPropersAndRepacks: doNotPrefer
+  createEmptySeriesFolders: false
+  deleteEmptyFolders: false
+  fileDate: 2
+  rescanAfterRefresh: afterManual
+  setPermissionsLinux: false
+  chmodFolder: 
+  chownGroup: 
+  episodeTitleRequired: never
+  skipFreeSpaceCheckWhenImporting: false
+  minimumFreeSpaceWhenImporting: 100
+  copyUsingHardlinks: false
+  useScriptImport: false
+  importExtraFiles: true
+  extraFileExtensions: srt,sub,idx,vob
+  enableMediaInfo: true
+media_naming_api:
+  id: 1
+  renameEpisodes: true
+  replaceIllegalCharacters: true
+  colonReplacementFormat: 4
+  customColonReplacementFormat: Smart Replace
+  multiEpisodeStyle: 5
+  standardEpisodeFormat: "{Series TitleYear} - S{season:00}E{episode:00} -
+    [{Custom Formats }{Quality Full}]{[MediaInfo
+    VideoDynamicRangeType]}{[Mediainfo AudioCodec}{ Mediainfo
+    AudioChannels]}{[MediaInfo VideoCodec]}{-Release Group}"
+  dailyEpisodeFormat: "{Series TitleYear} - {Air-Date} - [{Custom Formats
+    }{Quality Full}]{[MediaInfo VideoDynamicRangeType]}{[Mediainfo AudioCodec}{
+    Mediainfo AudioChannels]}{[MediaInfo VideoCodec]}{-Release Group}"
+  animeEpisodeFormat: "{Series TitleYear} - S{season:00}E{episode:00} -
+    {absolute:000} - [{Custom Formats }{Quality Full}]{[MediaInfo
+    VideoDynamicRangeType]}{[Mediainfo AudioCodec}{ Mediainfo
+    AudioChannels]}{[MediaInfo VideoCodec]}{-Release Group}"
+  seriesFolderFormat: "{Series TitleYear} {tvdb-{TvdbId}}"
+  seasonFolderFormat: Season {season:00}
+  specialsFolderFormat: Specials
+delete_old_custom_formats: true
+replace_existing_custom_formats: true

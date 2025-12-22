@@ -15,11 +15,11 @@ services:
       - ./configarr/cfs:/app/cfs
       - ./configarr/templates:/app/templates
     networks:
-      - backend
+      - frontend
     labels:
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.icon=https://raw.githubusercontent.com/wiki/raydak-labs/configarr/img/logo.png
       - net.unraid.docker.shell=bash
 networks:
-  backend:
+  frontend:
     external: true
