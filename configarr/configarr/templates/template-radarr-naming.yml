@@ -1,0 +1,37 @@
+delete_unmanaged_custom_formats:
+  enabled: true
+media_management:
+  id: 1
+  autoUnmonitorPreviouslyDownloadedMovies: false
+  recycleBinCleanupDays: 7
+  downloadPropersAndRepacks: doNotPrefer
+  createEmptyMovieFolders: false
+  deleteEmptyFolders: false
+  fileDate: "1"
+  rescanAfterRefresh: afterManual
+  autoRenameFolders: true
+  pathsDefaultStatic: true
+  setPermissionsLinux: false
+  chmodFolder: ""
+  chownGroup: ""
+  skipFreeSpaceCheckWhenImporting: false
+  minimumFreeSpaceWhenImporting: 100
+  copyUsingHardlinks: false
+  useScriptImport: false
+  importExtraFiles: true
+  extraFileExtensions: srt,sub,idx,vob
+  enableMediaInfo: true
+media_naming_api:
+  id: 1
+  renameMovies: true
+  replaceIllegalCharacters: true
+  colonReplacementFormat: delete
+  standardMovieFormat: "{Movie Title:DE}{(Release Year)} [tmdb-{TmdbId}] -
+    {Edition Tags }{[Custom Formats]}{[Quality Full]}{[MediaInfo 3D]}{[MediaInfo
+    VideoDynamicRangeType]}{[Mediainfo AudioCodec}{ Mediainfo
+    AudioChannels]}{[Mediainfo VideoCodec]}{-Release Group}"
+  movieFolderFormat: "{Movie TitleFirstCharacter:DE}/{Movie Title:DE} ({Release Year}) {tmdb-{TmdbId}}"
+quality_definition:
+  type: movie # Quality definition type for Radarr
+delete_old_custom_formats: true
+replace_existing_custom_formats: true
