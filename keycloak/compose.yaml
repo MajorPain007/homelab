@@ -13,7 +13,7 @@ services:
       KC_DB_PASSWORD: ${DB_PW}
       KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_ADMIN}
       KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_ADMIN_PW}
-      KEYCLOAK_EXTRA_ARGS: null
+      KEYCLOAK_EXTRA_ARGS:
       KC_CACHE: local
       KC_PROXY_HEADERS: xforwarded
       KC_HTTP_ENABLED: true

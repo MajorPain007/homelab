@@ -103,7 +103,7 @@ certificatesResolvers:
       email: "user@example.com"
       storage: /etc/traefik/certs/acme.json
       certificatesDuration: 2160 # 90 Tage
-      keyType:
+      keyType: EC384
       caServer: "https://acme-v02.api.letsencrypt.org/directory"
       dnsChallenge:
         provider: cloudflare

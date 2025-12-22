@@ -8,7 +8,7 @@ lidarrEnabled: false
 radarr:
   radarr-main:
     base_url: http://radarr:7878 # !secret radarr_url
-    api_key:
+    api_key: # !secret radarr_apikey
     delete_unmanaged_custom_formats:
       enabled: true
     media_management:
@@ -190,7 +190,7 @@ radarr:
 
   radarr-kids:
     base_url: http://radarr_kids:7878 # !secret radarr_kids_url
-    api_key:
+    api_key: # !secret radarr_kids_apikey
     delete_unmanaged_custom_formats:
       enabled: true
     media_management:
@@ -301,7 +301,7 @@ radarr:
 sonarr:
   sonarr:
     base_url: http://sonarr:8989 # !secret sonarr_url
-    api_key:
+    api_key: # !secret sonarr_apikey
     delete_unmanaged_custom_formats:
       enabled: true
     quality_definition:
@@ -445,7 +445,7 @@ sonarr:
 
   sonarr_as:
     base_url: http://sonarr_as:8989 # !secret sonarr_as_url
-    api_key:
+    api_key: # !secret sonarr_as_apikey
     delete_unmanaged_custom_formats:
       enabled: true
     media_management:

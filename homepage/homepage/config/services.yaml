@@ -147,7 +147,7 @@
             type: adguard
             url: http://192.168.20.254:3000
             username: 
-            password: 
+            password:
 
 - Download:
     - SABnzbd:
