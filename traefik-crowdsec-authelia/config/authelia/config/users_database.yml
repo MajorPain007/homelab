@@ -11,7 +11,7 @@ users:
     displayname: "user1"
     # docker run authelia/authelia:latest authelia crypto hash generate argon2 --password 'your password'  
     password: "$argon2id$v=" 
-    email: example@example.com
+    email: user@example.com
     groups:
       - admins
       - dev
