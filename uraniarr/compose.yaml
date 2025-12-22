@@ -1,0 +1,29 @@
+services:
+  uraniarr:
+    container_name: uraniarr
+    build: https://github.com/jaboll-ai/Uraniarr.git#main
+    image: uraniarr
+    ports:
+      - 11562:8000
+    environment:
+      - CONFIG_DIR=/config
+      - VENDOR=https://www.thalia.de
+    volumes:
+      - ./uraniarr/:/config
+      - /mnt/user/Media:/dataconfig
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=frontend
+      - traefik.http.routers.uraniarr.entrypoints=homesec
+      - traefik.http.routers.uraniarr.rule=Host(`uraniarr.${DOMAIN}`)
+      - traefik.http.services.uraniarr.loadbalancer.server.port=8080
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:8000]
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/jaboll-ai/Uraniarr/refs/heads/main/frontend/public/assets/uraniarr.svg
+      - net.unraid.docker.shell=bash
+    restart: unless-stopped
+    networks:
+      - frontend
+networks:
+  frontend:
+    external: true

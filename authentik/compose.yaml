@@ -31,9 +31,10 @@ services:
       - crowdsec.enable=true
       - crowdsec.labels.type=authentik
       - traefik.enable=true
-      - traefik.docker.network=backend
+      - traefik.docker.network=frontend
       - traefik.http.routers.authentik-server.entrypoints=homesec,websecure
-      - traefik.http.routers.authentik-server.rule=Host(`authentik.${DOMAIN}`) || (HostRegexp(`{subdomain:[a-z0-9-]+}.${DOMAIN}`) && PathPrefix(`/outpost.goauthentik.io/`))
+      - traefik.http.routers.authentik-server.rule=Host(`authentik.${DOMAIN}`) || (HostRegexp(`{subdomain:[a-z0-9-]+}.${DOMAIN}`) &&
+        PathPrefix(`/outpost.goauthentik.io/`))
       - traefik.http.routers.authentik-server.service=authentik-server
       - traefik.http.services.authentik-server.loadbalancer.server.port=9000
       - net.unraid.docker.managed=composeman

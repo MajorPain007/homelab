@@ -37,7 +37,6 @@ services:
       - ${TMP_TRANSCODE}:/transcode
     networks:
       - frontend
-      - backend
     labels:
       - traefik.enable=true
       - traefik.http.routers.plex.entrypoints=websecure,homesec
@@ -49,6 +48,4 @@ services:
       - net.unraid.docker.shell=bash
 networks:
   frontend:
-    external: true
-  backend:
     external: true

@@ -14,13 +14,15 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    ports:
-      - 5432:5432/tcp
+    # ports:
+    #   - 5432:5432/tcp
     environment:
       - TZ=Europe/Berlin
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db_password
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_DB=${POSTGRES_DB}
+    secrets:
+      - db_password
     volumes:
       - ./postgresql17:/var/lib/postgresql/data:rw
     networks:
@@ -29,6 +31,11 @@ services:
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.icon=https://raw.githubusercontent.com/sgraaf/Unraid-Docker-Templates/main/postgresql17/icon.png
       - net.unraid.docker.shell=bash
+
+secrets:
+  db_password:
+    file: ./secrets/db_password.txt
+
 networks:
   backend:
     external: true

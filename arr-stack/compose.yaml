@@ -7,7 +7,6 @@ services:
     security_opt:
       - no-new-privileges:true
     networks:
-      - backend
       - frontend
     user: ${ENV_PUID}:${ENV_PGID}
     environment:
@@ -31,7 +30,7 @@ services:
     security_opt:
       - no-new-privileges:true
     networks:
-      - backend
+      - frontend
     environment:
       - PUID=${ENV_PUID}
       - PGID=${ENV_PGID}
@@ -57,7 +56,7 @@ services:
     security_opt:
       - no-new-privileges:true
     networks:
-      - backend
+      - frontend
     environment:
       - PUID=${ENV_PUID}
       - PGID=${ENV_PGID}
@@ -83,7 +82,7 @@ services:
     security_opt:
       - no-new-privileges:true
     networks:
-      - backend
+      - frontend
     environment:
       - PUID=${ENV_PUID}
       - PGID=${ENV_PGID}
@@ -110,7 +109,7 @@ services:
     security_opt:
       - no-new-privileges:true
     networks:
-      - backend
+      - frontend
     environment:
       - PUID=${ENV_PUID}
       - PGID=${ENV_PGID}
@@ -136,7 +135,7 @@ services:
     security_opt:
       - no-new-privileges:true
     networks:
-      - backend
+      - frontend
     environment:
       - PUID=${ENV_PUID}
       - PGID=${ENV_PGID}
@@ -161,7 +160,7 @@ services:
     security_opt:
       - no-new-privileges:true
     networks:
-      - backend
+      - frontend
     environment:
       - PUID=${ENV_PUID}
       - PGID=${ENV_PGID}
@@ -199,6 +198,10 @@ services:
       - ${SERVICES_DIR}/posterizarr/assetsbackup:/assetsbackup:rw
       - ${SERVICES_DIR}/posterizarr/manualassets:/manualassets:rw
     labels:
+      - traefik.enable=true
+      - traefik.docker.network=backend
+      - traefik.http.routers.posterizarr.entrypoints=homesec
+      - traefik.http.routers.posterizarr.rule=Host(`poster.${DOMAIN}`)
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.webui=http://[IP]:[PORT:8000]/
       - net.unraid.docker.icon=https://raw.githubusercontent.com/nwithan8/unraid_templates/master/images/posterizarr-icon.png
@@ -220,7 +223,7 @@ services:
       #     - TZ=${TIMEZONE}
       #  labels:
       #     - traefik.enable=true
-      #     - traefik.docker.network=backend
+      #     - traefik.docker.network=frontend
       #     - traefik.http.routers.bazarr.entrypoints=homesec
       #     - traefik.http.routers.bazarr.rule=Host(`bazarr.${DOMAIN}`)
       #     - net.unraid.docker.managed:=omposeman
@@ -235,7 +238,7 @@ services:
     security_opt:
       - no-new-privileges:true
     networks:
-      - backend
+      - frontend
     environment:
       - PUID=${ENV_PUID}
       - PGID=${ENV_PGID}
@@ -266,7 +269,7 @@ services:
     security_opt:
       - no-new-privileges:true
     networks:
-      - backend
+      - frontend
     environment:
       - PUID=${ENV_PUID}
       - PGID=${ENV_PGID}
@@ -292,13 +295,11 @@ services:
       - READARR__APIKEY=${READARR_API_KEY}
       - LIDARR__ENABLED=false
       - LIDARR__HOST="http://lidarr:8686"
-      - LIDARR__APIKEY="API_KEY"
+      - LIDARR__APIKEY=${LIDARR_API_KEY}
     labels:
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.icon=https://raw.githubusercontent.com/tschoerk/unraid-templates/main/umlautadaptarr/umlaute.png
       - net.unraid.docker.shell=bash
 networks:
   frontend:
-    external: true
-  backend:
     external: true

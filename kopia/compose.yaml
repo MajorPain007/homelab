@@ -1,0 +1,41 @@
+services:
+  kopia:
+    container_name: kopia
+    hostname: kopia
+    image: kopia/kopia:latest
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - 51515:51515/tcp
+    volumes:
+      - /mnt/cache/appdata/kopia/config:/app/config:rw
+      - /mnt/cache/appdata/kopia/cache:/app/cache:rw
+      - /mnt/cache/appdata/kopia/logs:/app/logs:rw
+      - /mnt/user/:/app/data:rw
+      - /root/.ssh/:/root/.ssh/:ro
+    environment:
+      - TZ=Europe/Berlin
+      - KOPIA_PASSWORD=${KOPIA_PASSWORD}
+      - CA_TS_FALLBACK_DIR=/app/config
+    command:
+      - server
+      - start
+      - --insecure
+      - --htpasswd-file=/app/config/htpasswd
+      - --address=0.0.0.0:51515
+      - --server-username=admin
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.kopia.entrypoints=homesec
+      - traefik.http.routers.kopia.rule=Host(`kopia.${DOMAIN}`)
+      - traefik.http.services.kopia.loadbalancer.server.port=51515
+      - net.unraid.docker.managed=dockerman
+      - net.unraid.docker.shell=bash
+      - net.unraid.docker.webui=http://[IP]:[PORT:51515]
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/kopia/kopia/master/icons/kopia.svg
+    networks:
+      - frontend
+networks:
+  frontend:
+    external: true

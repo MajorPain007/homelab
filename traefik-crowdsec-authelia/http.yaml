@@ -25,8 +25,8 @@ format: |
   },
   "priority": 3,
   {{range .Decisions -}}
-  "number": "+4916090176560",
-  "recipients": [ "+4916090176560" ],
+  "number": "YOUR_PHONE",
+  "recipients": [ "YOUR_PHONE" ],
   "title": "{{.Type }} {{ .Value }} for {{.Duration}}",
   "message": "{{.Scenario}}  \n\n[crowdsec cti](https://app.crowdsec.net/cti/{{.Value -}})  \n\n[shodan](https://shodan.io/host/{{.Value -}})"
   {{end -}}
@@ -40,6 +40,6 @@ url: http://signal:8080/v2/send #http://gotify/message
 method: POST
 
 # headers:
-#   X-Gotify-Key:
+#   X-Gotify-Key: AYJ5VtxtFNYgM6R
 #   Content-Type: application/json
 # skip_tls_verification:  # true or false. Default is false

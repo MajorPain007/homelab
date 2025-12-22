@@ -29,7 +29,7 @@ services:
       - mongo
     ports:
       - 9120:9120
-    env_file: .env
+    env_file: ./.env
     environment:
       KOMODO_DATABASE_ADDRESS: mongo:27017
       KOMODO_DATABASE_USERNAME: ${KOMODO_DB_USERNAME}
@@ -37,7 +37,13 @@ services:
     volumes:
       - ./komodo:/backups
     labels:
-      komodo.skip: null
+      - traefik.enable=true
+      - traefik.http.routers.komodo.entrypoints=homesec
+      - traefik.http.routers.komodo.rule=Host(`komodo.${DOMAIN}`)
+      - traefik.http.services.komodo.loadbalancer.server.port=9120
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:9120]
+      - net.unraid.docker.shell=bash
     networks:
       - backend
       - frontend
@@ -46,7 +52,7 @@ services:
     labels:
       komodo.skip: null
     restart: unless-stopped
-    env_file: .env
+    env_file: ./.env
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /proc:/proc

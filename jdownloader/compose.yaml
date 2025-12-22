@@ -21,8 +21,8 @@ services:
       - SECURE_CONNECTION_CERTS_CHECK_INTERVAL=60
       - WEB_LISTENING_PORT=5800
       - VNC_LISTENING_PORT=5900
-      - MYJDOWNLOADER_EMAIL=$MYJDOWNLOADER_EMAIL
-      - MYJDOWNLOADER_PASSWORD=$MYJDOWNLOADER_PASSWORD
+      - MYJDOWNLOADER_EMAIL=${MYJDOWNLOADER_EMAIL}
+      - MYJDOWNLOADER_PASSWORD=${MYJDOWNLOADER_PASSWORD}
       - MYJDOWNLOADER_DEVICE_NAME=docker
       - JDOWNLOADER_HEADLESS=0
       - JDOWNLOADER_MAX_MEM=
@@ -35,19 +35,10 @@ services:
       - ./JDownloader2:/config
       - ${DATA_DIR}:/output:rw
     networks:
-      - backend
+      - frontend
     labels:
-      # - homepage.group=Download
-      # - homepage.name=JDownloader
-      # - homepage.icon=/images/png/jdownloader.png
-      # - homepage.href=https://jd.${DOMAIN}
-      # - homepage.weight=2
-      # - homepage.widget.type=jdownloader
-      # - homepage.widget.url=http://jdownloader:5800
-      # - homepage.widget.username=${MYJDOWNLOADER_EMAIL}
-      # - homepage.widget.password=${MYJDOWNLOADER_PASSWORD}
       - traefik.enable=true
-      - traefik.docker.network=backend
+      - traefik.docker.network=frontend
       - traefik.http.routers.jdownloader.entrypoints=homesec
       - traefik.http.routers.jdownloader.rule=Host(`jd.${DOMAIN}`)
       - traefik.http.services.jdownloader.loadbalancer.server.port=5800
@@ -56,5 +47,5 @@ services:
       - net.unraid.docker.icon=https://raw.githubusercontent.com/jlesage/docker-templates/master/jlesage/images/jdownloader-2-icon.png
       - net.unraid.docker.shell=sh
 networks:
-  backend:
+  frontend:
     external: true

@@ -12,12 +12,16 @@ services:
     container_name: spotizerr-app
     restart: unless-stopped
     labels:
+      - traefik.enable=true
+      - traefik.http.routers.spotizerr.entrypoints=homesec
+      - traefik.http.routers.spotizerr.rule=Host(`spotizerr.${DOMAIN}`)
+      - traefik.http.services.spotizerr.loadbalancer.server.port=7171
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.shell=bash
     env_file:
       - .env
     networks:
-      - backend
+      - frontend
 networks:
-  backend:
+  frontend:
     external: true

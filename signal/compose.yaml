@@ -15,13 +15,12 @@ services:
       - 8080:8080
     volumes:
       - ./signal-api:/home/.local/share/signal-cli
-    networks:
-      - backend
     labels:
-
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.icon=https://raw.githubusercontent.com/signalapp/Signal-Desktop/refs/heads/main/images/signal-logo-desktop-linux.png
       - net.unraid.docker.shell=bash
+    networks:
+      - frontend
 networks:
-  backend:
+  frontend:
     external: true

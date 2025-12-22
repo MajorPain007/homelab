@@ -100,7 +100,7 @@ providers:
 certificatesResolvers:
   letsencrypt:
     acme:
-      email: "example@example.com" # {{env "EMAIL"}}
+      email: "user@example.com" # {{env "EMAIL"}}
       storage: /etc/traefik/certs/acme.json
       certificatesDuration: 2160 # 90 Tage
       keyType: EC384

@@ -12,17 +12,15 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./uptimekuma:/app/data
     networks:
-      - backend
+      - frontend
     labels:
       - traefik.enable=true
-      - traefik.docker.network=backend
       - traefik.http.routers.kuma.entrypoints=homesec
       - traefik.http.routers.kuma.rule=Host(`kuma.${DOMAIN}`)
-      - traefik.http.routers.kuma.middlewares=authelia@docker
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.webui=http://[IP]:[PORT:3001]/files/
       - net.unraid.docker.icon=https://github.com/louislam/uptime-kuma/blob/master/public/icon.png?raw=true
       - net.unraid.docker.shell=bash
 networks:
-  backend:
+  frontend:
     external: true

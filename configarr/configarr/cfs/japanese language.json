@@ -1,0 +1,22 @@
+{
+  "trash_id": "Japanese Audio",
+  "trash_scores": {
+    "default": 400
+  },
+  "trash_description": "Japanese Audio",
+  "custom_inf": "Japanese Audio",
+  "name": "Japanese Audio",
+  "includeCustomFormatWhenRenaming": false,
+  "specifications": [
+{
+    "name": "Japanese",
+    "implementation": "LanguageSpecification",
+    "negate": false,
+    "required": true,
+    "fields": {
+        "value": 8,
+        "exceptLanguage": false
+    }
+    }
+  ]
+}

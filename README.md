@@ -1,2 +1,3 @@
-# homelab
-Docker Compose collection 
+# My Docker Compose Collection
+
+Optimized for Unraid and Traefik.

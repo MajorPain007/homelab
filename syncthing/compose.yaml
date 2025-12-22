@@ -19,12 +19,16 @@ services:
       - /mnt/cache/Daten/:/data2:rw
       - ./syncthing:/config:rw
     networks:
-      - backend
+      - frontend
     labels:
+      - traefik.enable=true
+      - traefik.http.routers.syncthing.entrypoints=homesec
+      - traefik.http.routers.syncthing.rule=Host(`syncthing.${DOMAIN}`)
+      - traefik.http.services.syncthing.loadbalancer.server.port=8384
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.webui=http://[IP]:[PORT:8384]
       - net.unraid.docker.icon=https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/syncthing-logo.png
       - net.unraid.docker.shell=bash
 networks:
-  backend:
+  frontend:
     external: true

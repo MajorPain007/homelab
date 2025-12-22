@@ -1,0 +1,75 @@
+{
+    "trash_id": "Anime BD Tier 2",
+    "trash_scores": {
+      "default": 3800
+    },
+    "trash_description": "Anime BD Tier 2",
+    "custom_inf": "Anime BD Tier 2",
+    "name": "Anime BD Tier 2",
+    "includeCustomFormatWhenRenaming": false,
+    "specifications": [
+        {
+        "name": "ABJ",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "^(ABJ)$"
+        }
+        },
+        {
+        "name": "DK",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "^(DRiFTKiNG|DK)$"
+        }
+        },
+        {
+        "name": "VECTOR",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "^(VECTOR)$"
+        }
+        },
+        {
+        "name": "ZeroTwo",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "^(ZeroTwo)$"
+        }
+        },
+        {
+        "name": "SiXTYNiNE",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "^(SiXTYNiNE)$"
+        }
+        },
+        {
+        "name": "PHM",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "^(PHM)$"
+        }
+        },
+        {
+          "name": "Bluray",
+          "implementation": "SourceSpecification",
+          "negate": false,
+          "required": true,
+          "fields": {
+            "value": 6
+          }
+        }
+    ]
+}

@@ -1,7 +1,7 @@
 services:
-  audiobook:
-    container_name: audiobookshelf
-    hostname: audiobookshelf
+  audiobookshelf:
+    container_name: ${APP_NAME}
+    hostname: ${APP_NAME}
     image: ghcr.io/advplyr/audiobookshelf:latest
     restart: unless-stopped
     security_opt:
@@ -17,9 +17,9 @@ services:
       - ./audiobookshelf/metadata:/metadata
     labels:
       - traefik.enable=true
-      - traefik.http.routers.audiobookshelf.entrypoints=websecure,homesec
-      - traefik.http.routers.audiobookshelf.rule=Host(`ab.${DOMAIN}`)
-      - traefik.http.routers.audiobookshelf.middlewares=authelia@file
+      - traefik.http.routers.${APP_NAME}.entrypoints=websecure,homesec
+      - traefik.http.routers.${APP_NAME}.rule=Host(`${SUBDOMAIN}.${DOMAIN}`)
+      - traefik.http.routers.${APP_NAME}.middlewares=authelia@file
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.webui=http://[IP]:[PORT:80]
       - net.unraid.docker.icon=https://github.com/advplyr/audiobookshelf/raw/master/client/static/Logo.png
