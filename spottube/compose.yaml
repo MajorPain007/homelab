@@ -18,12 +18,15 @@ services:
     ports:
       - 5010:5000
     networks:
-      - backend
+      - frontend
     labels:
-
+      - traefik.enable=true
+      - traefik.http.routers.spottube.entrypoints=homesec
+      - traefik.http.routers.spottube.rule=Host(`spottube.${DOMAIN}`)
+      - traefik.http.services.spottube.loadbalancer.server.port=5000
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.icon=https://raw.githubusercontent.com/KRTirtho/spotube/refs/heads/master/assets/spotube-logo-item.png
       - net.unraid.docker.shell=bash
 networks:
-  backend:
+  frontend:
     external: true

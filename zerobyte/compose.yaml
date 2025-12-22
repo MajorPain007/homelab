@@ -18,12 +18,16 @@ services:
       - ./zerobyte:/var/lib/zerobyte
       - /mnt/user:/mnt/user:ro
     labels:
+      - traefik.enable=true
+      - traefik.http.routers.zerobyte.entrypoints=homesec
+      - traefik.http.routers.zerobyte.rule=Host(`zerobyte.${DOMAIN}`)
+      - traefik.http.services.zerobyte.loadbalancer.server.port=4096
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.webui=http://[IP]:[PORT:4096]
       - net.unraid.docker.icon=https://raw.githubusercontent.com/nicotsx/zerobyte/refs/heads/main/public/images/favicon/web-app-manifest-192x192.png
       - net.unraid.docker.shell=sh
     networks:
-      - backend
+      - frontend
 networks:
-  backend:
+  frontend:
     external: true

@@ -8,10 +8,14 @@ services:
     ports:
       - 7318:8000
     labels:
+      - traefik.enable=true
+      - traefik.http.routers.cyberchef.entrypoints=homesec
+      - traefik.http.routers.cyberchef.rule=Host(`cyberchef.${DOMAIN}`)
+      - traefik.http.services.cyberchef.loadbalancer.server.port=8000
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.shell=sh
     networks:
-      - backend
+      - frontend
 networks:
-  backend:
+  frontend:
     external: true

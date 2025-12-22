@@ -12,8 +12,8 @@ services:
       SIGNUPS_ALLOWED: false
       INVITATIONS_ALLOWED: false
       WEBSOCKET_ENABLED: false
-      ADMIN_TOKEN: $ADMIN_TOKEN
-      DOMAIN: https://${DOMAIN}
+      ADMIN_TOKEN: ${ADMIN_TOKEN}
+      DOMAIN: https://bw.${DOMAIN}
       SMTP_HOST: ${SMTP_HOST}
       SMTP_FROM: ${SMTP_FROM}
       SMTP_PORT: ${SMTP_PORT}
@@ -29,7 +29,7 @@ services:
       - crowdsec.labels.type=vaultwarden
       - traefik.enable=true
       - traefik.http.routers.vaultwarden.entrypoints=websecure,homesec
-      - traefik.http.routers.vaultwarden.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.vaultwarden.rule=Host(`bw.${DOMAIN}`)
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.webui=http://[IP]:[PORT:80]/admin
       - net.unraid.docker.icon=https://raw.githubusercontent.com/selfhosters/unRAID-CA-templates/master/templates/img/vaultwarden.png

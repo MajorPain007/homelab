@@ -1,0 +1,93 @@
+{
+    "trash_id": "Anime BD Tier 3",
+    "trash_scores": {
+      "default": 3400
+    },
+    "trash_description": "Anime BD Tier 3",
+    "custom_inf": "Anime BD Tier 3",
+    "name": "Anime BD Tier 3",
+    "includeCustomFormatWhenRenaming": false,
+    "specifications": [
+        {
+        "name": "SUBARU",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "^(SUBARU)$"
+        }
+        },
+        {
+        "name": "ATAX",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "^(ATAX)$"
+        }
+        },
+        {
+        "name": "HDC",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "^(HDC)$"
+        }
+        },
+        {
+        "name": "Mindus",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "^(Mindus)$"
+        }
+        },
+        {
+        "name": "WAREZCX",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "^(WAREZCX)$"
+        }
+        },
+        {
+        "name": "4baka",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "^(4baka)$"
+        }
+        },
+        {
+        "name": "W33BSHiT",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "^(W33BSHiT)$"
+        }
+        },
+        {
+        "name": "AST4u",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "^(AST4u)$"
+        }
+        },
+        {
+          "name": "Bluray",
+          "implementation": "SourceSpecification",
+          "negate": false,
+          "required": true,
+          "fields": {
+            "value": 6
+          }
+        }
+    ]
+}

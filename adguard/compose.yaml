@@ -1,53 +1,45 @@
 services:
   adguardhome:
-    container_name: adguardhome
-    hostname: adguardhome
     image: adguard/adguardhome:latest
-    restart: unless-stopped
-    security_opt:
-      - no-new-privileges:true
-    # depends_on:
-    #   - unbound
+    container_name: ${APP_NAME}
+    hostname: ${APP_NAME}
+    cap_add:
+      - NET_ADMIN
+      - NET_BIND_SERVICE
+      - NET_RAW
     ports:
-      - 54:53/tcp
-      - 54:53/udp
+      - 3003:3000/tcp
+      - 80:80/tcp
+      - 443:443/udp
+      - 53:53/tcp
+      - 53:53/udp
       - 784:784/udp
       - 853:853/tcp
-      - 3003:3000/tcp
-      - 87:80/tcp
-      # - 443:443/tcp
+      - 5443:5443/tcp
+      - 5443:5443/udp
     volumes:
-      - /mnt/cache/appdata/adguard/config/adguard/workingdir:/opt/adguardhome/work
-      - /mnt/cache/appdata/adguard/config/adguard/config:/opt/adguardhome/conf
-    labels:
-      - net.unraid.docker.managed=composeman
-      - net.unraid.docker.webui=http://[IP]/
-      - net.unraid.docker.icon=https://raw.githubusercontent.com/SiwatINC/unraid-ca-repository/master/icons/adguard.png
-      - net.unraid.docker.shell=bash
-      # unbound:
-      #   labels:
-      #     net.unraid.docker.managed: dockerman
-      #     net.unraid.docker.icon: https://raw.githubusercontent.com/kutzilla/unraid-templates/master/images/unbound.png
-      #     net.unraid.docker.shell: 'bash'
-#   unbound:
-#     container_name: unbound
-#     hostname: unbound
-#     image: mvance/unbound:latest
-#     expose:
-#       - 53
-#         networks:
-#           locale-net:
-#             ipv4_address: 192.168.178.253
-#     ports:
-#       - 53:53/tcp
-#       - 53:53/udp
-#     volumes:
-#       - /mnt/cache/appdata/adguard/config/unbound/unbound.conf:/opt/unbound/etc/unbound/unbound.conf
-#     restart: unless-stopped
-#     security_opt:
-#       - no-new-privileges:true
-# networks: {}
-
+      - ./adguard/workingdir:/opt/adguardhome/work
+      - ./adguard/config:/opt/adguardhome/conf
+      - ./certbot/etc/letsencrypt:/etc/letsencrypt:ro
+    restart: unless-stopped
+    networks:
+      lan_access:
+        ipv4_address: 192.168.20.254
+  certbot:
+    image: certbot/dns-cloudflare:latest
+    container_name: certbot-adguard
+    restart: unless-stopped
+    volumes:
+      - ./certbot/etc/letsencrypt:/etc/letsencrypt
+      - ./certbot/var/letsencrypt:/var/lib/letsencrypt
+      - ./cloudflare.ini:/etc/letsencrypt/cloudflare.ini:ro
+    entrypoint: /bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 24h &
+      wait $${!}; done'
+    networks:
+      - frontend
 networks:
-  locale-net:
+  lan_access:
+    name: br0
+    external: true
+  frontend:
     external: true

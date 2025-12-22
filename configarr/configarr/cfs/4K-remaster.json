@@ -1,0 +1,21 @@
+{
+    "trash_id": "4K-remaster",
+    "trash_scores": {
+      "default": -10000
+    },
+    "trash_description": "4K-remaster",
+    "custom_inf": "4K-remaster",
+    "name": "4K-remaster",
+    "includeCustomFormatWhenRenaming": true,
+    "specifications": [
+{
+    "name": "4K-remaster",
+    "implementation": "ReleaseTitleSpecification",
+    "negate": false,
+    "required": false,
+    "fields": {
+      "value": "(?i)\\b4K.?Remaster(ed)?\\b"
+        }
+      }
+    ]
+}

@@ -2,7 +2,7 @@ services:
   watchtower:
     container_name: watchtower
     hostname: watchtower
-    image: nickfedor/watchtower:latest
+    image: containrrr/watchtower:latest
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
@@ -16,7 +16,6 @@ services:
       - WATCHTOWER_MONITOR_ONLY=false
       - WATCHTOWER_SCHEDULE=0 0 5 * * *
       - WATCHTOWER_LOG_FORMAT=JSON
-      - WATCHTOWER_CLEANUP=true
     networks:
       - backend
     labels:

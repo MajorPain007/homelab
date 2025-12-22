@@ -27,7 +27,7 @@ services:
       lan_access:
         ipv4_address: 192.168.20.2
       frontend: null
-      backend: null
+
     labels:
       - crowdsec.enable=true
       - crowdsec.labels.type=traefik
@@ -107,7 +107,6 @@ services:
       - PGID=${ENV_PGID}
     networks:
       - frontend
-      - backend
     labels:
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.webui=http://[IP]:[PORT:8081]/
@@ -115,8 +114,6 @@ services:
       - net.unraid.docker.shell=sh
 networks:
   frontend:
-    external: true
-  backend:
     external: true
   lan_access:
     name: br0

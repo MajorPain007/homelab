@@ -20,11 +20,10 @@ services:
       - ${TMP_TRANSCODE}:/transcode
     networks:
       - frontend
-      - backend
     labels:
       - traefik.enable=true
       - traefik.http.routers.jellyfin.entrypoints=websecure,homesec
-      - traefik.http.routers.jellyfin.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.jellyfin.rule=Host(`jf.${DOMAIN}`)
       - traefik.http.services.jellyfin.loadbalancer.server.port=8096
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.webui=http://[IP]:[PORT:8096]
@@ -32,6 +31,4 @@ services:
       - net.unraid.docker.shell=bash
 networks:
   frontend:
-    external: true
-  backend:
     external: true

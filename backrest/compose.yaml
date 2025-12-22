@@ -23,10 +23,9 @@ services:
     ports:
       - 9898:9898
     networks:
-      - backend
+      - frontend
     labels:
       - traefik.enable=true
-      - traefik.docker.network=backend
       - traefik.http.routers.backrest.entrypoints=homesec
       - traefik.http.routers.backrest.rule=Host(`backrest.${DOMAIN}`)
       - net.unraid.docker.managed=composeman
@@ -34,5 +33,5 @@ services:
       - net.unraid.docker.icon=https://raw.githubusercontent.com/garethgeorge/backrest/refs/heads/main/webui/assets/favicon.png
       - net.unraid.docker.shell=bash
 networks:
-  backend:
+  frontend:
     external: true

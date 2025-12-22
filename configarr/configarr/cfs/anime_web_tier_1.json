@@ -1,0 +1,147 @@
+{
+    "trash_id": "Anime Web Tier 1",
+    "trash_scores": {
+      "default": 3700
+    },
+    "trash_description": "Anime Web Tier 1",
+    "custom_inf": "Anime Web Tier 1",
+    "name": "Anime Web Tier 1",
+    "includeCustomFormatWhenRenaming": false,
+    "specifications": [
+      {
+        "name": "Baka",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "^(Baka)$"
+        }
+        },
+        {
+        "name": "Pudding-Sama",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "^(Pudding-Sama)$"
+        }
+        },
+        {
+        "name": "RTemp",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "^(RTemp)$"
+        }
+        },
+        {
+        "name": "snk",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "\\b(snk|shw)\\b"
+        }
+        },
+        {
+        "name": "Ainz",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "^(Ainz)$"
+        }
+        },
+        {
+        "name": "TvR",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "^(TvR)$"
+        }
+        },
+        {
+        "name": "Tanuki",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "^(Tanuki)$"
+        }
+        },
+        {
+        "name": "Fuuko",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "^(Fuuko)$"
+        }
+        },
+        {
+        "name": "HiSHiRO",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "^(HiSHiRO)$"
+        }
+        },
+        {
+        "name": "WeebPinn",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "^(WeebPinn)$"
+        }
+        },
+        {
+        "name": "Lynacchi",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "^(Lynacchi)$"
+        }
+        },
+        {
+        "name": "Waechter",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+            "value": "Waechter"
+        }
+        },
+        {
+        "name": "GP",
+        "implementation": "ReleaseGroupSpecification",
+        "negate": false,
+        "required": false,
+        "fields": {
+        "value": "^(GP)$"
+        }
+        },
+        {
+          "name": "WebDL",
+          "implementation": "SourceSpecification",
+          "negate": false,
+          "required": false,
+          "fields": {
+            "value": 3
+          }
+        },
+        {
+          "name": "WebRip",
+          "implementation": "SourceSpecification",
+          "negate": false,
+          "required": false,
+          "fields": {
+            "value": 4
+          }
+        }
+    ]
+}

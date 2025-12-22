@@ -30,11 +30,9 @@ services:
       - ./tdarr/configs:/app/configs
       - ./tdarr/logs:/app/logs
       - ${DATA_DIR}/:/data/media
-    networks:
-      - backend
     labels:
       - traefik.enable=true
-      - traefik.docker.network=backend
+      - traefik.docker.network=frontend
       - traefik.http.routers.tdarr.entrypoints=homesec
       - traefik.http.routers.tdarr.rule=Host(`tdarr.${DOMAIN}`)
       - traefik.http.services.tdarr.loadbalancer.server.port=8265
@@ -42,6 +40,8 @@ services:
       - net.unraid.docker.webui=http://[IP]:[PORT:8265]
       - net.unraid.docker.icon=https://raw.githubusercontent.com/selfhosters/unRAID-CA-templates/master/templates/img/tdarr.png
       - net.unraid.docker.shell=bash
+    networks:
+      - frontend
 networks:
-  backend:
+  frontend:
     external: true

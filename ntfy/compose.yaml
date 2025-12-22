@@ -33,7 +33,6 @@ services:
       - NTFY_LOG_LEVEL=info
     networks:
       - frontend
-      - backend
     labels:
       - traefik.enable=true
       - traefik.docker.network=frontend
@@ -44,7 +43,5 @@ services:
       - net.unraid.docker.icon=https://raw.githubusercontent.com/binwiederhier/ntfy/main/docs/static/img/ntfy.png
       - net.unraid.docker.shell=bash
 networks:
-  backend:
-    external: true
   frontend:
     external: true

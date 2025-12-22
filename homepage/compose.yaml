@@ -18,16 +18,13 @@ services:
       - ./homepage/images:/app/public/images
       - /mnt/user:/mnt/user:ro
       - /mnt/cache:/mnt/cache:ro
-    networks:
-      - backend
-      - frontend
     environment:
       - HOMEPAGE_ALLOWED_HOSTS=192.168.20.3:3000,ho.${DOMAIN}
       # - PUID=$PUID
       # - PGID=$PGID
     labels:
       - traefik.enable=true
-      - traefik.docker.network=backend
+      - traefik.docker.network=frontend
       - traefik.http.routers.homepage.entrypoints=homesec
       - traefik.http.routers.homepage.rule=Host(`ho.${DOMAIN}`)
       - traefik.http.services.homepage.loadbalancer.server.port=3000
@@ -35,8 +32,8 @@ services:
       - net.unraid.docker.webui=http://[IP]:[PORT:3000]
       - net.unraid.docker.icon=https://raw.githubusercontent.com/gethomepage/homepage/main/public/android-chrome-512x512.png
       - net.unraid.docker.shell=sh
+    networks:
+      - frontend
 networks:
-  backend:
-    external: true
   frontend:
     external: true

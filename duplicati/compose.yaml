@@ -21,7 +21,7 @@ services:
       - /mnt/user/:/source
     labels:
       - traefik.enable=true
-      - traefik.docker.network=backend
+      - traefik.docker.network=frontend
       - traefik.http.routers.duplicati.entrypoints=homesec
       - traefik.http.routers.duplicati.rule=Host(`duplicati.${DOMAIN}`)
       - net.unraid.docker.shell=bash
@@ -29,7 +29,7 @@ services:
       - net.unraid.docker.webui=http://[IP]:[PORT:8200]/login.html
       - net.unraid.docker.icon=https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/duplicati-logo.png
     networks:
-      - backend
+      - frontend
 networks:
-  backend:
+  frontend:
     external: true

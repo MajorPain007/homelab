@@ -11,8 +11,6 @@ services:
       disable: true
     ports:
       - 99:80
-    networks:
-      - frontend
     volumes:
       - ${DATA_DIR}:/srv
       - ./filebrowser:/config
@@ -26,6 +24,8 @@ services:
       - net.unraid.docker.webui=http://[IP]:[PORT:99]/files/
       - net.unraid.docker.icon=https://github.com/maschhoff/docker/raw/master/filebrowser/35781395.png
       - net.unraid.docker.shell=sh
+    networks:
+      - frontend
 networks:
   frontend:
     external: true

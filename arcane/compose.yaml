@@ -24,8 +24,13 @@ services:
       - LOG_JSON=true
       - OIDC_ENABLED=false
       - DATABASE_URL=file:data/arcane.db?_pragma=journal_mode(WAL)&_pragma=busy_timeout(2500)&_txlock=immediate
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.arcane.entrypoints=homesec
+      - traefik.http.routers.arcane.rule=Host(`arcane.${DOMAIN}`)
+      - traefik.http.services.arcane.loadbalancer.server.port=3552
     networks:
-      - backend
+      - frontend
 networks:
-  backend:
+  frontend:
     external: true

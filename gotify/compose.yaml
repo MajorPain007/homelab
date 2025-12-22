@@ -16,11 +16,10 @@ services:
       - ./gotify/:/app/data
       - ./gotify/config/:/etc/gotify
     networks:
-      - backend
       - frontend
     labels:
       - traefik.enable=true
-      - traefik.docker.network=backend
+      - traefik.docker.network=frontend
       - traefik.http.routers.gotify.entrypoints=websecure,homesec
       - traefik.http.routers.gotify.rule=Host(`gotify.${DOMAIN}`)
       - net.unraid.docker.managed=composeman
@@ -28,7 +27,5 @@ services:
       - net.unraid.docker.icon=https://raw.githubusercontent.com/A75G/docker-templates/master/templates/icons/gotify.png
       - net.unraid.docker.shell=bash
 networks:
-  backend:
-    external: true
   frontend:
     external: true

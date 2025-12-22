@@ -1,0 +1,93 @@
+{
+    "trash_id": "Anime Web Tier 2",
+    "trash_scores": {
+      "default": 3500
+    },
+    "trash_description": "Anime Web Tier 2",
+    "custom_inf": "Anime Web Tier 2",
+    "name": "Anime Web Tier 2",
+    "includeCustomFormatWhenRenaming": false,
+    "specifications": [
+        {
+            "name": "ABJ",
+            "implementation": "ReleaseGroupSpecification",
+            "negate": false,
+            "required": false,
+            "fields": {
+                "value": "^(ABJ)$"
+            }
+            },
+            {
+            "name": "DK",
+            "implementation": "ReleaseGroupSpecification",
+            "negate": false,
+            "required": false,
+            "fields": {
+                "value": "^(DRiFTKiNG|DK)$"
+            }
+            },
+            {
+            "name": "VECTOR",
+            "implementation": "ReleaseGroupSpecification",
+            "negate": false,
+            "required": false,
+            "fields": {
+                "value": "^(VECTOR)$"
+            }
+            },
+            {
+            "name": "ZeroTwo",
+            "implementation": "ReleaseGroupSpecification",
+            "negate": false,
+            "required": false,
+            "fields": {
+                "value": "^(ZeroTwo)$"
+            }
+            },
+            {
+            "name": "SiXTYNiNE",
+            "implementation": "ReleaseGroupSpecification",
+            "negate": false,
+            "required": false,
+            "fields": {
+                "value": "^(SiXTYNiNE)$"
+            }
+            },
+            {
+            "name": "AO",
+            "implementation": "ReleaseGroupSpecification",
+            "negate": false,
+            "required": false,
+            "fields": {
+                "value": "^(AO)$"
+            }
+            },
+            {
+            "name": "MELD",
+            "implementation": "ReleaseGroupSpecification",
+            "negate": false,
+            "required": false,
+            "fields": {
+                "value": "^(MELD)$"
+            }
+            },
+        {
+          "name": "WebDL",
+          "implementation": "SourceSpecification",
+          "negate": false,
+          "required": false,
+          "fields": {
+            "value": 3
+          }
+        },
+        {
+          "name": "WebRip",
+          "implementation": "SourceSpecification",
+          "negate": false,
+          "required": false,
+          "fields": {
+            "value": 4
+          }
+        }
+    ]
+}

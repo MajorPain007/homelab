@@ -16,6 +16,7 @@ services:
       - ./Emby:/config:rw
     labels:
       - traefik.enable=true
+      - traefik.docker.network=frontend
       - traefik.http.routers.emby.entrypoints=websecure,homesec
       - traefik.http.routers.emby.rule=(Host(`emby.${DOMAIN}`))
       - traefik.http.services.emby.loadbalancer.server.port=8096
@@ -24,7 +25,7 @@ services:
       - net.unraid.docker.icon=https://raw.githubusercontent.com/MediaBrowser/Emby.Resources/master/images/Logos/logoicon.png
     restart: unless-stopped
     networks:
-      - backend
+      - frontend
 networks:
-  backend:
+  frontend:
     external: true

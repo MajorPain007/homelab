@@ -18,11 +18,11 @@ services:
       - net.unraid.docker.webui=http://[IP]:[PORT:25600]
       - net.unraid.docker.icon=https://raw.githubusercontent.com/selfhosters/unRAID-CA-templates/master/templates/img/komga.png
       - traefik.enable=true
-      - traefik.docker.network=backend
+      - traefik.docker.network=frontend
       - traefik.http.routers.komga.entrypoints=websecure,homesec
-      - traefik.http.routers.komga.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.komga.rule=Host(`eb2.${DOMAIN}`)
     networks:
-      - backend
+      - frontend
 networks:
-  backend:
+  frontend:
     external: true
