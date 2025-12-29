@@ -4,7 +4,7 @@ global:
   sendAnonymousUsage: false
 
 serversTransport:
-  insecureSkipVerify: true
+  insecureSkipVerify: false
 
 # Log & Accesslog
 log:
@@ -21,9 +21,9 @@ accessLog:
   bufferingSize: 50
   addInternals: true
   filters:
-    statusCodes:
-      - "200-299"
-      - "400-599"
+    # statusCodes:
+    #   - "200-299"
+    #   - "400-599"
     retryAttempts: true
     minDuration: 10ms
   fields:

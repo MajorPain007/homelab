@@ -39,5 +39,6 @@ http:
 
     skynet:
       loadBalancer:
+        serversTransport: insecure-transport
         servers:
           - url: "https://192.168.20.3:1443"
