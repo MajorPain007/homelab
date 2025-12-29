@@ -8,7 +8,7 @@ lidarrEnabled: false
 radarr:
   radarr-main:
     base_url: !secret radarr_url
-    api_key: !secret radarr_apikey
+    api_key:
     include:
       - template: template-radarr-naming
       - template: template-radarr-german
@@ -24,7 +24,7 @@ radarr:
 
   radarr-kids:
     base_url: !secret radarr_kids_url
-    api_key: !secret radarr_kids_apikey
+    api_key:
     quality_definition:
       type: anime # Quality definition type for Radarr
     include:
@@ -39,7 +39,7 @@ radarr:
 sonarr:
   sonarr:
     base_url: !secret sonarr_url
-    api_key: !secret sonarr_apikey
+    api_key:
     include:
       - template: template-sonarr-naming
       - template: template-sonarr-german
@@ -51,7 +51,7 @@ sonarr:
 
   sonarr_as:
     base_url: !secret sonarr_as_url
-    api_key: !secret sonarr_as_apikey
+    api_key:
     include:
       - template: template-sonarr-naming
       - template: template-sonarr-anime-german

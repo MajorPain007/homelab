@@ -9,6 +9,7 @@ services:
     user: 99:100
     environment:
       - TZ=Europe/Berlin
+      # - LOG_STACKTRACE=true
     volumes:
       - ./configarr/config:/app/config
       - ./configarr/repos:/app/repos

@@ -1,0 +1,12 @@
+services:
+  tasmota-monitor:
+    build: .
+    container_name: tasmota_monitor
+    ports:
+      - 8501:8501
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/Berlin
+networks: {}

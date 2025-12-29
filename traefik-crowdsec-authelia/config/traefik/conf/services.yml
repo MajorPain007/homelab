@@ -1,11 +1,10 @@
-http:
 #-------------------------------------------- routers --------------------------------------------#
-
+http:
   routers:
     jetkvm:
       entryPoints:
         - "homesec"
-      rule: "Host(`jetkvm.example.de`)"
+      rule: "Host(`jetkvm.yourdomain.com`)"
       service: jetkvm
       tls: {}
 
@@ -13,8 +12,15 @@ http:
     krusader:
       entryPoints:
         - "homesec"
-      rule: "Host(`krusader.example.de`)"
+      rule: "Host(`krusader.yourdomain.com`)"
       service: krusader
+      tls: {}
+
+    skynet:
+      entryPoints:
+        - "homesec"
+      rule: "Host(`skynet.yourdomain.com`)"
+      service: skynet
       tls: {}
 
 #-------------------------------------------- services --------------------------------------------#
@@ -23,9 +29,15 @@ http:
     jetkvm:
       loadBalancer:
         servers:
-          - url: "http://192.168.20.200"
+          - url: "http://192.168.20.199"
 
     krusader:
       loadBalancer:
         servers:
           - url: "http://192.168.20.3:6080"
+          # - url: "http://192.168.20.3:6080/vnc.html?resize=remote&host=192.168.20.3&port=6080&autoconnect=1"
+
+    skynet:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.20.3:1443"

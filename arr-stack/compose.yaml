@@ -9,6 +9,8 @@ services:
     networks:
       - frontend
     user: ${ENV_PUID}:${ENV_PGID}
+    ports:
+      - 5055:5055
     environment:
       - LOG_LEVEL=debug
       - TZ=${TIMEZONE}
@@ -31,6 +33,8 @@ services:
       - no-new-privileges:true
     networks:
       - frontend
+    ports:
+      - 7878:7878
     environment:
       - PUID=${ENV_PUID}
       - PGID=${ENV_PGID}
@@ -41,7 +45,6 @@ services:
       - ${POSTERIZARR}:/posterizarr:rw
     labels:
       - traefik.enable=true
-      - traefik.docker.network=backend
       - traefik.http.routers.radarr.entrypoints=homesec
       - traefik.http.routers.radarr.rule=Host(`radarr.${DOMAIN}`)
       - net.unraid.docker.managed=composeman
@@ -57,6 +60,8 @@ services:
       - no-new-privileges:true
     networks:
       - frontend
+    ports:
+      - 7879:7878
     environment:
       - PUID=${ENV_PUID}
       - PGID=${ENV_PGID}
@@ -67,7 +72,6 @@ services:
       - ${POSTERIZARR}:/posterizarr:rw
     labels:
       - traefik.enable=true
-      - traefik.docker.network=backend
       - traefik.http.routers.radarr-kids.entrypoints=homesec
       - traefik.http.routers.radarr-kids.rule=Host(`radarr-kids.${DOMAIN}`)
       - net.unraid.docker.managed=composeman
@@ -83,6 +87,8 @@ services:
       - no-new-privileges:true
     networks:
       - frontend
+    ports:
+      - 8989:8989
     environment:
       - PUID=${ENV_PUID}
       - PGID=${ENV_PGID}
@@ -93,7 +99,6 @@ services:
       - ${POSTERIZARR}:/posterizarr:rw
     labels:
       - traefik.enable=true
-      - traefik.docker.network=backend
       - traefik.http.routers.sonarr.entrypoints=homesec
       - traefik.http.routers.sonarr.rule=Host(`sonarr.${DOMAIN}`)
       - net.unraid.docker.managed=composeman
@@ -110,6 +115,8 @@ services:
       - no-new-privileges:true
     networks:
       - frontend
+    ports:
+      - 8990:8989
     environment:
       - PUID=${ENV_PUID}
       - PGID=${ENV_PGID}
@@ -120,38 +127,36 @@ services:
       - ${POSTERIZARR}:/posterizarr:rw
     labels:
       - traefik.enable=true
-      - traefik.docker.network=backend
       - traefik.http.routers.sonarr-as.entrypoints=homesec
       - traefik.http.routers.sonarr-as.rule=Host(`sonarr-as.${DOMAIN}`)
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.webui=http://[IP]:[PORT:8990]/system/status
       - net.unraid.docker.icon=https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/sonarr-logo.png
       - net.unraid.docker.shell=bash
-  readarr:
-    container_name: readarr
-    hostname: readarr
-    image: lscr.io/linuxserver/readarr:0.4.18-develop
-    restart: unless-stopped
-    security_opt:
-      - no-new-privileges:true
-    networks:
-      - frontend
-    environment:
-      - PUID=${ENV_PUID}
-      - PGID=${ENV_PGID}
-      - TZ=${TIMEZONE}
-    volumes:
-      - ${SERVICES_DIR}/readarr:/config
-      - ${DATA_DIR}:/data
-    labels:
-      - traefik.enable=true
-      - traefik.docker.network=backend
-      - traefik.http.routers.readarr.entrypoints=homesec
-      - traefik.http.routers.readarr.rule=Host(`readarr.${DOMAIN}`)
-      - net.unraid.docker.managed=composeman
-      - net.unraid.docker.webui=http://[IP]:[PORT:8787]/system/status
-      - net.unraid.docker.icon=https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/readarr-logo.png
-      - net.unraid.docker.shell=bash
+  # readarr:
+  #   container_name: readarr
+  #   hostname: readarr
+  #   image: lscr.io/linuxserver/readarr:0.4.18-develop
+  #   restart: unless-stopped
+  #   security_opt:
+  #     - no-new-privileges:true
+  #   networks:
+  #     - frontend
+  #   environment:
+  #     - PUID=${ENV_PUID}
+  #     - PGID=${ENV_PGID}
+  #     - TZ=${TIMEZONE}
+  #   volumes:
+  #     - ${SERVICES_DIR}/readarr:/config
+  #     - ${DATA_DIR}:/data
+  #   labels:
+  #     - traefik.enable=true
+  #     - traefik.http.routers.readarr.entrypoints=homesec
+  #     - traefik.http.routers.readarr.rule=Host(`readarr.${DOMAIN}`)
+  #     - net.unraid.docker.managed=composeman
+  #     - net.unraid.docker.webui=http://[IP]:[PORT:8787]/system/status
+  #     - net.unraid.docker.icon=https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/readarr-logo.png
+  #     - net.unraid.docker.shell=bash
   prowlarr:
     container_name: prowlarr
     hostname: prowlarr
@@ -161,6 +166,8 @@ services:
       - no-new-privileges:true
     networks:
       - frontend
+    ports:
+      - 9696:9696
     environment:
       - PUID=${ENV_PUID}
       - PGID=${ENV_PGID}
@@ -169,42 +176,41 @@ services:
       - ${SERVICES_DIR}/prowlarr:/config
     labels:
       - traefik.enable=true
-      - traefik.docker.network=backend
       - traefik.http.routers.prowlarr.entrypoints=homesec
       - traefik.http.routers.prowlarr.rule=Host(`prowlarr.${DOMAIN}`)
+      - traefik.http.services.prowlarr.loadbalancer.server.port=9696
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.webui=http://[IP]:[PORT:9696]/system/status
       - net.unraid.docker.icon=https://raw.githubusercontent.com/binhex/docker-templates/master/binhex/images/prowlarr-icon.png
       - net.unraid.docker.shell=bash
-  posterizarr:
-    container_name: posterizarr
-    hostname: posterizarr
-    image: ghcr.io/fscorrupt/posterizarr:latest
-    user: ${ENV_PUID}:${ENV_PGID}
-    ports:
-      - 8000:8000
-    security_opt:
-      - no-new-privileges:true
-    environment:
-      - TZ=${TIMEZONE}
-      - TERM=xterm
-      - RUN_TIME=disabled
-    restart: unless-stopped
-    networks:
-      - frontend
-    volumes:
-      - ${SERVICES_DIR}/posterizarr:/config:rw
-      - ${SERVICES_DIR}/posterizarr/assets:/assets:rw
-      - ${SERVICES_DIR}/posterizarr/assetsbackup:/assetsbackup:rw
-      - ${SERVICES_DIR}/posterizarr/manualassets:/manualassets:rw
-    labels:
-      - traefik.enable=true
-      - traefik.docker.network=backend
-      - traefik.http.routers.posterizarr.entrypoints=homesec
-      - traefik.http.routers.posterizarr.rule=Host(`poster.${DOMAIN}`)
-      - net.unraid.docker.managed=composeman
-      - net.unraid.docker.webui=http://[IP]:[PORT:8000]/
-      - net.unraid.docker.icon=https://raw.githubusercontent.com/nwithan8/unraid_templates/master/images/posterizarr-icon.png
+      # posterizarr:
+      #   container_name: posterizarr
+      #   hostname: posterizarr
+      #   image: ghcr.io/fscorrupt/posterizarr:latest
+      #   user: ${ENV_PUID}:${ENV_PGID}
+      #   ports:
+      #     - 8000:8000
+      #   security_opt:
+      #     - no-new-privileges:true
+      #   environment:
+      #     - TZ=${TIMEZONE}
+      #     - TERM=xterm
+      #     - RUN_TIME=disabled
+      #   restart: unless-stopped
+      #   networks:
+      #     - frontend
+      #   volumes:
+      #     - ${SERVICES_DIR}/posterizarr:/config:rw
+      #     - ${SERVICES_DIR}/posterizarr/assets:/assets:rw
+      #     - ${SERVICES_DIR}/posterizarr/assetsbackup:/assetsbackup:rw
+      #     - ${SERVICES_DIR}/posterizarr/manualassets:/manualassets:rw
+      #   labels:
+      #     - traefik.enable=true
+      #     - traefik.http.routers.posterizarr.entrypoints=homesec
+      #     - traefik.http.routers.posterizarr.rule=Host(`poster.${DOMAIN}`)
+      #     - net.unraid.docker.managed=composeman
+      #     - net.unraid.docker.webui=http://[IP]:[PORT:8000]/
+      #     - net.unraid.docker.icon=https://raw.githubusercontent.com/nwithan8/unraid_templates/master/images/posterizarr-icon.png
       # bazarr:
       #   container_name: bazarr
       #   hostname: bazarr
@@ -213,7 +219,7 @@ services:
       #   #   - 6767:6767
       #   restart: unless-stopped
       #   networks:
-      #     - backend
+      #     - frontend
       #   volumes:
       #     - ${SERVICES_DIR}/bazarr/config:/config
       #     - ${DATA_DIR}:/data
@@ -239,6 +245,8 @@ services:
       - no-new-privileges:true
     networks:
       - frontend
+    ports:
+      - 8087:8080
     environment:
       - PUID=${ENV_PUID}
       - PGID=${ENV_PGID}
@@ -249,7 +257,6 @@ services:
       - ${TMP_DOWNLOADS_DIR}:/data/incomplete
     labels:
       - traefik.enable=true
-      - traefik.docker.network=backend
       - traefik.http.routers.sabnzbd.entrypoints=homesec
       - traefik.http.routers.sabnzbd.rule=Host(`sabnzbd.${DOMAIN}`)
       - traefik.http.services.sabnzbd.loadbalancer.server.port=8080

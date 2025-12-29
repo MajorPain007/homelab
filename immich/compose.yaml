@@ -9,7 +9,7 @@ services:
       - /dev/dri:/dev/dri
     volumes:
       - ${UPLOAD_LOCATION}:/data
-      - ${EXT_LOCATION}:/libraries
+      # - ${EXT_LOCATION}:/libraries
       - /etc/localtime:/etc/localtime:ro
     env_file:
       - .env

@@ -1,0 +1,32 @@
+services:
+  posterizarr:
+    container_name: posterizarr
+    hostname: posterizarr
+    image: ghcr.io/fscorrupt/posterizarr:latest
+    user: ${ENV_PUID}:${ENV_PGID}
+    ports:
+      - 8000:8000
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      - TZ=${TIMEZONE}
+      - TERM=xterm
+      - RUN_TIME=disabled
+    restart: unless-stopped
+    networks:
+      - frontend
+    volumes:
+      - ./posterizarr:/config:rw
+      - ./posterizarr/assets:/assets:rw
+      - ./posterizarr/assetsbackup:/assetsbackup:rw
+      - ./posterizarr/manualassets:/manualassets:rw
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.posterizarr.entrypoints=homesec
+      - traefik.http.routers.posterizarr.rule=Host(`poster.${DOMAIN}`)
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:8000]/
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/nwithan8/unraid_templates/master/images/posterizarr-icon.png
+networks:
+  frontend:
+    external: true

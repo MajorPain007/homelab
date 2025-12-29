@@ -25,21 +25,21 @@ services:
     networks:
       lan_access:
         ipv4_address: 192.168.20.254
-  certbot:
-    image: certbot/dns-cloudflare:latest
-    container_name: certbot-adguard
-    restart: unless-stopped
-    volumes:
-      - ./certbot/etc/letsencrypt:/etc/letsencrypt
-      - ./certbot/var/letsencrypt:/var/lib/letsencrypt
-      - ./cloudflare.ini:/etc/letsencrypt/cloudflare.ini:ro
-    entrypoint: /bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 24h &
-      wait $${!}; done'
-    networks:
-      - frontend
+  # certbot:
+  #   image: certbot/dns-cloudflare:latest
+  #   container_name: certbot-adguard
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./certbot/etc/letsencrypt:/etc/letsencrypt
+  #     - ./certbot/var/letsencrypt:/var/lib/letsencrypt
+  #     - ./cloudflare.ini:/etc/letsencrypt/cloudflare.ini:ro
+  #   entrypoint: /bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 24h &
+  #     wait $${!}; done'
+  #   networks:
+  #     - frontend
 networks:
   lan_access:
     name: br0
     external: true
-  frontend:
-    external: true
+  # frontend:
+  #   external: true

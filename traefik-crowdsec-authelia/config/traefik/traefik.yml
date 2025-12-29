@@ -8,13 +8,18 @@ serversTransport:
 
 # Log & Accesslog
 log:
+  # compress: true
   level: INFO
   # filePath: /var/log/traefik/traefik.log
+  # maxAge: 14
+  # maxBackups: 10
+  # maxSize: 100
 
 accessLog:
   # filePath: /var/log/traefik/access.log
   format: json
-  bufferingSize: 0
+  bufferingSize: 50
+  addInternals: true
   filters:
     statusCodes:
       - "200-299"
@@ -22,12 +27,16 @@ accessLog:
     retryAttempts: true
     minDuration: 10ms
   fields:
+    defaultMode: keep
     headers:
       defaultMode: drop
       names:
         User-Agent: keep
         Authorization: drop
         Content-Type: keep
+        X-Special-Header: keep
+        CF-Connection-IP: keep
+        X-Forwarded-For: keep
 
 # API & Dashboard
 api:
@@ -47,6 +56,33 @@ entryPoints:
           permanent: true
   websecure:
     address: ":444"
+    forwardedHeaders:
+      trustedIPs:
+        - "192.168.2.0/24"
+        # BEGIN CLOUDFLARE IPs (managed by script). These will be pulled everyday from https://www.cloudflare.com/ips-v4 & https://www.cloudflare.com/ips-v6
+        # Cloudflare IPv4
+        - "173.245.48.0/20"
+        - "103.21.244.0/22"
+        - "103.22.200.0/22"
+        - "103.31.4.0/22"
+        - "141.101.64.0/18"
+        - "108.162.192.0/18"
+        - "190.93.240.0/20"
+        - "188.114.96.0/20"
+        - "197.234.240.0/22"
+        - "198.41.128.0/17"
+        - "162.158.0.0/15"
+        - "104.16.0.0/13"
+        - "104.24.0.0/14"
+        - "172.64.0.0/13"
+        # Cloudflare IPv6
+        - "2400:cb00::/32"
+        - "2606:4700::/32"
+        - "2803:f800::/32"
+        - "2405:b500::/32"
+        - "2405:8100::/32"
+        - "2a06:98c0::/29"
+        # END CLOUDFLARE IPs (managed by script)
     http3:
       advertisedPort: 444
     http:
@@ -55,9 +91,9 @@ entryPoints:
       tls:
         certResolver: letsencrypt
         domains:
-          - main: "example.de"
+          - main: "yourdomain.com"
             sans:
-              - "*.example.de"
+              - "*.yourdomain.com"
   # Internal
   home:
     address: ":80"
@@ -81,9 +117,9 @@ entryPoints:
       tls:
         certResolver: letsencrypt
         domains:
-          - main: "example.de"
+          - main: "yourdomain.com" # {{env "DOMAIN"}}
             sans:
-              - "*.example.de"
+              - "*.yourdomain.com" # {{env "DOMAIN"}}
 
 # Provider (Docker & File)
 providers:

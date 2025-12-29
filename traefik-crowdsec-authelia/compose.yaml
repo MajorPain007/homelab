@@ -8,12 +8,11 @@ services:
       - no-new-privileges:true
     depends_on:
       - crowdsec
-    # ports:
-    #   - 80:80
-    #   - 443:443
-    #   - 81:81
-    #   - 444:444
-
+    ports:
+      - 80:80
+      - 443:443
+      - 81:81
+      - 444:444
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./traefik:/etc/traefik
@@ -24,10 +23,7 @@ services:
       - DOMAIN=${DOMAIN}
       - EMAIL=${EMAIL}
     networks:
-      lan_access:
-        ipv4_address: 192.168.20.2
-      frontend: null
-
+      - frontend
     labels:
       - crowdsec.enable=true
       - crowdsec.labels.type=traefik
@@ -114,7 +110,4 @@ services:
       - net.unraid.docker.shell=sh
 networks:
   frontend:
-    external: true
-  lan_access:
-    name: br0
     external: true
