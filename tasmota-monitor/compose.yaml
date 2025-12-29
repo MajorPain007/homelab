@@ -1,0 +1,16 @@
+services:
+  tasmota-monitor:
+    image: python:3.11-slim
+    container_name: tasmota_monitor
+    working_dir: /app
+    volumes:
+      - ./:/app
+    environment:
+      - TZ=Europe/Berlin
+    ports:
+      - 8501:8501
+    command: |
+      sh -c "pip install streamlit pandas requests altair watchdog && 
+             streamlit run app.py --server.port=8501 --server.address=0.0.0.0"
+    restart: unless-stopped
+networks: {}

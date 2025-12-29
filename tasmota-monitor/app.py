@@ -251,7 +251,7 @@ elif page == "🎛️ Steuerung":
             status_data = get_device_status_detailed(ip)
             
             if status_data:
-                power_keys = [k for k in status_data.keys() if k.startswith("POWER")]
+                power_keys =
                 power_keys.sort()
                 
                 if not power_keys:
@@ -272,12 +272,12 @@ elif page == "🎛️ Steuerung":
                             
                             # Farbige Buttons
                             if state == "ON":
-                                if st.button(f"🟢 AN", key=f"{name}_{p_key}"):
+                                if st.button(f"🟢 AN", key=
                                     toggle_device_relay(ip, p_key)
                                     time.sleep(0.2)
                                     st.rerun()
                             else:
-                                if st.button(f"🔴 AUS", key=f"{name}_{p_key}"):
+                                if st.button(f"🔴 AUS", key=
                                     toggle_device_relay(ip, p_key)
                                     time.sleep(0.2)
                                     st.rerun()

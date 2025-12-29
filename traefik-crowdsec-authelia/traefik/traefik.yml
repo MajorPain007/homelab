@@ -58,7 +58,7 @@ entryPoints:
     address: ":444"
     forwardedHeaders:
       trustedIPs:
-        - "192.168.2.0/24"
+        - "192.168.0.0/16"
         # BEGIN CLOUDFLARE IPs (managed by script). These will be pulled everyday from https://www.cloudflare.com/ips-v4 & https://www.cloudflare.com/ips-v6
         # Cloudflare IPv4
         - "173.245.48.0/20"

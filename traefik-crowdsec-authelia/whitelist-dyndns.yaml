@@ -1,0 +1,7 @@
+# crowdsec/config/postoverflows/s01-whitelist/whitelist-dyndns.yaml
+name: me/dyndnswhitelist
+description: Whitelist fuer eure Domain
+whitelist:
+ reason: dont ban my IP
+ expression:
+  - evt.Overflow.Alert.Source.IP in LookupHost('*.yourdomain.com')

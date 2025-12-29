@@ -1,0 +1,10 @@
+# crowdsec/config/parsers/s02-enrich/mywithelist.yaml
+name: crowdsecurity/whitelists
+description: "Whitelist events from my ip addresses"
+whitelist:
+  reason: "my ip ranges"
+  ip:
+    - "127.0.0.1"
+  cidr:
+    - "144.41.11.0/24"
+    - "192.168.0.0/16"
