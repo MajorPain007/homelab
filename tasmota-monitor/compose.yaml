@@ -13,4 +13,17 @@ services:
       sh -c "pip install streamlit pandas requests altair watchdog && 
              streamlit run app.py --server.port=8501 --server.address=0.0.0.0"
     restart: unless-stopped
-networks: {}
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.arcane.entrypoints=homesec
+      - traefik.http.routers.arcane.rule=Host(`tasmo.${DOMAIN}`)
+      - traefik.http.services.arcane.loadbalancer.server.port=8501
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:8501]
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/digiblur/unraid-docker-templates/master/images/tasmoadmin_icon.png
+      - net.unraid.docker.shell=bash
+    networks:
+      - frontend
+networks:
+  frontend:
+    external: true

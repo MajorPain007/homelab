@@ -29,6 +29,10 @@ services:
       - traefik.http.routers.arcane.entrypoints=homesec
       - traefik.http.routers.arcane.rule=Host(`arcane.${DOMAIN}`)
       - traefik.http.services.arcane.loadbalancer.server.port=3552
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:3552]
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/tajniak81/unraid-docker-templates/refs/heads/main/arcane/icon/arcane.png
+      - net.unraid.docker.shell=bash
     networks:
       - frontend
 networks:

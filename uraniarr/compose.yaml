@@ -1,13 +1,12 @@
 services:
   uraniarr:
     container_name: uraniarr
-    build: https://github.com/jaboll-ai/Uraniarr.git#main
-    image: uraniarr
+    image: ghcr.io/jaboll-ai/uraniarr:latest
     ports:
       - 11562:8000
     environment:
       - CONFIG_DIR=/config
-      - VENDOR=https://www.thalia.de
+      - VENDOR=https://www.t*****.de
     volumes:
       - ./uraniarr/:/config
       - /mnt/user/Media:/dataconfig
