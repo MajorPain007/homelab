@@ -24,6 +24,21 @@ services:
       - net.unraid.docker.icon=https://hotio.dev/webhook-avatars/jellyseerr.png
       - net.unraid.docker.webui=http://[IP]:[PORT:5055]
       - net.unraid.docker.shell=sh
+      - pangolin.proxy-resources.jellyseerr.name=jellyseerr
+      - pangolin.proxy-resources.jellyseerr.full-domain=js.${DOMAIN}
+      - pangolin.proxy-resources.jellyseerr.protocol=http
+      - pangolin.proxy-resources.jellyseerr.auth.sso-enabled=true
+      - pangolin.proxy-resources.jellyseerr.targets[0].method=http
+      - pangolin.proxy-resources.jellyseerr.targets[0].hostname=jellyseerr
+      - pangolin.proxy-resources.jellyseerr.targets[0].port=5055
+      - pangolin.proxy-resources.jellyseerr.rules[0].action=pass
+      - pangolin.proxy-resources.jellyseerr.rules[0].match=country
+      - pangolin.proxy-resources.jellyseerr.rules[0].value=DE
+      - pangolin.proxy-resources.jellyseerr.rules[0].priority=1
+      - pangolin.proxy-resources.jellyseerr.rules[1].action=deny
+      - pangolin.proxy-resources.jellyseerr.rules[1].match=country
+      - pangolin.proxy-resources.jellyseerr.rules[1].value=ALL
+      - pangolin.proxy-resources.jellyseerr.rules[1].priority=2
   radarr:
     container_name: radarr
     hostname: radarr

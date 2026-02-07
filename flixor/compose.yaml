@@ -1,0 +1,17 @@
+services:
+  flixor:
+    image: ghcr.io/flixorui/flixor:latest
+    container_name: flixor
+    environment:
+      - SESSION_SECRET=
+    ports:
+      - 8123:80
+    volumes:
+      - ./flixor-config:/app/config
+      - ./flixor-cache:/app/cache
+    restart: unless-stopped
+    networks:
+      - frontend
+networks:
+  frontend:
+    external: true

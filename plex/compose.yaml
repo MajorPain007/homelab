@@ -46,6 +46,21 @@ services:
       - net.unraid.docker.webui=http://[IP]:[PORT:32400]/web
       - net.unraid.docker.icon=https://raw.githubusercontent.com/plexinc/pms-docker/master/img/plex-server.png
       - net.unraid.docker.shell=bash
+      - pangolin.proxy-resources.plex.name=plex
+      - pangolin.proxy-resources.plex.full-domain=plex.${DOMAIN}
+      - pangolin.proxy-resources.plex.protocol=http
+      - pangolin.proxy-resources.plex.auth.sso-enabled=true
+      - pangolin.proxy-resources.plex.targets[0].method=http
+      - pangolin.proxy-resources.plex.targets[0].hostname=plex
+      - pangolin.proxy-resources.plex.targets[0].port=32400
+      - pangolin.proxy-resources.plex.rules[0].action=pass
+      - pangolin.proxy-resources.plex.rules[0].match=country
+      - pangolin.proxy-resources.plex.rules[0].value=DE
+      - pangolin.proxy-resources.plex.rules[0].priority=1
+      - pangolin.proxy-resources.plex.rules[1].action=deny
+      - pangolin.proxy-resources.plex.rules[1].match=country
+      - pangolin.proxy-resources.plex.rules[1].value=ALL
+      - pangolin.proxy-resources.plex.rules[1].priority=2
 networks:
   frontend:
     external: true

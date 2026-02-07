@@ -29,6 +29,21 @@ services:
       - net.unraid.docker.webui=http://[IP]:[PORT:8096]
       - net.unraid.docker.icon=https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/jellyfin-logo.png
       - net.unraid.docker.shell=bash
+      - pangolin.proxy-resources.jellyfin.name=jellyfin
+      - pangolin.proxy-resources.jellyfin.full-domain=jf.${DOMAIN}
+      - pangolin.proxy-resources.jellyfin.protocol=http
+      - pangolin.proxy-resources.jellyfin.auth.sso-enabled=true
+      - pangolin.proxy-resources.jellyfin.targets[0].method=http
+      - pangolin.proxy-resources.jellyfin.targets[0].hostname=jellyfin
+      - pangolin.proxy-resources.jellyfin.targets[0].port=8096
+      - pangolin.proxy-resources.jellyfin.rules[0].action=pass
+      - pangolin.proxy-resources.jellyfin.rules[0].match=country
+      - pangolin.proxy-resources.jellyfin.rules[0].value=DE
+      - pangolin.proxy-resources.jellyfin.rules[0].priority=1
+      - pangolin.proxy-resources.jellyfin.rules[1].action=deny
+      - pangolin.proxy-resources.jellyfin.rules[1].match=country
+      - pangolin.proxy-resources.jellyfin.rules[1].value=ALL
+      - pangolin.proxy-resources.jellyfin.rules[1].priority=2
 networks:
   frontend:
     external: true

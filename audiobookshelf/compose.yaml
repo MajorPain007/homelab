@@ -23,6 +23,21 @@ services:
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.webui=http://[IP]:[PORT:80]
       - net.unraid.docker.icon=https://github.com/advplyr/audiobookshelf/raw/master/client/static/Logo.png
+      - pangolin.proxy-resources.audiobookshelf.name=audiobookshelf
+      - pangolin.proxy-resources.audiobookshelf.full-domain=${SUBDOMAIN}.${DOMAIN}
+      - pangolin.proxy-resources.audiobookshelf.protocol=http
+      - pangolin.proxy-resources.audiobookshelf.auth.sso-enabled=true
+      - pangolin.proxy-resources.audiobookshelf.targets[0].method=http
+      - pangolin.proxy-resources.audiobookshelf.targets[0].hostname=audiobookshelf
+      - pangolin.proxy-resources.audiobookshelf.targets[0].port=80
+      - pangolin.proxy-resources.audiobookshelf.rules[0].action=pass
+      - pangolin.proxy-resources.audiobookshelf.rules[0].match=country
+      - pangolin.proxy-resources.audiobookshelf.rules[0].value=DE
+      - pangolin.proxy-resources.audiobookshelf.rules[0].priority=1
+      - pangolin.proxy-resources.audiobookshelf.rules[1].action=deny
+      - pangolin.proxy-resources.audiobookshelf.rules[1].match=country
+      - pangolin.proxy-resources.audiobookshelf.rules[1].value=ALL
+      - pangolin.proxy-resources.audiobookshelf.rules[1].priority=2
     networks:
       - frontend
 networks:

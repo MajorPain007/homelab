@@ -1,0 +1,15 @@
+services:
+  nevu:
+    image: ipmake/nevu
+    ports:
+      - 3013:3000
+    volumes:
+      - ./nevu_data:/data
+    environment:
+      - PLEX_SERVER=http://plex:32400
+    restart: unless-stopped
+    networks:
+      - frontend
+networks:
+  frontend:
+    external: true

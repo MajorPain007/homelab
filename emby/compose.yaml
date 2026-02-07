@@ -23,6 +23,31 @@ services:
       - net.unraid.docker.managed=dockerman
       - net.unraid.docker.webui=http://[IP]:[PORT:8096]/
       - net.unraid.docker.icon=https://raw.githubusercontent.com/MediaBrowser/Emby.Resources/master/images/Logos/logoicon.png
+      - pangolin.proxy-resources.emby.name=emby
+      - pangolin.proxy-resources.emby.full-domain=emby.${DOMAIN}
+      - pangolin.proxy-resources.emby.protocol=http
+      - pangolin.proxy-resources.emby.auth.sso-enabled=true
+      - pangolin.proxy-resources.emby.targets[0].method=http
+      - pangolin proxy-resources.emby.targets[0].hostname=filebrowser
+      - pangolin.proxy-resources.emby.targets[0].port=8096
+      - pangolin.proxy-resources.emby.rules[0].action=pass
+      - pangolin.proxy-resources.emby.rules[0].match=country
+      - pangolin.proxy-resources.emby.rules[0].value=DE
+      - pangolin.proxy-resources.emby.rules[0].priority=1
+      - pangolin.proxy-resources.emby.rules[1].action=deny
+      - pangolin.proxy-resources.emby.rules[1].match=country
+      - pangolin.proxy-resources.emby.rules[1].value=ALL
+      - pangolin.proxy-resources.emby.rules[1].priority=2
+    restart: unless-stopped
+    networks:
+      - frontend
+  embycreditocr:
+    image: yock1/embycreditocr
+    container_name: tesseract-ocr
+    devices:
+      - /dev/dri:/dev/dri
+    # ports:
+    #   - 8884:8884
     restart: unless-stopped
     networks:
       - frontend

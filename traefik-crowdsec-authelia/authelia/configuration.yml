@@ -21,7 +21,7 @@ session:
   cookies:
     - domain: 'yourdomain.com'
       authelia_url: 'https://auth.yourdomain.com'
-      default_redirection_url: 'https://www.yourdomain.com'
+      default_redirection_url: 'https://yourdomain.com'
   
   # docker run authelia/authelia:latest authelia crypto rand --length 64 --charset alphanumeric
   secret:

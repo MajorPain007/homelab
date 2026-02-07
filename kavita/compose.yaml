@@ -23,6 +23,21 @@ services:
       - net.unraid.docker.webui=http://[IP]:[PORT:5000]
       - net.unraid.docker.icon=https://raw.githubusercontent.com/Kareadita/Kavita/develop/UI/Web/src/assets/icons/android-chrome-192x192.png
       - net.unraid.docker.shell=bash
+      - pangolin.proxy-resources.kavita.name=kavita
+      - pangolin.proxy-resources.kavita.full-domain=eb.${DOMAIN}
+      - pangolin.proxy-resources.kavita.protocol=http
+      - pangolin.proxy-resources.kavita.auth.sso-enabled=true
+      - pangolin.proxy-resources.kavita.targets[0].method=http
+      - pangolin.proxy-resources.kavita.targets[0].hostname=kavita
+      - pangolin.proxy-resources.kavita.targets[0].port=5000
+      - pangolin.proxy-resources.kavita.rules[0].action=pass
+      - pangolin.proxy-resources.kavita.rules[0].match=country
+      - pangolin.proxy-resources.kavita.rules[0].value=DE
+      - pangolin.proxy-resources.kavita.rules[0].priority=1
+      - pangolin.proxy-resources.kavita.rules[1].action=deny
+      - pangolin.proxy-resources.kavita.rules[1].match=country
+      - pangolin.proxy-resources.kavita.rules[1].value=ALL
+      - pangolin.proxy-resources.kavita.rules[1].priority=2
 networks:
   frontend:
     external: true

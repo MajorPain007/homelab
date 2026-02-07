@@ -1,0 +1,59 @@
+services:
+  bitwarden:
+    env_file:
+      - .env
+    image: ghcr.io/bitwarden/lite:2026.1.0
+    restart: always
+    ports:
+      - 280:8080
+      # - 2443:8443
+    volumes:
+      - ./bitwarden/:/etc/bitwarden
+      - ./bitwarden/logs:/var/log/bitwarden
+    labels:
+      - crowdsec.enable=true
+      - crowdsec.labels.type=bitwarden
+      - traefik.enable=true
+      - traefik.http.routers.bitwarden.entrypoints=websecure,homesec
+      - traefik.http.routers.bitwarden.rule=Host(`${BW_DOMAIN}`)
+      - traefik.http.services.bitwarden.loadbalancer.server.port=8443
+      - net.unraid.docker.managed=composeman
+      - net.unraid.docker.webui=http://[IP]:[PORT:80]/admin
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/selfhosters/unRAID-CA-templates/master/templates/img/bitwarden.png
+      - net.unraid.docker.shell=bash
+      - pangolin.proxy-resources.bitwarden.name=bitwarden
+      - pangolin.proxy-resources.bitwarden.full-domain=${BW_DOMAIN}
+      - pangolin.proxy-resources.bitwarden.protocol=http
+      - pangolin.proxy-resources.bitwarden.auth.sso-enabled=true
+      - pangolin.proxy-resources.bitwarden.targets[0].method=http
+      - pangolin.proxy-resources.bitwarden.targets[0].hostname=bitwarden
+      - pangolin.proxy-resources.bitwarden.targets[0].port=8080
+      - pangolin.proxy-resources.bitwarden.rules[0].action=deny
+      - pangolin.proxy-resources.bitwarden.rules[0].match=path
+      - pangolin.proxy-resources.bitwarden.rules[0].value=/admin/*
+      - pangolin.proxy-resources.bitwarden.rules[0].priority=1
+      - pangolin.proxy-resources.bitwarden.rules[1].action=allow
+      - pangolin.proxy-resources.bitwarden.rules[1].match=path
+      - pangolin.proxy-resources.bitwarden.rules[1].value=/api/*
+      - pangolin.proxy-resources.bitwarden.rules[1].priority=2
+      - pangolin.proxy-resources.bitwarden.rules[2].action=allow
+      - pangolin.proxy-resources.bitwarden.rules[2].match=path
+      - pangolin.proxy-resources.bitwarden.rules[2].value=/identity/*
+      - pangolin.proxy-resources.bitwarden.rules[2].priority=3
+      - pangolin.proxy-resources.bitwarden.rules[3].action=allow
+      - pangolin.proxy-resources.bitwarden.rules[3].match=path
+      - pangolin.proxy-resources.bitwarden.rules[3].value=/wl/*
+      - pangolin.proxy-resources.bitwarden.rules[3].priority=4
+      - pangolin.proxy-resources.bitwarden.rules[4].action=pass
+      - pangolin.proxy-resources.bitwarden.rules[4].match=country
+      - pangolin.proxy-resources.bitwarden.rules[4].value=DE
+      - pangolin.proxy-resources.bitwarden.rules[4].priority=5
+      - pangolin.proxy-resources.bitwarden.rules[5].action=deny
+      - pangolin.proxy-resources.bitwarden.rules[5].match=country
+      - pangolin.proxy-resources.bitwarden.rules[5].value=ALL
+      - pangolin.proxy-resources.bitwarden.rules[5].priority=6
+    networks:
+      - frontend
+networks:
+  frontend:
+    external: true

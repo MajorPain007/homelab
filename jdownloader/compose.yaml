@@ -38,7 +38,6 @@ services:
       - frontend
     labels:
       - traefik.enable=true
-      - traefik.docker.network=frontend
       - traefik.http.routers.jdownloader.entrypoints=homesec
       - traefik.http.routers.jdownloader.rule=Host(`jd.${DOMAIN}`)
       - traefik.http.services.jdownloader.loadbalancer.server.port=5800

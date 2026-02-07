@@ -1,0 +1,30 @@
+services:
+  languagetool:
+    image: meyay/languagetool:6.6
+    container_name: languagetool
+    restart: unless-stopped
+    user: 99:100
+    read_only: true
+    tmpfs:
+      - /tmp:exec
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges
+    # ports:
+    #   - 8081:8081
+    environment:
+      - download_ngrams_for_langs=en,de
+    volumes:
+      - ./ngrams:/ngrams
+      - ./fasttext:/fasttext
+    networks:
+      - frontend
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=frontend
+      - traefik.http.routers.languagetool.entrypoints=homesec
+      - traefik.http.routers.languagetool.rule=Host(`lt.${DOMAIN}`)
+networks:
+  frontend:
+    external: true

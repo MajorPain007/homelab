@@ -21,6 +21,21 @@ services:
       - traefik.docker.network=frontend
       - traefik.http.routers.komga.entrypoints=websecure,homesec
       - traefik.http.routers.komga.rule=Host(`eb2.${DOMAIN}`)
+      - pangolin.proxy-resources.komga.name=komga
+      - pangolin.proxy-resources.komga.full-domain=eb2.${DOMAIN}
+      - pangolin.proxy-resources.komga.protocol=http
+      - pangolin.proxy-resources.komga.auth.sso-enabled=true
+      - pangolin.proxy-resources.komga.targets[0].method=http
+      - pangolin.proxy-resources.komga.targets[0].hostname=komga
+      - pangolin.proxy-resources.komga.targets[0].port=25600
+      - pangolin.proxy-resources.komga.rules[0].action=pass
+      - pangolin.proxy-resources.komga.rules[0].match=country
+      - pangolin.proxy-resources.komga.rules[0].value=DE
+      - pangolin.proxy-resources.komga.rules[0].priority=1
+      - pangolin.proxy-resources.komga.rules[1].action=deny
+      - pangolin.proxy-resources.komga.rules[1].match=country
+      - pangolin.proxy-resources.komga.rules[1].value=ALL
+      - pangolin.proxy-resources.komga.rules[1].priority=2
     networks:
       - frontend
 networks:

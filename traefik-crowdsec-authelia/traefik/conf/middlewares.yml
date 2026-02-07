@@ -6,26 +6,25 @@ http:
     basic-chain:
       chain:
         middlewares:
-          # - authelia@docker
           # - crowdsec
-          # - waf
-          - securityHeaders
           # - ratelimit
+          - securityHeaders
+          # - authelia@docker
           - gzip
     sec-chain:
       chain:
         middlewares:
-          - authelia@docker
           - crowdsec
-          - waf
-          - securityHeaders
           - ratelimit
+          - securityHeaders
+          - authelia@docker
           - gzip
     
     ratelimit:
       rateLimit:
-        average: 50
-        burst: 100
+        average: 100
+        burst: 120
+        period: 10s
 
     gzip:
       compress: {}
@@ -36,15 +35,6 @@ http:
           - "127.0.0.1/32"
           - "10.0.0.0/8"
           - "192.168.0.0/16"
-
-    waf:
-      plugin:
-        coraza-http-wasm-traefik:
-          directives:
-            - SecRuleEngine On
-            - SecDebugLog /dev/stdout
-            - SecDebugLogLevel 9
-            - SecRule REQUEST_URI "@streq /admin" "id:101,phase:1,log,deny,status:403"
     
     authelia:
       forwardAuth:

@@ -24,6 +24,21 @@ services:
       - net.unraid.docker.webui=http://[IP]:[PORT:99]/files/
       - net.unraid.docker.icon=https://github.com/maschhoff/docker/raw/master/filebrowser/35781395.png
       - net.unraid.docker.shell=sh
+      - pangolin.proxy-resources.filebrowser.name=filebrowser
+      - pangolin.proxy-resources.filebrowser.full-domain=fb.${DOMAIN}
+      - pangolin.proxy-resources.filebrowser.protocol=http
+      - pangolin.proxy-resources.filebrowser.auth.sso-enabled=true
+      - pangolin.proxy-resources.filebrowser.targets[0].method=http
+      - pangolin.proxy-resources.filebrowser.targets[0].hostname=filebrowser
+      - pangolin.proxy-resources.filebrowser.targets[0].port=80
+      - pangolin.proxy-resources.filebrowser.rules[0].action=pass
+      - pangolin.proxy-resources.filebrowser.rules[0].match=country
+      - pangolin.proxy-resources.filebrowser.rules[0].value=DE
+      - pangolin.proxy-resources.filebrowser.rules[0].priority=1
+      - pangolin.proxy-resources.filebrowser.rules[1].action=deny
+      - pangolin.proxy-resources.filebrowser.rules[1].match=country
+      - pangolin.proxy-resources.filebrowser.rules[1].value=ALL
+      - pangolin.proxy-resources.filebrowser.rules[1].priority=2
     networks:
       - frontend
 networks:

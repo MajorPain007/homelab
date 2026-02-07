@@ -9,16 +9,19 @@ services:
     ports:
       - 8200:8200
     environment:
-      # - PUID=99
-      # - PGID=100
-      - TZ={TZ}
+      # - PUID=${PUID}
+      # - PGID=${PGID}
+      - TZ=${TZ}
       - SETTINGS_ENCRYPTION_KEY=${PASSWORD}
       # - CLI_ARGS= #optional
       - DUPLICATI__WEBSERVICE_PASSWORD=${WEBPASSWORD}
+      - USAGEREPORTER_Duplicati_LEVEL=none
     volumes:
-      - ./duplicati/config:/config
-      # - ./duplicati/ssh_keys:/root/.ssh
+      - ./duplicati/data:/data
+      - ./duplicati/ssh_keys:/root/.ssh
       - /mnt/user/:/source
+      - /mnt/disks/:/backup
+      - /mnt/cache:/snapshots:ro,rslave
     labels:
       - traefik.enable=true
       - traefik.docker.network=frontend
@@ -28,6 +31,21 @@ services:
       - net.unraid.docker.managed=composeman
       - net.unraid.docker.webui=http://[IP]:[PORT:8200]/login.html
       - net.unraid.docker.icon=https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/duplicati-logo.png
+    networks:
+      - frontend
+  duplistatus:
+    image: ghcr.io/wsj-br/duplistatus:latest
+    container_name: duplistatus
+    restart: unless-stopped
+    environment:
+      - TZ=${TZ}
+      - LANG=de_DE
+      - PWD_ENFORCE=true
+      - PWD_MIN_LEN=8
+    ports:
+      - 9666:9666
+    volumes:
+      - ./duplistatus_data:/app/data
     networks:
       - frontend
 networks:

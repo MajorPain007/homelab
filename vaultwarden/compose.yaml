@@ -20,6 +20,9 @@ services:
       SMTP_SSL: ${SMTP_SSL}
       SMTP_USERNAME: ${SMTP_USERNAME}
       SMTP_PASSWORD: ${SMTP_PASSWORD}
+      PUSH_ENABLED: true
+      PUSH_INSTALLATION_ID: ${PUSH_INSTALLATION_ID}
+      PUSH_INSTALLATION_KEY: ${PUSH_INSTALLATION_KEY}
     volumes:
       - ./vaultwarden:/data
     networks:
@@ -34,6 +37,41 @@ services:
       - net.unraid.docker.webui=http://[IP]:[PORT:80]/admin
       - net.unraid.docker.icon=https://raw.githubusercontent.com/selfhosters/unRAID-CA-templates/master/templates/img/vaultwarden.png
       - net.unraid.docker.shell=bash
+      - pangolin.proxy-resources.vaultwarden.name=vaultwarden
+      - pangolin.proxy-resources.vaultwarden.full-domain=bw.${DOMAIN}
+      - pangolin.proxy-resources.vaultwarden.protocol=http
+      - pangolin.proxy-resources.vaultwarden.auth.sso-enabled=true
+      - pangolin.proxy-resources.vaultwarden.targets[0].method=http
+      - pangolin.proxy-resources.vaultwarden.targets[0].hostname=vaultwarden
+      - pangolin.proxy-resources.vaultwarden.targets[0].port=80
+      - pangolin.proxy-resources.vaultwarden.rules[0].action=deny
+      - pangolin.proxy-resources.vaultwarden.rules[0].match=path
+      - pangolin.proxy-resources.vaultwarden.rules[0].value=/admin/*
+      - pangolin.proxy-resources.vaultwarden.rules[0].priority=1
+      - pangolin.proxy-resources.vaultwarden.rules[1].action=allow
+      - pangolin.proxy-resources.vaultwarden.rules[1].match=path
+      - pangolin.proxy-resources.vaultwarden.rules[1].value=/api/*
+      - pangolin.proxy-resources.vaultwarden.rules[1].priority=2
+      - pangolin.proxy-resources.vaultwarden.rules[2].action=allow
+      - pangolin.proxy-resources.vaultwarden.rules[2].match=path
+      - pangolin.proxy-resources.vaultwarden.rules[2].value=/identity/*
+      - pangolin.proxy-resources.vaultwarden.rules[2].priority=3
+      - pangolin.proxy-resources.vaultwarden.rules[3].action=allow
+      - pangolin.proxy-resources.vaultwarden.rules[3].match=path
+      - pangolin.proxy-resources.vaultwarden.rules[3].value=/wl/*
+      - pangolin.proxy-resources.vaultwarden.rules[3].priority=4
+      - pangolin.proxy-resources.vaultwarden.rules[4].action=allow
+      - pangolin.proxy-resources.vaultwarden.rules[4].match=path
+      - pangolin.proxy-resources.vaultwarden.rules[4].value=/notifications/*
+      - pangolin.proxy-resources.vaultwarden.rules[4].priority=5
+      - pangolin.proxy-resources.vaultwarden.rules[5].action=pass
+      - pangolin.proxy-resources.vaultwarden.rules[5].match=country
+      - pangolin.proxy-resources.vaultwarden.rules[5].value=DE
+      - pangolin.proxy-resources.vaultwarden.rules[5].priority=6
+      - pangolin.proxy-resources.vaultwarden.rules[6].action=deny
+      - pangolin.proxy-resources.vaultwarden.rules[6].match=country
+      - pangolin.proxy-resources.vaultwarden.rules[6].value=ALL
+      - pangolin.proxy-resources.vaultwarden.rules[6].priority=7
 networks:
   frontend:
     external: true
