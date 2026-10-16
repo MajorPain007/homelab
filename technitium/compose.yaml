@@ -1,0 +1,25 @@
+services:
+  technitium:
+    image: docker.io/technitium/dns-server:latest
+    container_name: technitium
+    ports:
+      - 53:53/udp
+      - 53:53/tcp
+      - 5380:5380/tcp # Web UI
+      - 8053:8053/tcp # DoH via Reverse Proxy
+    environment:
+      - DNS_SERVER_DOMAIN=dns2.${DOMAIN}
+      - DNS_SERVER_LOG_FOLDER_PATH=/var/log/technitium/dns
+      - DNS_SERVER_RECURSION=AllowOnlyForPrivateNetworks
+      - DNS_SERVER_OPTIONAL_PROTOCOL_DNS_OVER_HTTP=true # ← aktiviert Port 8053
+    volumes:
+      - ./technitium/config:/etc/dns
+      - ./technitium/logs:/var/log/technitium/dns
+    restart: unless-stopped
+    networks:
+      lan_access:
+        ipv4_address: 192.168.20.254
+networks:
+  lan_access:
+    name: br0
+    external: true

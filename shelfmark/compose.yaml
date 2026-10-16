@@ -1,0 +1,23 @@
+services:
+  shelfmark:
+    image: ghcr.io/calibrain/shelfmark:latest
+    container_name: shelfmark
+    environment:
+      - PUID=${ENV_PUID}
+      - PGID=${ENV_PGID}
+    ports:
+      - 8088:8084
+    restart: unless-stopped
+    volumes:
+      - /mnt/user/Daten/Ebooks:/books
+      - ./shelfmark/config:/config
+      - /mnt/user/Media/complete:/data/complete
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.shelfmark.entrypoints=homesec
+      - traefik.http.routers.shelfmark.rule=Host(`sh.${DOMAIN}`)
+    networks:
+      - frontend
+networks:
+  frontend:
+    external: true

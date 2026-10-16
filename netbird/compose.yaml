@@ -1,0 +1,19 @@
+services:
+  netbird-sidecar:
+    container_name: netbird
+    hostname: netbird
+    image: netbirdio/netbird:latest
+    restart: always
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - NB_SETUP_KEY=${NB_SETUP_KEY}
+      - NB_MANAGEMENT_URL=https://${DOMAIN}
+    volumes:
+      - ./netbird/config:/var/lib/netbird
+    networks:
+      - frontend
+networks:
+  frontend:
+    name: frontend
+    external: true

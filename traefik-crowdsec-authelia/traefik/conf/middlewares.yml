@@ -14,6 +14,7 @@ http:
     sec-chain:
       chain:
         middlewares:
+          # - geoblock
           - crowdsec
           - ratelimit
           - securityHeaders
@@ -24,7 +25,26 @@ http:
       rateLimit:
         average: 100
         burst: 120
-        period: 10s
+        period: 5s
+    
+    geoblock:
+      plugin:
+        geoblock:
+          allowLocalRequests: true
+          logLocalRequests: false
+          logAllowedRequests: false
+          logApiRequests: true
+          api: "https://get.geojs.io/v1/ip/country/{ip}"
+          apiTimeoutMs: 750
+          cacheSize: 100
+          forceMonthlyUpdate: true
+          allowUnknownCountries: false
+          unknownCountryApiResponse: "nil"
+          blackListMode: false
+          countries:
+            - DE
+            - AT
+            - CH
 
     gzip:
       compress: {}
@@ -40,6 +60,7 @@ http:
       forwardAuth:
         address: "http://authelia:9091/api/verify?rd=https://auth.yourdomain.com"
         trustForwardHeader: true
+        maxResponseBodySize: 4096
         authResponseHeaders:
           - "Remote-User"
           - "Remote-Groups"
@@ -74,10 +95,15 @@ http:
           crowdsecAppsecHost: crowdsec:7422
           crowdsecAppsecFailureBlock: true
           crowdsecAppsecUnreachableBlock: true
+          crowdsecAppsecBodyLimit: 10485760
           crowdsecLapiKey:
           crowdsecLapiHost: crowdsec:8080
           crowdsecLapiScheme: http
           crowdsecLapiTLSInsecureVerify: false
+          httpTimeoutSeconds: 10
+          logLevel: INFO
+          updateIntervalSeconds: 15
+          updateMaxFailure: 0
           forwardedHeadersTrustedIPs:
             # private class ranges
             - 10.0.0.0/8
@@ -91,12 +117,13 @@ http:
     
     securityHeaders:
       headers:
-        accessControlMaxAge: 100
+        # accessControlMaxAge: 100
         customFrameOptionsValue: "SAMEORIGIN"
         permissionsPolicy: "camera=(), microphone=(), geolocation=(), payment=(), usb=(), vr=()"
         customResponseHeaders:
           X-Robots-Tag: "none,noarchive,nosnippet,notranslate,noimageindex"
-          server: ""
+          Server: ""
+          X-Powered-By: ""
           X-Forwarded-Proto: "https"
         sslProxyHeaders:
           X-Forwarded-Proto: "https"
@@ -104,7 +131,7 @@ http:
         hostsProxyHeaders:
           - "X-Forwarded-Host"
         contentTypeNosniff: true
-        # contentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.plex.tv; style-src 'self' 'unsafe-inline'; img-src * data: blob:; font-src 'self' data:; connect-src 'self' wss: ws: *.plex.tv plex.tv; form-action 'self'; frame-src 'self' *.plex.tv plex.tv; object-src 'none'; frame-ancestors 'self';"
+        contentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' wss: ws: https:; media-src 'self'; form-action 'self'; frame-ancestors 'self'; base-uri 'self'; object-src 'none'"
         browserXssFilter: true
         forceSTSHeader: true
         stsIncludeSubdomains: true

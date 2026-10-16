@@ -1,0 +1,22 @@
+services:
+  clonarr:
+    image: ghcr.io/prophetse7en/clonarr:latest
+    container_name: clonarr
+    restart: unless-stopped
+    ports:
+      - 6064:6060
+    environment:
+      - TZ=Europe/Berlin
+      - PUID=${PUID}
+      - PGID=${PGID}
+    volumes:
+      - ./clonarr-config:/config
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${APP_NAME}.entrypoints=homesec
+      - traefik.http.routers.${APP_NAME}.rule=Host(`${SUBDOMAIN}.${DOMAIN}`)
+    networks:
+      - frontend
+networks:
+  frontend:
+    external: true

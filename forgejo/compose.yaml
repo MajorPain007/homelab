@@ -1,24 +1,62 @@
 services:
-  server:
-    image: codeberg.org/forgejo/forgejo:11
-    restart: unless-stopped
-    security_opt:
-      - no-new-privileges:true
+  forgejo:
+    image: codeberg.org/forgejo/forgejo:14
     container_name: forgejo
-    ports:
-      - 3005:3000
-      - 222:22
+    restart: unless-stopped
     environment:
-      - USER_UID=99
-      - USER_GID=100
+      TZ: Europe/Berlin
+      FORGEJO__database__DB_TYPE: sqlite3
+      FORGEJO__packages__ENABLED: "true"
+      FORGEJO__server__DOMAIN: ${DOMAIN}
+      FORGEJO__server__ROOT_URL: https://${DOMAIN}
+      FORGEJO__server__SSH_DOMAIN: ${DOMAIN}
+      FORGEJO__server__SSH_PORT: "2222"
     volumes:
-      - /mnt/cache/appdata/forgejo/forgejo:/data
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
-    networks:
-      - backend
+      - ./forgejo/forgejo_data:/data
     labels:
-      - net.unraid.docker.managed=composeman
+      - traefik.enable=true
+      # HTTPS
+      - traefik.http.routers.forgejo.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.forgejo.entrypoints=homesec
+      - traefik.http.services.forgejo.loadbalancer.server.port=3000
+      # SSH TCP
+      - traefik.tcp.routers.forgejo-ssh.rule=HostSNI(`*`)
+      - traefik.tcp.routers.forgejo-ssh.entrypoints=forgejo-ssh
+      - traefik.tcp.services.forgejo-ssh.loadbalancer.server.port=22
+    networks:
+      - forgejo
+      - frontend
+  dind:
+    image: docker:27-dind
+    container_name: forgejo-dind
+    privileged: true
+    restart: unless-stopped
+    command:
+      - dockerd
+      - -H
+      - tcp://0.0.0.0:2375
+      - --tls=false
+    networks:
+      - forgejo
+  runner:
+    image: code.forgejo.org/forgejo/runner:11
+    container_name: forgejo-runner
+    restart: unless-stopped
+    links:
+      - dind
+    depends_on:
+      dind:
+        condition: service_started
+    environment:
+      DOCKER_HOST: tcp://dind:2375
+    volumes:
+      - ./forgejo/runner/data:/data
+    #  command: '/bin/sh -c "while : ; do sleep 1 ; done ;"'
+    command: /bin/sh -c "sleep 5; forgejo-runner daemon --config config.yml"
+    networks:
+      - forgejo
 networks:
-  backend:
+  forgejo:
+    external: false
+  frontend:
     external: true

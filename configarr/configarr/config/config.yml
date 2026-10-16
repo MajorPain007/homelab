@@ -55,8 +55,10 @@ sonarr:
     include:
       - template: template-sonarr-naming
       - template: template-sonarr-anime-german
-      - template: 7324309a7d1e10dc0dc2cea6c70ed852 # https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/sonarr/quality-profiles/german-uhd-bluray-web-alternative.json
+      - template: 6fe5937e1dcc2269e23b49eb46dfe6d6 # https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/sonarr/quality-profiles/german-anime-hd-bluray-web.json
         source: TRASH
+      # - template: 7324309a7d1e10dc0dc2cea6c70ed852 # https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/sonarr/quality-profiles/german-uhd-bluray-web-alternative.json
+      #   source: TRASH
     renameQualityProfiles:
-      - from: "[German] UHD Bluray + WEB (Alternative)"
+      - from: "[German] Anime HD Bluray + WEB"
         to: Any

@@ -1,0 +1,21 @@
+services:
+  cantinarr:
+    image: ghcr.io/windoze95/cantinarr:latest
+    ports:
+      - 8585:8585
+    volumes:
+      - ./config:/config
+    environment:
+      CANTINARR_PUSH_GATEWAY_URL: "https://push.cantinarr.com"
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=frontend
+      - traefik.http.routers.cantinarr.entrypoints=homesec
+      - traefik.http.routers.cantinarr.rule=Host(`ct.${DOMAIN}`)
+      - traefik.http.services.cantinarr.loadbalancer.server.port=8585
+    networks:
+      - frontend
+networks:
+  frontend:
+    external: true

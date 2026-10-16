@@ -1,0 +1,40 @@
+services:
+  tracearr:
+    image: ghcr.io/connorgallopo/tracearr:supervised
+    container_name: tracearr
+    shm_size: 512mb
+    mem_limit: 3g
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+    ports:
+      - 3017:3000
+    environment:
+      - TZ=${TZ}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+    volumes:
+      - ./tracearr/postgres:/data/postgres
+      - ./tracearr/redis:/data/redis
+      - ./tracearr/data:/data/tracearr
+      - ./tracearr/backups:/data/backup
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${APP_NAME}.entrypoints=homesec
+      - traefik.http.routers.${APP_NAME}.rule=Host(`${SUBDOMAIN}.${DOMAIN}`)
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -f
+        - http://127.0.0.1:3000/health
+      interval: 30s
+      timeout: 10s
+      start_period: 60s
+      retries: 3
+    networks:
+      - frontend
+networks:
+  frontend:
+    external: true

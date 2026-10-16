@@ -5,16 +5,13 @@
 
 theme: 'dark'
 
-# --- NEU: Server Konfiguration (statt host/port) ---
 server:
   address: "tcp://0.0.0.0:9091"
 
-# --- NEU: JWT Secret verschoben ---
 identity_validation:
   reset_password:
     # This secret can also be set using the env variables AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET_FILE
     jwt_secret:
-
 
 session:
   name: authelia_session
@@ -27,13 +24,14 @@ session:
   secret:
   expiration: 96h
   inactivity: 6h
-  
   remember_me: 1M
+
 log:
   level: info
   format: text
   file_path: /config/authelia.log
   keep_stdout: true
+
 totp:
   issuer: auth.yourdomain.com ### your plain domain
   period: 30
@@ -49,30 +47,97 @@ authentication_backend:
       parallelism: 8
       memory: 128
 
+###############################################################
+#                      Access Control                         #
+###############################################################
+#
+# WICHTIG: Regeln werden von oben nach unten ausgewertet.
+# Die ERSTE passende Regel gewinnt.
+#
+
 access_control:
   default_policy: deny
   rules:
-    # Do not authorise while on network
+    # ==================== Lokales Netzwerk ====================
+    # Kein Auth nötig wenn aus dem LAN zugegriffen wird
     - domain: "*.yourdomain.com"
       policy: bypass
       networks:
         - 192.168.0.0/16
-        - 10.10.10.0/24
-    # Rules applied to everyone
+        - 10.0.0.0/8
+
+    # ==================== Authelia Portal ====================
+    # Auth-Portal selbst muss immer erreichbar sein
     - domain: auth.yourdomain.com
       policy: bypass
-    - domain: "*.yourdomain.com"
+
+    # ==================== Vaultwarden Admin blockieren ====================                                                                                                                                   
+    - domain: bw.yourdomain.com
+      resources:                                                                                                                                                                                               
+        - "^/admin([/?].*)?$"                                                                                                                                                                                  
+      policy: deny
+
+    # ==================== Vaultwarden API Bypass ====================
+    # BW Desktop/Mobile/Browser-Extension braucht diese Pfade ohne 2FA
+    - domain: bw.yourdomain.com
       resources:
-        - ^/api.*$
-        - ^/identity.*$
-        - ^/system.*$
-        - ^/api/opds.*$
+        - "^/api([/?].*)?$"
+        - "^/identity([/?].*)?$"
+        - "^/icons([/?].*)?$"
+        - "^/notifications([/?].*)?$"
       policy: bypass
-    - domain: "gotify.yourdomain.com"
+
+    # ==================== Kavita OPDS Feed ====================
+    # E-Reader brauchen Zugriff auf den OPDS Feed
+    - domain: eb.yourdomain.com
+      resources:
+        - "^/api/opds([/?].*)?$"
       policy: bypass
+
+    # ==================== Client-App Bypass (bei Bedarf aktivieren) ====================
+    # Falls Mobile/Desktop-Clients nicht durch Authelia kommen,
+    # die jeweilige Regel unkommentieren.
+    #
+    # --- Plex ---
+    # Plex-Clients (TV, Mobile, Desktop) können kein Authelia 2FA.
+    # Option 1: Plex komplett bypassen (Plex hat eigene Auth mit 2FA)
+    # - domain: plex.yourdomain.com
+    #   policy: bypass
+    #
+    # Option 2: Nur API-Pfade bypassen
+    # - domain: plex.yourdomain.com
+    #   resources:
+    #     - "^/web([/?].*)?$"
+    #     - "^/library([/?].*)?$"
+    #     - "^/playQueues([/?].*)?$"
+    #   policy: bypass
+    #
+    # --- Jellyfin ---
+    # - domain: jf.yourdomain.com
+    #   resources:
+    #     - "^/api([/?].*)?$"
+    #     - "^/socket([/?].*)?$"
+    #     - "^/System([/?].*)?$"
+    #   policy: bypass
+    #
+    # --- Emby ---
+    # - domain: emby.yourdomain.com
+    #   resources:
+    #     - "^/emby([/?].*)?$"
+    #     - "^/System([/?].*)?$"
+    #   policy: bypass
+    #
+    # --- Audiobookshelf ---
+    # - domain: ab.yourdomain.com
+    #   resources:
+    #     - "^/api([/?].*)?$"
+    #     - "^/s([/?].*)?$"
+    #     - "^/login([/?].*)?$"
+    #   policy: bypass
+
+    # ==================== Alles andere: 2FA ====================
     - domain: "*.yourdomain.com"
       policy: two_factor
-
 
 regulation:
   max_retries: 3
@@ -90,8 +155,7 @@ notifier:
     username: user@example.com
     # This secret can also be set using the env variables AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE
     password:
-    address: "submissions://"
-    
+    address: "submissions://smtp.mail.yahoo.com:465"
     sender: user@example.com
   # For testing purpose, notifications can be sent in a file. 
   # filesystem:

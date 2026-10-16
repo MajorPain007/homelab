@@ -3,6 +3,7 @@ quality_profiles:
     language: Any
     reset_unmatched_scores:
       enabled: true
+    score_set: german
     upgrade:
       allowed: true
       until_quality: Bluray|WEB
